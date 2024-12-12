@@ -1,4 +1,12 @@
-export const formatDate = (dateString) => {
+// utils/formatDate.js
+
+/**
+ * Formatiert ein Datum im Stil "TT MMM (Wochentag)" (z. B. "12 OKT (MO)").
+ *
+ * @param {string} dateString - Ein Datum im ISO-Format.
+ * @returns {string} Formatiertes Datum.
+ */
+export const formatDateWithWeekday = (dateString) => {
     const date = new Date(dateString);
     const formatter = new Intl.DateTimeFormat("de-DE", {
         day: "2-digit",
@@ -14,7 +22,13 @@ export const formatDate = (dateString) => {
     return `${day} ${month} (${weekday})`;
 };
 
-export const formatDateforProgram = (dateString) => {
+/**
+ * Extrahiert den Tag und den Wochentag aus einem Datum.
+ *
+ * @param {string} dateString - Ein Datum im ISO-Format.
+ * @returns {Object} Objekt mit `day` und `weekday`.
+ */
+export const extractDayAndWeekday = (dateString) => {
     const date = new Date(dateString);
     const formatter = new Intl.DateTimeFormat("de-DE", {
         day: "2-digit",
@@ -28,15 +42,27 @@ export const formatDateforProgram = (dateString) => {
     return { day, weekday };
 };
 
-export const formatDateToLocaleString = (dateString) => {
-    return dateString = new Date(dateString).toLocaleDateString("de-DE", {
+/**
+ * Formatiert ein Datum ins deutsche Lokaldatum im Stil "TT.MM.JJJJ".
+ *
+ * @param {string} dateString - Ein Datum im ISO-Format.
+ * @returns {string} Formatiertes Datum.
+ */
+export const formatDateToGermanLocale = (dateString) => {
+    return new Date(dateString).toLocaleDateString("de-DE", {
         day: "2-digit",
         month: "2-digit",
         year: "numeric",
     });
 };
 
-export const groupShowtimes = (showtimes) => {
+/**
+ * Gruppiert und sortiert Spielzeiten nach Datum.
+ *
+ * @param {Array} showtimes - Eine Liste von Spielzeiten.
+ * @returns {Object} Gruppierte und sortierte Spielzeiten.
+ */
+export const groupAndSortShowtimes = (showtimes) => {
     const grouped = showtimes.reduce(
         (acc, { date, time, isOriginalVersion, is3D }) => {
             if (!acc[date]) {
@@ -51,7 +77,7 @@ export const groupShowtimes = (showtimes) => {
     const sorted = Object.entries(grouped).sort((a, b) => {
         const dateA = new Date(a[0]); // Konvertiere Schlüssel zurück zu Datum
         const dateB = new Date(b[0]);
-        return dateB - dateA; // Sortiere in absteigender Reihenfolge
+        return dateA - dateB; // Sortiere in aufsteigender Reihenfolge
     });
 
     // Konvertiere zurück zu einem Objekt

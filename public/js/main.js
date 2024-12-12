@@ -131,82 +131,30 @@ scrollContainer.addEventListener("touchmove", (e) => {
 
 // ---------------------------------------------
 
-document.addEventListener("DOMContentLoaded", async () => {
-  const dateNav = document.querySelector(".programm__dates");
-  const movieContainer = document.querySelector(".programm__movies");
+document.addEventListener("DOMContentLoaded", () => {
+  const dateButtons = document.querySelectorAll(".programm__date");
+  const movieLists = document.querySelectorAll(".programm__movie-list");
 
-  try {
-    // Abrufen der Programmübersicht vom Backend
-    const response = await fetch("/api/program-overview");
-    if (!response.ok) {
-      throw new Error("Fehler beim Abrufen der Programmübersicht");
-    }
-    const { programm, daten } = await response.json();
+  // Event-Listener für jeden Button hinzufügen
+  dateButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      // Aktiven Button hervorheben
+      document.querySelector(".programm__date--active")?.classList.remove(
+        "programm__date--active",
+      );
+      button.classList.add("programm__date--active");
 
-    // Dynamische Erstellung der Datums-Buttons
-    daten.forEach((datum, index) => {
-      const button = document.createElement("button");
-      button.classList.add("programm__date");
-      if (index === 0) button.classList.add("programm__date--active");
+      // Datum des Buttons holen
+      const selectedDate = button.getAttribute("data-date");
 
-      const dateObj = new Date(datum);
-      const options = { weekday: "short", day: "2-digit", month: "2-digit" };
-      const formattedDate = dateObj.toLocaleDateString("de-DE", options);
-
-      button.innerHTML = `
-        <span>${formattedDate.split(",")[0]}</span>
-        <time datetime="${datum}">${formattedDate.split(",")[1]}</time>
-      `;
-
-      button.addEventListener("click", () => {
-        document.querySelector(".programm__date--active")?.classList.remove(
-          "programm__date--active",
-        );
-        button.classList.add("programm__date--active");
-        updateFilmList(programm[datum]);
+      // Alle Filmlisten durchgehen und nur die passende anzeigen
+      movieLists.forEach((list) => {
+        if (list.getAttribute("data-date") === selectedDate) {
+          list.classList.remove("hidden");
+        } else {
+          list.classList.add("hidden");
+        }
       });
-
-      dateNav.appendChild(button);
     });
-
-    // Filme für den ersten Tag anzeigen
-    updateFilmList(programm[daten[0]]);
-  } catch (error) {
-    console.error("Fehler beim Laden des Programms:", error);
-    movieContainer.innerHTML = "<p>Fehler beim Laden des Programms.</p>";
-  }
-});
-
-function updateFilmList(filme) {
-  const movieContainer = document.querySelector(".programm__movies");
-  movieContainer.innerHTML = ""; // Vorherige Inhalte entfernen
-
-  if (!filme || filme.length === 0) {
-    movieContainer.innerHTML = "<p>Keine Filme verfügbar.</p>";
-    return;
-  }
-
-  filme.forEach((film) => {
-    const filmElement = document.createElement("article");
-    filmElement.classList.add("programm__movie");
-    filmElement.innerHTML = `
-      <a href="/films/${film.id}">
-        <img src="${film.poster}" class="programm__movie-img" alt="Filmplakat von '${film.titel}'" />
-      </a>
-      <div class="programm__movie-info">
-        <h3 class="programm__movie-name">${film.titel}</h3>
-        <p class="programm__movie-details">${film.dauer} MIN / ${
-      film.genres.join(", ")
-    } / FSK ${film.bewertung}</p>
-        <ul class="programm__times" aria-label="Vorführzeiten">
-          ${
-      film.vorfuehrzeiten.map((time) => `<li><time>${time}</time></li>`).join(
-        "",
-      )
-    }
-        </ul>
-      </div>
-    `;
-    movieContainer.appendChild(filmElement);
   });
-}
+});

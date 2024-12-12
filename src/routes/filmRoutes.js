@@ -4,7 +4,7 @@ import {
     destroy,
     edit,
     filmsByDate,
-    getProgramOverview,
+    getProgramOverviewEndpoint,
     index,
     show,
     update,
@@ -14,7 +14,7 @@ export default [
     {
         method: "GET",
         pattern: new URLPattern({ pathname: "/api/program-overview" }),
-        handler: getProgramOverview, // API für die nächsten 5 Tage
+        handler: getProgramOverviewEndpoint, // API für die nächsten 5 Tage
     },
     {
         method: "GET",

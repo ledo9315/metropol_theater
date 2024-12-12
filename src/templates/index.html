@@ -35,15 +35,67 @@ content %}
     </div>
   </section>
 
-  <!-- Programmuebersicht -->
   <section class="programm" id="programm">
     <div class="container">
       <h2 class="programm__title">Aktuell im Programm</h2>
+
+      <!-- Navigationsbuttons für die nächsten 5 Tage -->
       <nav class="programm__dates">
-        <!-- Dynamische Buttons für die nächsten 5 Tage -->
+        {% for tag in daten %}
+        <button
+          class="programm__date {% if loop.index == 1 %}programm__date--active{% endif %}"
+          data-date="{{ tag.date }}"
+        >
+          <span>{{ tag.weekday }}</span>
+          <time datetime="{{ tag.date }}">{{ tag.day }}</time>
+        </button>
+        {% endfor %}
       </nav>
+
+      <!-- Filme für die jeweiligen Tage -->
       <div class="programm__movies">
-        <!-- Filme werden dynamisch hier geladen -->
+        {% for tag in daten %}
+        <div
+          class="programm__movie-list {% if loop.index != 1 %}hidden{% endif %}"
+          data-date="{{ tag.date }}"
+        >
+          {% if programm[tag.date] and programm[tag.date].length > 0 %} {% for
+          film in programm[tag.date] %}
+          <article class="programm__movie">
+            <a href="/films/{{ film.id }}">
+              <img
+                src="{{ film.poster }}"
+                alt="Filmplakat von '{{ film.title }}'"
+                class="programm__movie-img"
+              />
+            </a>
+            <div class="programm__movie-info">
+              <h3 class="programm__movie-name">{{ film.title }}</h3>
+              <p class="programm__movie-details">
+                {{ film.duration }} MIN / {{ film.genres | join(', ') }} / FSK
+                {{ film.rating }}
+              </p>
+              <ul class="programm__times">
+                {% for showtime in film.showtimeWithDetails %}
+                <li class="programm__time">
+                  <time datetime="{{ showtime.date }}T{{ showtime.time }}">
+                    {{ showtime.time }}
+                  </time>
+                  {% if showtime.is3D %}
+                  <span class="schedule__item-time-tag">3D</span>
+                  {% endif %} {% if showtime.isOriginalVersion %}
+                  <span class="schedule__item-time-tag">OV</span>
+                  {% endif %}
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </article>
+          {% endfor %} {% else %}
+          <p class="programm__no-movies">Keine Filme verfügbar</p>
+          {% endif %}
+        </div>
+        {% endfor %}
       </div>
     </div>
   </section>

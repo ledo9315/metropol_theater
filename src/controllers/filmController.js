@@ -1,12 +1,12 @@
+import { getUpcomingFilms } from "../models/filmModel.js";
 import * as filmService from "../services/filmService.js";
+import { getProgramOverview } from "../services/filmService.js";
 import { render } from "../services/render.js";
 import { createResponse } from "../utils/response.js";
 
 // Alle Filme anzeigen (GET)
 export const index = async () => {
   const films = await filmService.getAllFilms();
-
-  console.log("Filme aus index:", films);
 
   try {
     return createResponse(render("dashboard.html", { films }));
@@ -21,6 +21,8 @@ export const show = async (_, params) => {
   try {
     const { id } = params.pathname.groups;
     const data = await filmService.getFilmById(id);
+
+    console.log("Filmdaten:", data);
 
     if (!data) {
       return new Response("Film nicht gefunden", { status: 404 });
@@ -129,21 +131,39 @@ export const destroy = async (_, params) => {
 };
 
 /**
- * Zeigt die Startseite mit den aktuellen Programmdaten an.
+ * Rendert die Startseite mit der Programmübersicht und den kommenden Filmen.
  *
- * @returns {Response} Eine gerenderte HTML-Seite oder ein Fehler, wenn etwas schiefgeht.
+ * @returns {Response} Eine HTML-Antwort mit den gerenderten Daten.
  */
 export const homePage = async () => {
   try {
-    const data = await filmService.getComingFilms();
-    console.log("Daten für Startseite:", data);
-    return createResponse(render("index.html", { films: data }));
-  } catch (fehler) {
-    console.error("Fehler beim Anzeigen der Startseite:", fehler);
+    const { programm, daten } = await getProgramOverview();
+    const comingFilms = await filmService.getComingFilms();
+
+    console.log("Coming films:", comingFilms);
+
+    return new Response(
+      render("index.html", {
+        programm,
+        daten,
+        films: comingFilms,
+      }),
+      {
+        headers: { "Content-Type": "text/html" },
+      },
+    );
+  } catch (error) {
+    console.error("Fehler beim Rendern der Startseite:", error);
     return new Response("Interner Serverfehler", { status: 500 });
   }
 };
 
+/**
+ * API-Endpunkt: Holt Filme für ein bestimmtes Datum.
+ *
+ * @param {Request} req - Die eingehende Anfrage mit dem Datumsparameter.
+ * @returns {Response} Eine JSON-Antwort mit den Filmen für das angegebene Datum.
+ */
 export const filmsByDate = async (req) => {
   try {
     const url = new URL(req.url);
@@ -164,9 +184,14 @@ export const filmsByDate = async (req) => {
   }
 };
 
-export const getProgramOverview = async () => {
+/**
+ * API-Endpunkt: Holt die Programmübersicht der nächsten 5 Tage.
+ *
+ * @returns {Response} Eine JSON-Antwort mit den Filmen und den Daten.
+ */
+export const getProgramOverviewEndpoint = async () => {
   try {
-    const { programm, daten } = await filmService.getProgramOverview();
+    const { programm, daten } = await getProgramOverview();
 
     return new Response(
       JSON.stringify({ programm, daten }),

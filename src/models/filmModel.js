@@ -478,12 +478,15 @@ export const getUpcomingFilms = async (startDate, endDate) => {
       films.poster,
       GROUP_CONCAT(DISTINCT genres.name) AS genres,
       GROUP_CONCAT(DISTINCT show_times.show_time) AS show_times,
-      show_dates.show_date
+      show_dates.show_date,
+      show_details.is_original_version,
+      show_details.is_3d
     FROM films
     JOIN film_genres ON films.id = film_genres.film_id
     JOIN genres ON film_genres.genre_id = genres.id
     JOIN show_dates ON films.id = show_dates.film_id
     JOIN show_times ON show_dates.id = show_times.show_date_id
+    JOIN show_details ON show_times.id = show_details.show_time_id
     WHERE show_dates.show_date BETWEEN ? AND ?
     GROUP BY films.id, show_dates.show_date
     ORDER BY show_dates.show_date ASC;

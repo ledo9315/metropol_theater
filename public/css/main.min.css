@@ -218,6 +218,9 @@ a:hover {
 li {
     list-style: none;
 }
+.hidden {
+    display: none !important;
+}
 button {
     padding: 10px 50px;
     background: var(--accent-color);
@@ -510,7 +513,7 @@ header {
     display: flex;
     align-items: center;
     column-gap: 10px;
-    width: 110px;
+    width: 160px;
 }
 
 .schedule__item-time-tag {
@@ -929,6 +932,13 @@ header {
     cursor: -webkit-grab;
     cursor: grab;
 }
+
+.programm__no-movies {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--accent-color);
+    margin-bottom: 50px;
+}
 .programm__dates.active {
     cursor: -webkit-grabbing;
     cursor: grabbing;
@@ -1039,6 +1049,12 @@ header {
         margin-left: 0;
         margin-top: 10px;
     }
+}
+
+.programm__time {
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
 }
 .kino {
     margin-bottom: 150px;
