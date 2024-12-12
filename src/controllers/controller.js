@@ -1,7 +1,6 @@
 // controller.js
 import { render } from "../services/render.js";
 import { createResponse } from "../utils/response.js";
-import * as filmService from "../services/filmService.js";
 
 export function renderPage(templateName, status) {
     try {

@@ -14,12 +14,12 @@ export default [
     {
         method: "GET",
         pattern: new URLPattern({ pathname: "/api/program-overview" }),
-        handler: getProgramOverviewEndpoint, // API für die nächsten 5 Tage
+        handler: getProgramOverviewEndpoint,
     },
     {
         method: "GET",
         pattern: new URLPattern({ pathname: "/api/films" }),
-        handler: filmsByDate, // API für Filme an einem bestimmten Datum
+        handler: filmsByDate, 
     },
     {
         method: "GET",

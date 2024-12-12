@@ -1,18 +1,23 @@
+// filmService.js
+
 import {
-    addFilmToDB,
-    deleteFilmFromDB,
-    getAllFilmsFromDB,
-    getComingSoonFilmsFromDB,
-    getFilmByIdFromDB,
-    getShowtimesWithDetails,
-    getUpcomingFilms,
-    saveCountry,
-    saveDirectorToDB,
-    saveFilmCountry,
-    saveFilmGenres,
-    saveGenreToDB,
-    saveShowtimesWithDetails,
-    updateFilmInDB,
+    deleteFilm as modelDeleteFilm,
+    findCountryIdByName as modelFindCountryIdByName,
+    findDirectorIdByName as modelFindDirectorIdByName,
+    findGenreIdByName as modelFindGenreIdByName,
+    getAllFilms as modelGetAllFilms,
+    getComingSoonFilms as modelGetComingSoonFilms,
+    getFilmById as modelGetFilmById,
+    getShowtimesForFilm as modelGetShowtimesForFilm,
+    getUpcomingFilms as modelGetUpcomingFilms,
+    insertCountry as modelInsertCountry,
+    insertDirector as modelInsertDirector,
+    insertFilm as modelInsertFilm,
+    insertGenre as modelInsertGenre,
+    setFilmCountry as modelSetFilmCountry,
+    setFilmGenres as modelSetFilmGenres,
+    setShowtimesForFilm as modelSetShowtimesForFilm,
+    updateFilm as modelUpdateFilm,
 } from "../models/filmModel.js";
 
 import {
@@ -30,6 +35,7 @@ import {
 
 import { uploadFiles } from "../utils/fileUtils.js";
 import { validateFilmData } from "../utils/validators.js";
+import { render } from "../services/render.js";
 
 /**
  * Ruft alle Filme und deren Details ab.
@@ -38,7 +44,7 @@ import { validateFilmData } from "../utils/validators.js";
  */
 export const getAllFilms = async () => {
     try {
-        const data = await getAllFilmsFromDB();
+        const data = await modelGetAllFilms();
 
         console.log("Filme aus getAllFilms:", data);
 
@@ -66,20 +72,20 @@ export const getAllFilms = async () => {
             const isOriginalVersion = !!row[12];
             const is3D = !!row[13];
 
-            if (!films[filmId].showtimes[date]) {
-                films[filmId].showtimes[date] = [];
-            }
+            if (date) {
+                if (!films[filmId].showtimes[date]) {
+                    films[filmId].showtimes[date] = [];
+                }
 
-            films[filmId].showtimes[date].push({
-                time,
-                isOriginalVersion,
-                is3D,
-            });
+                films[filmId].showtimes[date].push({
+                    time,
+                    isOriginalVersion,
+                    is3D,
+                });
+            }
         });
 
-        const dataArr = Object.values(films);
-
-        return dataArr;
+        return Object.values(films);
     } catch (error) {
         console.error("Fehler beim Abrufen der Filme:", error);
         throw new Error("Filme konnten nicht abgerufen werden.");
@@ -94,7 +100,7 @@ export const getAllFilms = async () => {
  */
 export const getFilmById = async (id) => {
     try {
-        let film = getFilmByIdFromDB(id);
+        let film = modelGetFilmById(id);
 
         if (!film) {
             console.log(`Kein Film mit der ID ${id} gefunden.`);
@@ -118,7 +124,7 @@ export const getFilmById = async (id) => {
             genres: film[13] ? film[13].split(",") : [],
         };
 
-        const showtimes = getShowtimesWithDetails(id);
+        const showtimes = modelGetShowtimesForFilm(id);
 
         const formattedShowtimes = showtimes.map((row) => ({
             date: formatDateWithWeekday(row.date),
@@ -145,9 +151,7 @@ export const getFilmById = async (id) => {
 export const addFilm = async (req) => {
     try {
         const formData = await req.formData();
-
         const { errors, hasErrors } = validateFilmData(formData);
-
         const formValues = extractFilmFormData(formData);
 
         if (hasErrors) {
@@ -159,20 +163,34 @@ export const addFilm = async (req) => {
         }
 
         const showtimes = extractShowtimes(formValues);
-
         await uploadFiles(formData, formValues);
 
-        const directorId = saveDirectorToDB(formValues.director);
-        const countryId = saveCountry(formValues.production_country);
+        let directorId = modelFindDirectorIdByName(formValues.director);
+        if (!directorId) {
+            directorId = modelInsertDirector(formValues.director);
+        }
+
+        let countryId = modelFindCountryIdByName(formValues.production_country);
+        if (!countryId) {
+            countryId = modelInsertCountry(formValues.production_country);
+        }
 
         const film = buildFilmObject(formValues, directorId, countryId);
+        const filmId = await modelInsertFilm(film);
 
-        const filmId = await addFilmToDB(film);
-        saveFilmCountry(filmId, countryId);
-        saveShowtimesWithDetails(filmId, showtimes);
+        modelSetFilmCountry(filmId, countryId);
+        modelSetShowtimesForFilm(filmId, showtimes);
 
-        const genreIds = formValues.genres.map((genre) => saveGenreToDB(genre));
-        saveFilmGenres(filmId, genreIds);
+        const genreIds = [];
+        for (const genre of formValues.genres) {
+            let gId = modelFindGenreIdByName(genre);
+            if (!gId) {
+                gId = modelInsertGenre(genre);
+            }
+            genreIds.push(gId);
+        }
+
+        modelSetFilmGenres(filmId, genreIds);
 
         return new Response(null, { status: 201 });
     } catch (error) {
@@ -191,7 +209,6 @@ export const addFilm = async (req) => {
 export const updateFilm = async (id, req) => {
     try {
         const formData = await req.formData();
-
         const { errors, hasErrors } = validateFilmData(formData);
         const formValues = extractFilmFormData(formData);
 
@@ -203,24 +220,36 @@ export const updateFilm = async (id, req) => {
             });
         }
 
-        const existingFilm = getFilmByIdFromDB(id);
-
+        const existingFilm = modelGetFilmById(id);
         if (!existingFilm) {
             console.error(`Film mit ID ${id} nicht gefunden.`);
             return new Response("Film nicht gefunden", { status: 404 });
         }
 
         const showtimes = extractShowtimes(formValues);
-
         await uploadFiles(formData, formValues, existingFilm);
 
-        const directorId = saveDirectorToDB(formValues.director);
-        const countryId = saveCountry(formValues.production_country);
-        const genreIds = formValues.genres.map((genre) => saveGenreToDB(genre));
+        let directorId = modelFindDirectorIdByName(formValues.director);
+        if (!directorId) {
+            directorId = modelInsertDirector(formValues.director);
+        }
+
+        let countryId = modelFindCountryIdByName(formValues.production_country);
+        if (!countryId) {
+            countryId = modelInsertCountry(formValues.production_country);
+        }
+
+        const genreIds = [];
+        for (const genre of formValues.genres) {
+            let gId = modelFindGenreIdByName(genre);
+            if (!gId) {
+                gId = modelInsertGenre(genre);
+            }
+            genreIds.push(gId);
+        }
 
         const film = buildFilmObject(formValues, directorId, countryId);
-
-        await updateFilmInDB(id, { film, showtimes, genreIds });
+        await modelUpdateFilm(id, { film, showtimes, genreIds });
 
         return new Response(null, { status: 200 });
     } catch (error) {
@@ -237,13 +266,13 @@ export const updateFilm = async (id, req) => {
  */
 export const deleteFilm = async (id) => {
     try {
-        const filmExists = await getFilmByIdFromDB(id);
+        const filmExists = await modelGetFilmById(id);
         if (!filmExists) {
             console.warn(`Film mit ID ${id} nicht gefunden.`);
             return new Response("Film nicht gefunden", { status: 404 });
         }
 
-        await deleteFilmFromDB(id);
+        await modelDeleteFilm(id);
         return new Response(null, { status: 204 });
     } catch (error) {
         console.error(`Fehler beim Löschen des Films mit ID ${id}:`, error);
@@ -260,42 +289,33 @@ export const getProgramOverview = async () => {
     const heute = new Date();
     const daten = [];
 
-    // Erstelle die Liste der nächsten 5 Tage mit Wochentagen und Tagesnummern
     for (let i = 0; i < 5; i++) {
         const datum = new Date(heute);
         datum.setDate(heute.getDate() + i);
-
-        // Extrahiere Wochentag und Tag
         daten.push({
             date: datum.toISOString().split("T")[0],
-            day: datum.getDate().toString().padStart(2, "0"), // Z. B. "02"
+            day: datum.getDate().toString().padStart(2, "0"),
             weekday: datum.toLocaleDateString("de-DE", { weekday: "short" })
-                .toUpperCase(), // Z. B. "MO."
+                .toUpperCase(),
         });
     }
 
     try {
-        const filme = await getUpcomingFilms(daten[0].date, daten[4].date);
+        const filme = await modelGetUpcomingFilms(daten[0].date, daten[4].date);
 
-        // Initialisiere das Programm-Objekt
         const programm = daten.reduce((acc, tag) => {
             acc[tag.date] = [];
             return acc;
         }, {});
 
-        // Verarbeite die Filme
         for (const film of filme) {
             const filmDatum = film[7];
             if (programm[filmDatum]) {
-                // Hole alle Showtimes mit Details für den Film
-                const allShowtimes = getShowtimesWithDetails(film[0]);
-
-                // Filtere die Showtimes nur für das aktuelle Datum
+                const allShowtimes = modelGetShowtimesForFilm(film[0]);
                 const filteredShowtimes = allShowtimes.filter(
                     (showtime) => showtime.date === filmDatum,
                 );
 
-                // Füge den Film mit den gefilterten Showtimes hinzu
                 programm[filmDatum].push({
                     id: film[0],
                     title: film[1],
@@ -309,11 +329,9 @@ export const getProgramOverview = async () => {
             }
         }
 
-        console.log("Programmübersicht:", programm);
-
         return { programm, daten };
-    } catch (fehler) {
-        console.error("Fehler beim Abrufen der Programmübersicht:", fehler);
+    } catch (error) {
+        console.error("Fehler beim Abrufen der Programmübersicht:", error);
         throw new Error("Programmübersicht konnte nicht abgerufen werden.");
     }
 };
@@ -321,8 +339,8 @@ export const getProgramOverview = async () => {
 /**
  * Holt Filme für ein bestimmtes Datum.
  *
- * @param {string} datum - Das Datum, für das Filme abgerufen werden sollen (Format: JJJJ-MM-TT).
- * @returns {Array} Ein Array von Filmen, die für das angegebene Datum geplant sind.
+ * @param {string} datum - Das Datum, für das Filme abgerufen werden sollen.
+ * @returns {Array} Filme für das angegebene Datum.
  */
 export const getFilmsByDate = async (datum) => {
     try {
@@ -330,7 +348,7 @@ export const getFilmsByDate = async (datum) => {
             throw new Error("Ungültiges Datumsformat. Erwartet: JJJJ-MM-TT.");
         }
 
-        const filme = await getUpcomingFilms(datum, datum);
+        const filme = await modelGetUpcomingFilms(datum, datum);
 
         return filme.map((film) => ({
             id: film[0],
@@ -342,10 +360,10 @@ export const getFilmsByDate = async (datum) => {
             vorfuehrzeiten: film[6] ? film[6].split(",") : [],
             vorfuehrdatum: extractDayAndWeekday(film[7]),
         }));
-    } catch (fehler) {
+    } catch (error) {
         console.error(
             `Fehler beim Abrufen der Filme für das Datum ${datum}:`,
-            fehler,
+            error,
         );
         throw new Error(
             `Filme für das Datum ${datum} konnten nicht abgerufen werden.`,
@@ -354,14 +372,13 @@ export const getFilmsByDate = async (datum) => {
 };
 
 /**
- * Holt eine Liste der Filme, die in naher Zukunft (außerhalb der nächsten 5 Tage) gezeigt werden.
+ * Holt eine Liste kommender Filme, die außerhalb der nächsten 5 Tage gezeigt werden.
  *
- * @returns {Array} Eine Liste der kommenden Filme mit Details wie Titel, Dauer, Bewertung usw.
+ * @returns {Array} Kommende Filme.
  */
 export const getComingFilms = async () => {
     try {
         const today = new Date();
-
         const startDate = new Date(today);
         startDate.setDate(today.getDate() + 6);
 
@@ -383,7 +400,7 @@ export const getComingFilms = async () => {
             exclusionEndDateISO,
         );
 
-        const data = await getComingSoonFilmsFromDB(
+        const data = await modelGetComingSoonFilms(
             startDateISO,
             exclusionStartDateISO,
             exclusionEndDateISO,

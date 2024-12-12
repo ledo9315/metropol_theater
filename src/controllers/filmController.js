@@ -1,10 +1,14 @@
-import { getUpcomingFilms } from "../models/filmModel.js";
 import * as filmService from "../services/filmService.js";
 import { getProgramOverview } from "../services/filmService.js";
 import { render } from "../services/render.js";
 import { createResponse } from "../utils/response.js";
 
-// Alle Filme anzeigen (GET)
+/**
+ * Holt die Filme für ein bestimmtes Datum.
+ *
+ *  @param {string} date - Das Datum, für das die Filme abgerufen werden sollen.
+ * @returns {Promise<Array>} Ein Array mit den Filmen für das angegebene Datum.
+ */
 export const index = async () => {
   const films = await filmService.getAllFilms();
 
@@ -16,13 +20,16 @@ export const index = async () => {
   }
 };
 
-// Einen bestimmten Film anzeigen (GET)
+/**
+ * Holt die Filme für ein bestimmtes Datum.
+ *
+ * @param {string} date - Das Datum, für das die Filme abgerufen werden sollen.
+ * @returns {Promise<Array>} Ein Array mit den Filmen für das angegebene Datum.
+ */
 export const show = async (_, params) => {
   try {
     const { id } = params.pathname.groups;
     const data = await filmService.getFilmById(id);
-
-    console.log("Filmdaten:", data);
 
     if (!data) {
       return new Response("Film nicht gefunden", { status: 404 });
@@ -40,7 +47,11 @@ export const show = async (_, params) => {
   }
 };
 
-// Formular anzeigen (GET)
+/**
+ *  Zeigt das Formular zum Hinzufügen eines neuen Films an.
+ *
+ *  @returns {Response} Eine HTML-Antwort mit dem Formular zum Hinzufügen eines Films.
+ */
 export const add = () => {
   try {
     return createResponse(render("add.html"));
@@ -50,7 +61,12 @@ export const add = () => {
   }
 };
 
-// Film hinzufügen (POST)
+/**
+ * Erstellt einen neuen Film.
+ *
+ * @param {Request} req - Die eingehende Anfrage mit den Daten des neuen Films.
+ * @returns {Response} Eine Weiterleitung zur Dashboard-Seite oder ein HTML-Response bei Validierungsfehlern.
+ */
 export const create = async (req) => {
   try {
     const response = await filmService.addFilm(req);
@@ -72,7 +88,12 @@ export const create = async (req) => {
   }
 };
 
-// Film bearbeiten (GET)
+/**
+ *  Zeigt das Formular zum Bearbeiten eines Films an.
+ *
+ * @param {Object} params - Die URL-Parameter mit der ID des zu bearbeitenden Films.
+ * @returns {Response} Eine HTML-Antwort mit dem Formular zum Bearbeiten des Films.
+ */
 export const edit = async (_, params) => {
   try {
     const { id } = params.pathname.groups;
@@ -93,7 +114,13 @@ export const edit = async (_, params) => {
   }
 };
 
-// Film aktualisieren (POST)
+/**
+ * Aktualisiert einen Film.
+ *
+ * @param {Request} req - Die eingehende Anfrage mit den aktualisierten Daten des Films.
+ * @param {Object} params - Die URL-Parameter mit der ID des zu aktualisierenden Films.
+ * @returns {Response} Eine Weiterleitung zur Dashboard-Seite oder ein HTML-Response bei Validierungsfehlern.
+ */
 export const update = async (req, params) => {
   try {
     const { id } = params.pathname.groups;
@@ -114,7 +141,12 @@ export const update = async (req, params) => {
   }
 };
 
-// Film löschen (POST)
+/**
+ * Löscht einen Film.
+ *
+ * @param {Object} params - Die URL-Parameter mit der ID des zu löschenden Films.
+ * @returns {Response} Eine Weiterleitung zur Dashboard-Seite.
+ */
 export const destroy = async (_, params) => {
   try {
     const { id } = params.pathname.groups;

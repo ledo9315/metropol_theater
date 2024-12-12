@@ -85,28 +85,32 @@ content %}
   <section class="schedule">
     <div class="container">
       <h2 class="schedule__title">Spielzeiten</h2>
+      {% if showtimes | length == 0 %}
+      <p>
+        Aktuell sind keine weiteren Vorführungen dieses Programmtitels geplant.
+      </p>
+      {% else %}
       <ul class="schedule__items">
         {% for date, times in showtimes %}
         <li class="schedule__item">
           <div class="schedule__item-day">
-            <!-- Zeigt das Datum an -->
             <time datetime="{{ date }}">{{ date }}</time>
           </div>
           <ul class="schedule__item-times">
-            <!-- Innere Schleife: Iteriert über die Zeiten -->
             {% for timeData in times %}
             <li class="schedule__item-time">
-              {{ timeData.time }} {% if timeData.isOriginalVersion %} <span
-                class="schedule__item-time-tag"
-              >OV</span> {% endif %} {% if timeData.is3D %} <span
-                class="schedule__item-time-tag"
-              >3D</span> {% endif %}
+              {{ timeData.time }} {% if timeData.isOriginalVersion %}
+              <span class="schedule__item-time-tag">OV</span>
+              {% endif %} {% if timeData.is3D %}
+              <span class="schedule__item-time-tag">3D</span>
+              {% endif %}
             </li>
             {% endfor %}
           </ul>
         </li>
         {% endfor %}
       </ul>
+      {% endif %}
     </div>
   </section>
 </main>
