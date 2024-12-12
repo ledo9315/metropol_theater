@@ -1,0 +1,93 @@
+.add-movie__breadcrumb {
+  margin-top: 100px;
+
+  a {
+    text-transform: none;
+  }
+}
+
+.add-movie__title {
+  font-weight: 300;
+  font-size: 3rem;
+  color: var(--accent-color);
+  margin-bottom: 20px;
+
+  @media (max-width: 620px) {
+    line-height: 1.2;
+    font-size: 2.5rem;
+  }
+}
+
+.add-movie__group {
+  max-width: 750px;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  column-gap: 20px;
+  margin-bottom: 10px;
+}
+
+.add-movie__time {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 20px;
+  max-width: 750px;
+
+  @media (max-width: 620px) {
+    grid-template-columns: 1fr;
+  }
+}
+.add-movie__label {
+  font-family: "Futura Std", Arial, Helvetica, sans-serif;
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: var(--accent-color);
+}
+.add-movie__input {
+  background: #e9e9e9;
+  border: none;
+  font-family: "Futura Std", Arial, Helvetica, sans-serif;
+  font-size: 1.125rem;
+  font-weight: 300;
+  color: var(--text-color);
+  padding: 10px;
+}
+.add-movie__select {
+  background: #e9e9e9;
+  border: none;
+}
+.add-movie__link {
+  display: block;
+  margin-bottom: 50px;
+  text-decoration: underline;
+}
+
+.add-movie__textarea {
+  background: #e9e9e9;
+  border: none;
+  font-family: "Futura Std", Arial, Helvetica, sans-serif;
+  font-size: 1.125rem;
+  font-weight: 300;
+  color: var(--text-color);
+  padding: 10px;
+}
+.add-movie__actions {
+  max-width: 750px;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+.add-movie__button {
+  background: none;
+  color: var(--accent-color);
+  text-decoration: underline;
+  font-weight: 500;
+  padding: 10px 20px;
+
+  &:hover {
+    text-decoration: none;
+    background: none;
+    color: var(--accent-color);
+    text-decoration: none;
+  }
+}

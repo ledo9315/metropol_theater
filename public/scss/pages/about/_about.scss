@@ -1,0 +1,77 @@
+.kino {
+  margin-bottom: 150px;
+}
+.kino__content {
+  display: flex;
+  column-gap: 60px;
+
+  @media (max-width: 1200px) {
+    flex-direction: column-reverse;
+    row-gap: 50px;
+  }
+}
+.kino__image {
+  max-width: 600px;
+  width: 100%;
+}
+.kino__description {
+  max-width: 600px;
+}
+.kino__title {
+  font-weight: 300;
+  font-size: 3rem;
+  color: var(--accent-color);
+  margin-bottom: 30px;
+
+  @media (max-width: 1200px) {
+    font-size: 2.5rem;
+  }
+}
+
+.technik {
+  max-width: 630px;
+  margin-bottom: 100px;
+}
+.technik__title {
+  font-weight: 300;
+  font-size: 3rem;
+  color: var(--accent-color);
+  margin-bottom: 30px;
+
+  @media (max-width: 960px) {
+    font-size: 2.5rem;
+  }
+}
+
+.technik-details__entry {
+  display: grid;
+  grid-template-columns: 1.2fr 2fr;
+  column-gap: 30px;
+  padding: 30px 0;
+  border-bottom: 2px solid var(--accent-color);
+
+  &:first-of-type {
+    padding-top: 0;
+  }
+
+  &:last-of-type {
+    border-bottom: none;
+    margin-bottom: 200px;
+  }
+
+  @media (max-width: 620px) {
+    display: flex;
+    flex-direction: column;
+  }
+}
+.technik-details__title {
+  font-weight: 500;
+  font-size: 1.5rem;
+  color: var(--accent-color);
+  margin-bottom: 30px;
+}
+.technik-details__text {
+  a {
+    text-decoration: underline;
+  }
+}

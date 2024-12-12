@@ -1,0 +1,59 @@
+.chronik {
+  color: var(--text-color);
+}
+
+.chronik__breadcrumb {
+  margin-bottom: 100px;
+}
+.chronik__entry {
+  display: grid;
+  margin-bottom: 200px;
+  column-gap: 60px;
+
+  &:nth-of-type(odd) {
+    grid-template-columns: 1fr 1.5fr;
+  }
+
+  &:nth-of-type(even) {
+    grid-template-columns: 1.5fr 1fr;
+  }
+
+  @media (max-width: 960px) {
+    display: flex;
+    flex-direction: column;
+
+    &:nth-of-type(even) {
+      flex-direction: column-reverse;
+    }
+  }
+}
+.chronik__content {
+  align-self: center;
+}
+.chronik__year {
+  font-size: 3rem;
+  color: var(--accent-color);
+  font-weight: 300;
+  line-height: 1.2;
+  margin-bottom: 30px;
+
+  @media (max-width: 960px) {
+    font-size: 2.5rem;
+  }
+}
+.chronik__text {
+  font-size: 1.125rem;
+
+  @media (max-width: 960px) {
+    margin-bottom: 30px;
+  }
+}
+.chronik__image {
+  &:nth-child(even) {
+    justify-self: flex-end;
+  }
+
+  &:nth-child(odd) {
+    justify-self: flex-start;
+  }
+}

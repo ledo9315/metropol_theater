@@ -1,0 +1,375 @@
+{% extends "template.html" %}
+{% block title %}Film hinzufügen{% endblock %}
+{% block content %}
+
+<main class="add-movie">
+  <div class="container">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb add-movie__breadcrumb" aria-label="Breadcrumb">
+      <a href="/dashboard" class="breadcrumb__link">&larr; Zurück zum Dashboard</a>
+    </nav>
+
+    <h1 class="add-movie__title">Bearbeiten</h1>
+    <form
+      action="/films/{{film.id}}/edit"
+      method="POST"
+      class="add-movie__form"
+      enctype="multipart/form-data"
+    >
+      <!-- Titel -->
+      <div class="add-movie__group">
+        <label for="title" class="add-movie__label">Titel des Films:</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          class="add-movie__input"
+          value="{{ film.title }}"
+          required
+        />
+        {% if errors.title %}
+        <p class="add-movie__error">{{ errors.title }}</p>
+        {% endif %}
+      </div>
+
+      <!-- Länge -->
+      <div class="add-movie__group">
+        <label for="duration" class="add-movie__label">Länge des Films (in Minuten):</label>
+        <input
+          type="number"
+          id="duration"
+          name="duration"
+          class="add-movie__input"
+          min="0"
+          value="{{ film.duration }}"
+          required
+        />
+        {% if errors.duration %}
+        <p class="add-movie__error">{{ errors.duration }}</p>
+        {% endif %}
+      </div>
+
+      <!-- Produktionsland -->
+      <div class="add-movie__group">
+        <label for="production_country" class="add-movie__label">Produktionsland:</label>
+        <input
+          type="text"
+          id="production_country"
+          name="production_country"
+          class="add-movie__input"
+          value="{{ film.country_names }}"
+          required
+        />
+        {% if errors.production_country %}
+        <p class="add-movie__error">{{ errors.productionCountry }}</p>
+        {% endif %}
+      </div>
+
+      <!-- Produktionsjahr -->
+      <div class="add-movie__group">
+        <label for="production_year" class="add-movie__label">Produktionsjahr:</label>
+        <input
+          type="number"
+          id="production_year"
+          name="production_year"
+          class="add-movie__input"
+          min="1900"
+          max="2100"
+          value="{{ film.production_year }}"
+          required
+        />
+        {% if errors.production_year %}
+        <p class="add-movie__error">{{ errors.productionYear }}</p>
+        {% endif %}
+      </div>
+
+      <!-- FSK -->
+      <div class="add-movie__group">
+        <label for="fsk" class="add-movie__label">FSK Altersfreigabe:</label>
+        <select
+          id="fsk"
+          name="fsk"
+          class="add-movie__select"
+          required
+        >
+          <option value="0" {% if film.rating == "0" %}selected{% endif %}>0</option>
+          <option value="6" {% if film.rating == "6" %}selected{% endif %}>6</option>
+          <option value="12" {% if film.rating == "12" %}selected{% endif %}>12</option>
+          <option value="16" {% if film.rating == "16" %}selected{% endif %}>16</option>
+          <option value="18" {% if film.rating == "18" %}selected{% endif %}>18</option>
+        </select>
+        {% if errors.fsk %}
+        <p class="add-movie__error">{{ errors.fsk }}</p>
+        {% endif %}
+      </div>
+
+      <!-- Spielzeiten -->
+      <div class="add-movie__group">
+        <label class="add-movie__label">Spielzeiten:</label>
+        <div id="showtimes-container" class="add-movie__showtimes">
+          {% if showtimes.length > 0 %}
+            {% for showtime in showtimes %}
+            <div class="add-movie__time">
+              <div class="add-movie__input-wrapper">
+                <input
+                  type="date"
+                  name="show_date[]"
+                  class="add-movie__input"
+                  value="{{ showtime.date }}"
+                  required
+                />
+                <input
+                  type="time"
+                  name="show_time[]"
+                  class="add-movie__input"
+                  value="{{ showtime.time }}"
+                  required
+                />
+              </div>
+              <div class="add-movie__select-wrapper">
+                <label class="add-movie__select-label">
+                  OV:
+                  <select name="is_original_version[]" class="add-movie__select">
+                    <option value="0" {% if not showtime.isOriginalVersion %}selected{% endif %}>
+                      Nein
+                    </option>
+                    <option value="1" {% if showtime.isOriginalVersion %}selected{% endif %}>
+                      Ja
+                    </option>
+                  </select>
+                </label>
+                <label class="add-movie__select-label">
+                  3D:
+                  <select name="is_3d[]" class="add-movie__select">
+                    <option value="0" {% if not showtime.is3D %}selected{% endif %}>
+                      Nein
+                    </option>
+                    <option value="1" {% if showtime.is3D %}selected{% endif %}>
+                      Ja
+                    </option>
+                  </select>
+                </label>
+              </div>
+              <button type="button" class="add-movie__button add-movie__button--remove">Entfernen</button>
+            </div>
+            {% endfor %}
+          {% else %}
+            <!-- Standard leerer Eintrag -->
+            <div class="add-movie__time">
+              <div class="add-movie__input-wrapper">
+                <input
+                  type="date"
+                  name="show_date[]"
+                  class="add-movie__input"
+                  value=""
+                  required
+                />
+                <input
+                  type="time"
+                  name="show_time[]"
+                  class="add-movie__input"
+                  value=""
+                  required
+                />
+              </div>
+              <div class="add-movie__select-wrapper">
+                <label class="add-movie__select-label">
+                  OV:
+                  <select name="is_original_version[]" class="add-movie__select">
+                    <option value="0" selected>Nein</option>
+                    <option value="1">Ja</option>
+                  </select>
+                </label>
+                <label class="add-movie__select-label">
+                  3D:
+                  <select name="is_3d[]" class="add-movie__select">
+                    <option value="0" selected>Nein</option>
+                    <option value="1">Ja</option>
+                  </select>
+                </label>
+              </div>
+              <button type="button" class="add-movie__button add-movie__button--remove">Entfernen</button>
+            </div>
+          {% endif %}
+        </div>
+        <button
+          type="button"
+          id="showtime-button"
+          class="add-movie__button add-movie__button--add"
+        >
+          Spielzeit hinzufügen
+        </button>
+      </div>
+
+
+
+      <!-- Genre -->
+      <div class="add-movie__group">
+        <label for="genres" class="add-movie__label">Genres:</label>
+        <div id="genre-container" class="add-movie__dynamic-inputs">
+          {% if film.genres.length > 0 %}
+            {% for genre in film.genres %}
+            <div class="add-movie__input-group">
+              <input
+                type="text"
+                name="genres"
+                class="add-movie__input"
+                value="{{ genre }}"
+                required
+              />
+              <button
+              type="button"
+              class="add-movie__button add-movie__button--remove"
+              onclick="removeGenreField(this)"
+            >
+              Entfernen
+            </button>
+            </div>
+            
+            {% endfor %}
+          {% else %}
+            <!-- Standard leerer Eintrag -->
+            <div class="add-movie__input-group">
+              <input
+                type="text"
+                name="genres"
+                class="add-movie__input"
+                required
+              />
+            </div>
+          {% endif %}
+        </div>
+        <button
+          type="button"
+          class="add-movie__button add-movie__button--add"
+          onclick="addGenreField()"
+        >
+          Genre hinzufügen
+        </button>
+        {% if errors.genres %}
+        <p class="add-movie__error">{{ errors.genres }}</p>
+        {% endif %}
+      </div>
+
+        <!-- Poster -->
+        <div class="add-movie__group">
+          <label for="poster" class="add-movie__label">Poster:</label>
+          
+          <!-- Zeigt das aktuelle Poster an -->
+          {% if film.poster %}
+          <div class="add-movie__current-poster">
+            <img src="/{{ film.poster }}" alt="Aktuelles Poster" class="add-movie__poster-preview" />
+          </div>
+          {% endif %}
+          
+          <!-- Eingabe für neues Poster -->
+          <input
+            type="file"
+            id="poster"
+            name="poster"
+            class="add-movie__file"
+            accept="image/*"
+            {% if not film.poster %}required{% endif %}
+          />
+        </div>
+
+
+      <!-- Beschreibung -->
+      <div class="add-movie__group">
+        <label for="description" class="add-movie__label">Beschreibung:</label>
+        <textarea
+          id="description"
+          name="description"
+          rows="5"
+          class="add-movie__textarea"
+        >{{ film.description }}</textarea>
+        {% if errors.description %}
+        <p class="add-movie__error">{{ errors.description }}</p>
+        {% endif %}
+      </div>
+
+      <!-- Regie -->
+      <div class="add-movie__group">
+        <label class="add-movie__label">Regie:</label>
+        <input
+          type="text"
+          name="director"
+          class="add-movie__input"
+          value="{{ film.director_name }}"
+          required
+        />
+      </div>
+
+      <!-- Produzenten -->
+      <div class="add-movie__group">
+        <label for="producer" class="add-movie__label">Produzent:</label>
+        <input
+          type="text"
+          id="producer"
+          name="producer"
+          class="add-movie__input"
+          value="{{ film.producer }}"
+          required
+        />
+      </div>
+
+      <!-- Trailer (Video) -->
+      <div class="add-movie__group">
+        <label for="trailer" class="add-movie__label">Trailer (Video):</label>
+        
+        <!-- Zeigt den aktuellen Trailer an -->
+        {% if film.trailer %}
+        <div class="add-movie__current-trailer">
+          <video width="300px" class="add-movie__video-preview" controls>
+            <source src="/{{ film.trailer }}" type="video/mp4">
+            Ihr Browser unterstützt dieses Videoformat nicht.
+          </video>
+        </div>
+        {% endif %}
+        
+        <!-- Eingabe für neuen Trailer -->
+        <input
+          type="file"
+          id="trailer"
+          name="trailer"
+          class="add-movie__file"
+          accept="video/*"
+        />
+      </div>
+
+      <!-- Trailer Poster -->
+      <div class="add-movie__group">
+        <label for="trailer_poster" class="add-movie__label">Trailer Poster:</label>
+        
+        <!-- Zeigt das aktuelle Trailer-Poster an -->
+        {% if film.trailer_poster %}
+        <div class="add-movie__current-poster">
+          <img src="/{{ film.trailer_poster }}" alt="Aktuelles Trailer Poster" class="add-movie__poster-preview" />
+        </div>
+        {% endif %}
+        
+        <!-- Eingabe für neues Trailer-Poster -->
+        <input
+          type="file"
+          id="trailer_poster"
+          name="trailer_poster"
+          class="add-movie__file"
+          accept="image/*"
+        />
+      </div>
+
+
+      <!-- Buttons -->
+      <div class="add-movie__actions">
+        <button type="reset" class="add-movie__button add-movie__button--cancel">
+          Abbrechen
+        </button>
+        <button type="submit" class="add-movie__button add-movie__button--submit">
+          Film speichern
+        </button>
+      </div>
+    </form>
+  </div>
+</main>
+
+{% endblock %}

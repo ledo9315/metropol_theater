@@ -1,0 +1,43 @@
+.coming-soon {
+  margin-bottom: 400px;
+
+  @media (max-width: 960px) {
+    margin-bottom: 200px;
+  }
+}
+
+.coming-soon__title {
+  font-weight: 300;
+  font-size: 3rem;
+  color: var(--accent-color);
+  margin-bottom: 20px;
+
+  @media (max-width: 620px) {
+    line-height: 1.2;
+    font-size: 2.5rem;
+  }
+}
+.coming-soon__movies {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(315px, 1fr));
+  gap: 30px;
+}
+.coming-soon__movie {
+  width: 315px;
+  justify-self: center;
+
+  figure > figcaption {
+    font-size: 1.375rem;
+    text-align: center;
+    font-weight: 500;
+    color: var(--accent-color);
+  }
+
+  @media (max-width: 960px) {
+  }
+}
+.coming-soon__movie-details {
+  text-align: center;
+  color: var(--grey);
+  font-size: 0.85rem;
+}

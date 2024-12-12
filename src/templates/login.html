@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./css/main.min.css" />
+    <title>Login - Metropol Theather</title>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="header__container">
+          <a
+            href="./index.html"
+            class="header__logo"
+            aria-label="Metropol Theater Startseite"
+          >
+            <img
+              src="./img/logo.svg"
+              alt="Metropol Theater Logo"
+              class="header__logo"
+            />
+          </a>
+          <div class="header__hamburger" aria-label="Menü öffnen">
+            <span class="header__hamburger-bar"></span>
+            <span class="header__hamburger-bar"></span>
+            <span class="header__hamburger-bar"></span>
+          </div>
+          <nav class="header__nav" aria-label="Hauptnavigation">
+            <ul class="header__nav-list">
+              <li class="header__nav-item">
+                <a class="header__nav-link" href="./index.html#programm"
+                  >Programm</a
+                >
+              </li>
+              <li class="header__nav-item">
+                <a class="header__nav-link" href="./prices.html"
+                  >Eintrittspreise</a
+                >
+              </li>
+              <li class="header__nav-item">
+                <a class="header__nav-link" href="./about.html">Ausstattung</a>
+              </li>
+              <li class="header__nav-item">
+                <a class="header__nav-link" href="./chronicle.html"
+                  >Geschichte</a
+                >
+              </li>
+              <li class="header__nav-item">
+                <a class="header__nav-link" href="./contact.html">Kontakt</a>
+              </li>
+            </ul>
+          </nav>
+          <a
+            href="tel:048529344"
+            class="header__phone"
+            aria-label="Telefonnummer anrufen"
+            ><img
+              src="./img/icons/phone.svg"
+              class="header__phone-icon"
+              alt="Telefon-Symbol"
+            />04852 9344</a
+          >
+        </div>
+      </div>
+    </header>
+    <main class="login">
+      <div class="container login__container">
+        <h1 class="login__title">Login</h1>
+        <form action="#" method="post" class="login__form">
+          <div class="login__group">
+            <label for="username" class="login__label">Benutzername:</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              class="login__input"
+              required
+            />
+          </div>
+          <div class="login__group">
+            <label for="password" class="login__label">Passwort:</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              class="login__input"
+              required
+            />
+          </div>
+          <button type="submit" class="login__button">Login</button>
+        </form>
+      </div>
+    </main>
+    <script src="./main.js"></script>
+  </body>
+</html>

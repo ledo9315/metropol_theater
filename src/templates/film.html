@@ -1,0 +1,114 @@
+{% extends "template.html" %} {% block title %}Home{% endblock %} {% block
+content %}
+
+<main class="main">
+  <!-- Film Details -->
+
+  <!-- Linke Spalte -->
+  <section class="film">
+    <div class="container">
+      <div class="film__container">
+        <div class="film__left-container">
+          <!-- Zurück zur Startseite -->
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <a href="/" class="breadcrumb__link"><span>&larr;</span>
+              Startseite</a>
+          </nav>
+          <aside class="film__poster">
+            <img
+              src="/{{ film.poster }}"
+              alt="Filmplakat von {{ film.title }}"
+              class="film__poster-img"
+            />
+            <h1 class="film__title">{{ film.title }}</h1>
+            <p class="film__details">
+              <span>
+                {% for genre in film.genres %} {{ genre }} {% if not loop.last
+                %} / {% endif %} {% endfor %}
+              </span>
+              <span>/ {{ film.production_year }} / {{ film.duration }} Min / FSK
+                {{ film.rating }}</span>
+            </p>
+          </aside>
+        </div>
+
+        <!-- Rechte Spalte -->
+        <div class="film__right-container">
+          <article class="film__description">
+            <div class="video-wrapper">
+              <video
+                controls
+                class="film__trailer"
+                src="/{{ film.trailer }}"
+                poster="/{{ film.trailer_poster }}"
+              >
+              </video>
+            </div>
+            <p class="film__description">
+              {{ film.description }}
+            </p>
+            <section class="film__info">
+              <h2 class="visually-hidden">Film-Details</h2>
+              <div class="film__info-row">
+                <div class="film__info-title">
+                  <span class="film__info-label">Regisseur</span>
+                  <span class="film__info-value">
+                    {{ film.director_name }}
+                  </span>
+                </div>
+              </div>
+              <div class="film__info-row">
+                <div class="film__info-title">
+                  <span class="film__info-label">Produktionsland</span>
+                  <span class="film__info-value">
+                    {% for country in film.country_names %} {{ country }} {%
+                    endfor %}
+                  </span>
+                </div>
+              </div>
+              <div class="film__info-row">
+                <div class="film__info-title">
+                  <span class="film__info-label">Produzenten</span>
+                  <span class="film__info-value">
+                    {{ film.producer }}
+                  </span>
+                </div>
+              </div>
+            </section>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Spielzeiten -->
+  <section class="schedule">
+    <div class="container">
+      <h2 class="schedule__title">Spielzeiten</h2>
+      <ul class="schedule__items">
+        {% for date, times in showtimes %}
+        <li class="schedule__item">
+          <div class="schedule__item-day">
+            <!-- Zeigt das Datum an -->
+            <time datetime="{{ date }}">{{ date }}</time>
+          </div>
+          <ul class="schedule__item-times">
+            <!-- Innere Schleife: Iteriert über die Zeiten -->
+            {% for timeData in times %}
+            <li class="schedule__item-time">
+              {{ timeData.time }} {% if timeData.isOriginalVersion %} <span
+                class="schedule__item-time-tag"
+              >OV</span> {% endif %} {% if timeData.is3D %} <span
+                class="schedule__item-time-tag"
+              >3D</span> {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+</main>
+
+{% endblock %}

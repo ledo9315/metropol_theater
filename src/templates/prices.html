@@ -1,0 +1,50 @@
+{% extends "template.html" %} {% block title %}Eintrittspreise -
+Metropol-Theater{% endblock %} {% block content %}
+<main>
+  <div class="container">
+    <!-- Zurück zur Startseite -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/home" class="breadcrumb__link"><span>&larr;</span> Startseite</a
+      >
+    </nav>
+
+    <!-- Preise -->
+    <section class="prices">
+      <h1 class="prices__title">Kartenpreise</h1>
+      <p class="prices__subtitle">Hier finden Sie unsere Besucherpreise.</p>
+      <table class="prices__table">
+        <tbody>
+          <tr>
+            <td>Standard</td>
+            <td>10,00€</td>
+          </tr>
+          <tr>
+            <td>Ermäßigt*</td>
+            <td>8,00€</td>
+          </tr>
+          <tr>
+            <td>3D-Kino</td>
+            <td>+3,00€</td>
+          </tr>
+          <tr>
+            <td>Überlänge</td>
+            <td>+1,50€</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="prices__note">*Kinder bis 16 Jahre</p>
+    </section>
+
+    <!-- Textblock -->
+    <section class="info">
+      <h2 class="info__title">Unser Kino, Eure Leinwand</h2>
+      <p class="info__text">
+        Sie sind eine Bildungseinrichtung, Verein oder Unternehmen und möchten
+        Ihre Ideen auf unserer Leinwand präsentieren? Dann
+        <a href="#kontakt" class="info__link">kontaktieren</a> Sie uns, um den
+        Kinosaal zu mieten.
+      </p>
+    </section>
+  </div>
+</main>
+{% endblock %}

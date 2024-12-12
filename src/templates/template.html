@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=
+    , initial-scale=1.0"
+        />
+        <link rel="stylesheet" href="/css/main.min.css" />
+        <title>{% block title %} Metropol Theater {% endblock %}</title>
+    </head>
+    <body>
+        <header>
+            <div class="container">
+                <div class="header__container">
+                    <a
+                        href="/"
+                        class="header__logo"
+                        aria-label="Metropol Theater Startseite"
+                    >
+                        <img
+                            src="/img/logo.svg"
+                            alt="Metropol Theater Logo"
+                            class="header__logo"
+                        />
+                    </a>
+                    <div class="header__hamburger" aria-label="Menü öffnen">
+                        <span class="header__hamburger-bar"></span>
+                        <span class="header__hamburger-bar"></span>
+                        <span class="header__hamburger-bar"></span>
+                    </div>
+                    <nav class="header__nav" aria-label="Hauptnavigation">
+                        <ul class="header__nav-list">
+                            <li class="header__nav-item">
+                                <a
+                                    class="header__nav-link"
+                                    href="/#programm"
+                                >Programm</a>
+                            </li>
+                            <li class="header__nav-item">
+                                <a class="header__nav-link" href="/prices"
+                                >Kartenpreise</a>
+                            </li>
+                            <li class="header__nav-item">
+                                <a class="header__nav-link" href="/about"
+                                >Ausstattung</a>
+                            </li>
+                            <li class="header__nav-item">
+                                <a
+                                    class="header__nav-link"
+                                    href="/chronicle"
+                                >Geschichte</a>
+                            </li>
+                            <li class="header__nav-item">
+                                <a
+                                    class="header__nav-link"
+                                    href="/contact"
+                                >Kontakt</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <a
+                        href="tel:048529344"
+                        class="header__phone"
+                        aria-label="Telefonnummer anrufen"
+                    ><img
+                            src="/img/icons/phone.svg"
+                            class="header__phone-icon"
+                            alt="Telefon-Symbol"
+                        />04852 9344</a>
+                </div>
+            </div>
+        </header>
+        {% block content %} {% endblock %}
+        <footer class="footer">
+            <div class="container">
+                <div class="footer__container">
+                    <!-- Metropol-Theater -->
+                    <div class="footer__theater">
+                        <h3 class="footer__theater-title">Metropol-Theater</h3>
+                        <p>Kartenvorbestellungen</p>
+                        <p>täglich ab 19:00 Uhr</p>
+                        <p>
+                            telefonisch unter:
+                            <a href="tel:+4948529344" class="footer__link"
+                            >04852 9344</a>
+                        </p>
+                    </div>
+
+                    <!-- Logo und Kontaktinformationen -->
+                    <div class="footer__contact">
+                        <h3 class="footer__contact-title">Adresse</h3>
+                        <address class="footer__address">
+                            <p>Posadowskystraße 2A</p>
+                            <p>25541 Brunsbüttel</p>
+                            <p>
+                                <a
+                                    href="tel:048529344"
+                                    class="footer__link"
+                                >Telefon: 04852 9344
+                                </a>
+                            </p>
+                            <p>
+                                <a
+                                    href="mailto:info@metropol-theater.de"
+                                    class="footer__link"
+                                >
+                                    Email: info@metropol-theater.de
+                                </a>
+                            </p>
+                        </address>
+                    </div>
+
+                    <!-- Navigation -->
+                    <nav
+                        class="footer__nav"
+                        aria-label="Interessante Informationen"
+                    >
+                        <h3 class="footer__nav-title">Navigation</h3>
+                        <ul class="footer__links">
+                            <li>
+                                <a href="/#programm" class="footer__link"
+                                >Programm</a>
+                            </li>
+                            <li>
+                                <a href="/prices" class="footer__link"
+                                >Eintrittspreise</a>
+                            </li>
+                            <li>
+                                <a href="/about" class="footer__link"
+                                >Ausstattung</a>
+                            </li>
+                            <li class="footer__link">
+                                <a href="/chronicle">Geschichte</a>
+                            </li>
+                            <li>
+                                <a href="/contact" class="footer__link"
+                                >Kontakt</a>
+                            </li>
+                        </ul>
+                    </nav>
+
+                    <!-- Rechtliches -->
+                    <nav
+                        class="footer__legal"
+                        aria-label="Rechtliche Informationen"
+                    >
+                        <h3 class="footer__legal-title">Rechtliches</h3>
+                        <ul class="footer__links">
+                            <li>
+                                <a href="#impressum" class="footer__link"
+                                >Impressum</a>
+                            </li>
+                            <li>
+                                <a href="#datenschutz" class="footer__link"
+                                >Datenschutz</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <!-- Copyright -->
+                <div class="footer__copyright">
+                    <p>
+                        &copy; 2024
+                        <a href="/" class="footer__link"
+                        >Metropol-Theater Brunsbüttel</a>
+                    </p>
+                </div>
+            </div>
+        </footer>
+        <script src="/js/main.js"></script>
+    </body>
+</html>

@@ -1,0 +1,106 @@
+{% extends "template.html" %} {% block title %}Home{% endblock %} {% block
+content %}
+
+<main class="main">
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <div class="container">
+      <a href="/home" class="breadcrumb__link">
+        <span>&larr;</span> Startseite
+      </a>
+    </div>
+  </nav>
+
+  <!-- Kontaktbereich -->
+  <section class="contact">
+    <div class="container">
+      <div class="contact__container">
+        <!-- Kontaktformular -->
+        <article class="contact__form">
+          <h2 class="contact__form-title">Kontaktformular</h2>
+          <p class="contact__form-description">
+            Schreiben Sie uns einfach eine Nachricht!
+          </p>
+          <form
+            action="#"
+            method="post"
+            class="form"
+            aria-label="Kontaktformular"
+          >
+            <div class="form__group">
+              <label for="firstname" class="form__label">Vorname</label>
+              <input
+                type="text"
+                id="firstname"
+                name="firstname"
+                class="form__input"
+                required
+              />
+            </div>
+            <div class="form__group">
+              <label for="lastname" class="form__label">Nachname</label>
+              <input
+                type="text"
+                id="lastname"
+                name="lastname"
+                class="form__input"
+                required
+              />
+            </div>
+            <div class="form__group">
+              <label for="email" class="form__label">E-Mail</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                class="form__input"
+                required
+              />
+            </div>
+            <div class="form__group">
+              <label for="message" class="form__label">Deine Nachricht</label>
+              <textarea
+                id="message"
+                name="message"
+                class="form__textarea"
+                rows="7"
+                required
+              ></textarea>
+            </div>
+            <button type="submit" class="form__button">Absenden</button>
+          </form>
+        </article>
+        <!-- Karte -->
+        <div
+          class="contact__map"
+          style="overflow: hidden; max-width: 100%; width: 100%; height: 600px"
+        >
+          <div
+            id="my-map-display"
+            style="height: 100%; width: 100%; max-width: 100%"
+          >
+            <iframe
+              style="height: 100%; width: 100%; border: 0"
+              frameborder="0"
+              src="https://www.google.com/maps/embed/v1/place?q=Posadowskystraße+2A,+25541+Brunsbüttel&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8"
+            ></iframe>
+          </div>
+          <a
+            class="googlecoder"
+            href="https://www.bootstrapskins.com/themes"
+            id="grab-map-data"
+          >premium bootstrap themes</a>
+          <style>
+            #my-map-display img {
+              max-height: none;
+              max-width: none !important;
+              background: none !important;
+            }
+          </style>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+{% endblock %}
