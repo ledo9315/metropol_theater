@@ -1,0 +1,66 @@
+{% extends "template.html" %} {% block title %}Film hinzufügen{% endblock %} {%
+block content %}
+
+<main class="add-highlight">
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb add-movie__breadcrumb" aria-label="Breadcrumb">
+            <a href="/dashboard" class="breadcrumb__link"
+            >&larr; Zurück zum Dashboard</a>
+        </nav>
+
+        <h1 class="add-highlight__title">Highlight hinzufügen</h1>
+        <form
+            action="/highlights/add"
+            method="POST"
+            class="add-highlight__form"
+            enctype="multipart/form-data"
+        >
+            <!-- Poster -->
+            <div class="add-highlight__group">
+                <label for="poster" class="add-movie__label">Poster:</label>
+                <input
+                    type="file"
+                    id="image"
+                    name="highlight_image"
+                    class="add-highlight__file"
+                    accept="image/*"
+                    required
+                />
+            </div>
+
+            <!-- Beschreibung -->
+            <div class="add-highlight__group">
+                <label for="description" class="add-highlight__label"
+                >Beschreibung:</label>
+                <textarea
+                    id="description"
+                    name="description"
+                    rows="5"
+                    class="add-highlight__textarea"
+                >{{ formValues.description }}</textarea>
+                {% if errors.description %}
+                <p class="add-highlight__error">{{ errors.description }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Buttons -->
+            <div class="add-highlight__actions">
+                <button
+                    type="reset"
+                    class="add-highlight__button add-highlight__button--cancel"
+                >
+                    Abbrechen
+                </button>
+                <button
+                    type="submit"
+                    class="add-highlight__button add-highlight__button--submit"
+                >
+                    Highlight hinzufügen
+                </button>
+            </div>
+        </form>
+    </div>
+</main>
+
+{% endblock %}

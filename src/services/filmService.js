@@ -6,6 +6,7 @@ import {
     findDirectorIdByName as modelFindDirectorIdByName,
     findGenreIdByName as modelFindGenreIdByName,
     getAllFilms as modelGetAllFilms,
+    getAllHighlights as modelGetHighlights,
     getComingSoonFilms as modelGetComingSoonFilms,
     getFilmById as modelGetFilmById,
     getShowtimesForFilm as modelGetShowtimesForFilm,
@@ -14,6 +15,7 @@ import {
     insertDirector as modelInsertDirector,
     insertFilm as modelInsertFilm,
     insertGenre as modelInsertGenre,
+    insertHighlight as modelInsertHighlight,
     setFilmCountry as modelSetFilmCountry,
     setFilmGenres as modelSetFilmGenres,
     setShowtimesForFilm as modelSetShowtimesForFilm,
@@ -33,7 +35,7 @@ import {
     groupAndSortShowtimes,
 } from "../utils/formatDate.js";
 
-import { uploadFiles } from "../utils/fileUtils.js";
+import { saveFile, uploadFiles } from "../utils/fileUtils.js";
 import { validateFilmData } from "../utils/validators.js";
 import { render } from "../services/render.js";
 
@@ -420,4 +422,32 @@ export const getComingFilms = async () => {
         console.error("Fehler beim Abrufen der kommenden Filme:", error);
         throw new Error("Kommende Filme konnten nicht abgerufen werden.");
     }
+};
+
+export const addHighlight = async (req) => {
+    try {
+        const formData = await req.formData();
+        const description = formData.get("description");
+
+        let image = formData.get("highlight_image");
+        if (image instanceof File && image.size > 0) {
+            image = await saveFile(image, "uploads/highlight_poster");
+        }
+
+        modelInsertHighlight(image, description);
+        return new Response(null, { status: 201 });
+    } catch (error) {
+        console.error("Fehler beim Hinzufügen des Highlights:", error);
+        throw new Error("Highlight konnte nicht hinzugefügt werden.");
+    }
+};
+
+export const getHighlights = async () => {
+    const highlights = await modelGetHighlights();
+
+    return highlights.map((highlight) => ({
+        id: highlight[0],
+        image: highlight[1],
+        description: highlight[2],
+    }));
 };

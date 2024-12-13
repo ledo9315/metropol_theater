@@ -190,49 +190,46 @@ export const homePage = async () => {
   }
 };
 
-/**
- * API-Endpunkt: Holt Filme für ein bestimmtes Datum.
- *
- * @param {Request} req - Die eingehende Anfrage mit dem Datumsparameter.
- * @returns {Response} Eine JSON-Antwort mit den Filmen für das angegebene Datum.
- */
-export const filmsByDate = async (req) => {
+export const createHighlight = async (req) => {
   try {
-    const url = new URL(req.url);
-    const date = url.searchParams.get("date");
+    const response = await filmService.addHighlight(req);
 
-    if (!date) {
-      return new Response("Fehlender Datumsparameter.", { status: 400 });
-    }
+    // if (response.status === 400) {
+    //   console.log("Validierungsfehler erkannt, Seite neu rendern");
+    //   return response;
+    // }
 
-    const filme = await getFilmsByDate(date);
-
-    return new Response(JSON.stringify(filme), {
-      headers: { "Content-Type": "application/json" },
+    return new Response(null, {
+      status: 302,
+      headers: { Location: "/highlights" },
     });
   } catch (error) {
-    console.error("Fehler beim Abrufen der Filme für ein Datum:", error);
+    console.error("Fehler beim Hinzufügen des Highlights:", error);
     return new Response("Interner Serverfehler", { status: 500 });
   }
 };
 
-/**
- * API-Endpunkt: Holt die Programmübersicht der nächsten 5 Tage.
- *
- * @returns {Response} Eine JSON-Antwort mit den Filmen und den Daten.
- */
-export const getProgramOverviewEndpoint = async () => {
+export const indexHighlights = async () => {
   try {
-    const { programm, daten } = await getProgramOverview();
+    const highlights = await filmService.getHighlights();
 
-    return new Response(
-      JSON.stringify({ programm, daten }),
-      {
-        headers: { "Content-Type": "application/json" },
-      },
-    );
+    console.log("Highlights:", highlights);
+
+    return createResponse(render("highlights.html", { highlights }));
   } catch (error) {
-    console.error("Fehler beim Abrufen der Programmübersicht:", error);
+    console.error("Fehler beim Abrufen der Highlights:", error);
+    return new Response("Interner Serverfehler", { status: 500 });
+  }
+};
+
+export const renderHighlightForm = () => {
+  try {
+    return createResponse(render("add_highlight.html"));
+  } catch (error) {
+    console.error(
+      "Fehler beim Laden des Formulars zum Hinzufügen von Highlights:",
+      error,
+    );
     return new Response("Interner Serverfehler", { status: 500 });
   }
 };

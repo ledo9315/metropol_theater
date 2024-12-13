@@ -509,3 +509,20 @@ export const getComingSoonFilms = async (
   }
   return data;
 };
+
+export const insertHighlight = (image, description) => {
+  const db = connection();
+  db.query(
+    "INSERT INTO highlights (highlight_image, description) VALUES (?,?)",
+    [
+      image,
+      description,
+    ],
+  );
+};
+
+export const getAllHighlights = () => {
+  const db = connection();
+
+  return db.query("SELECT * FROM highlights");
+};
