@@ -1,41 +1,46 @@
 {% extends "template.html" %} {% block title %}Home{% endblock %} {% block
-    content %}
-    
-    <main>
-        <div class="container">
-            <!-- Breadcrumb -->
-            <nav class="breadcrumb add-movie__breadcrumb" aria-label="Breadcrumb">
-                <a href="/dashboard" class="breadcrumb__link"
-                >&larr; Zurück zum Dashboard</a>
-            </nav>
+content %}
+
+<main>
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb add-movie__breadcrumb" aria-label="Breadcrumb">
+            <a href="/dashboard" class="breadcrumb__link"
+            >&larr; Zurück zum Dashboard</a>
+        </nav>
+        <header class="highlight__header">
             <h1 class="highlight__title">Highlights</h1>
-            <a class="highlight__add-button" href="/highlights/add">Highlight hinzufügen</a>
-    
-                {% for highlight in highlights %}
-                <article class="highlight__article">
-                    <div class="highlight__content">
-                        <div class="highlight__aside">
-                            <img
-                                src="/{{ highlight.image }}"
-                                width="200"
-                                alt="Filmplakat von {{ highlight.title }}"
-                                class="highlight__img"
-                            />
-                            <div class="highlight__actions">
-                                <a href="/highlights/{{ highlight.id }}/edit" class="highlight__link"
-                                    >Highlight bearbeiten</a
-                                >
-                                <a href="/highlight_remove_form/{{ highlight.id }}">Highlight entfernen</a>
-                            </div>
-                        </div>
-                        <div class="highlight__info">
-                            <strong>Beschreibung:</strong>
-                            <p>{{ highlight.description }}</p>
-                        </div>
-                    </div>  
-                </article>
-                {% endfor %}
-        </>
-    </main>
-    
-    {% endblock %}
+            <a class="highlight__add-button" href="/highlights/add" role="button">
+                Highlight hinzufügen
+            </a>
+        </header>
+
+        {% for highlight in highlights %}
+        <article class="highlight__article">
+            <div class="highlight__content">
+                <div class="highlight__aside">
+                    <img
+                        src="/{{ highlight.image }}"
+                        alt="Filmplakat von {{ highlight.title }}"
+                        class="highlight__img"
+                    />
+                    <div class="highlight__actions">
+                        <a
+                            href="/highlights/{{ highlight.id }}/edit"
+                            class="highlight__link"
+                        >Highlight bearbeiten</a>
+                        <a href="/highlight_remove_form/{{ highlight.id }}"
+                        >Highlight entfernen</a>
+                    </div>
+                </div>
+                <div class="highlight__info">
+                    <strong>Beschreibung:</strong>
+                    <p>{{ highlight.description }}</p>
+                </div>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+</main>
+
+{% endblock %}
