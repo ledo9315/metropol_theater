@@ -3,7 +3,7 @@ import { contentType } from "https://deno.land/std@0.203.0/media_types/mod.ts";
 
 function buildFullPath(base, pathname) {
     const decodedPath = decodeURI(pathname);
-    return path.resolve(base, `.${decodedPath}`);  
+    return path.resolve(base, `.${decodedPath}`);
 }
 
 function pathOk(fullPath, base) {

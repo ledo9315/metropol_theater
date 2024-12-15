@@ -106,30 +106,7 @@
       <!-- Spielzeiten -->
       <div class="add-movie__group">
         <label class="add-movie__label">Spielzeiten:</label>
-        <div id="showtimes-container" class="add-movie__showtimes">
-          <!-- <div class="add-movie__time">
-            <div class="add-movie__input-wrapper">
-              <input type="date" name="show_date[]" class="add-movie__input" required />
-              <input type="time" name="show_time[]" class="add-movie__input" required />
-            </div>
-            <div class="add-movie__select-wrapper">
-              <label class="add-movie__select-label">
-                OV:
-                <select name="is_original_version[]" class="add-movie__select">
-                  <option value="0">Nein</option>
-                  <option value="1">Ja</option>
-                </select>
-              </label>
-              <label class="add-movie__select-label">
-                3D:
-                <select name="is_3d[]" class="add-movie__select">
-                  <option value="0">Nein</option>
-                  <option value="1">Ja</option>
-                </select>
-              </label>
-            </div>
-          </div> -->
-        </div>
+        <div id="showtimes-container" class="add-movie__showtimes"></div>
         <button
           type="button"
           id="showtime-button"
@@ -152,11 +129,7 @@
             />
           </div>
         </div>
-        <button
-          type="button"
-          class="add-movie__button add-movie__button--add"
-          onclick="addGenreField()"
-        >
+        <button id="add-genre-button" type="button" class="add-movie__button">
           Genre hinzufügen
         </button>
         {% if errors.genres %}

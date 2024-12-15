@@ -11,9 +11,10 @@ import { createResponse } from "../utils/response.js";
  */
 export const index = async () => {
   const films = await filmService.getAllFilms();
+  const highlights = await filmService.getHighlights();
 
   try {
-    return createResponse(render("dashboard.html", { films }));
+    return createResponse(render("dashboard.html", { films, highlights }));
   } catch (error) {
     console.error("Fehler beim Abrufen der Filme:", error);
     return new Response("Interner Serverfehler", { status: 500 });
@@ -190,6 +191,11 @@ export const homePage = async () => {
   }
 };
 
+/**
+ * Rendert die Seite mit den Highlights.
+ *
+ * @returns {Response} Eine HTML-Antwort mit den gerenderten Highlights.
+ */
 export const createHighlight = async (req) => {
   try {
     const response = await filmService.addHighlight(req);
@@ -201,7 +207,7 @@ export const createHighlight = async (req) => {
 
     return new Response(null, {
       status: 302,
-      headers: { Location: "/highlights" },
+      headers: { Location: "/dashboard" },
     });
   } catch (error) {
     console.error("Fehler beim Hinzufügen des Highlights:", error);
@@ -209,19 +215,10 @@ export const createHighlight = async (req) => {
   }
 };
 
-export const indexHighlights = async () => {
-  try {
-    const highlights = await filmService.getHighlights();
-
-    console.log("Highlights:", highlights);
-
-    return createResponse(render("highlights.html", { highlights }));
-  } catch (error) {
-    console.error("Fehler beim Abrufen der Highlights:", error);
-    return new Response("Interner Serverfehler", { status: 500 });
-  }
-};
-
+/**
+ * Rendert die Seite mit den Highlights.
+ * @returns {Response} Eine HTML-Antwort mit den gerenderten Highlights.
+ */
 export const renderHighlightForm = () => {
   try {
     return createResponse(render("add_highlight.html"));

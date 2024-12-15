@@ -5,7 +5,6 @@ import {
     destroy,
     edit,
     index,
-    indexHighlights,
     renderHighlightForm,
     show,
     update,
@@ -44,11 +43,6 @@ export default [
         method: "GET",
         pattern: new URLPattern({ pathname: "/films/:id" }),
         handler: show,
-    },
-    {
-        method: "GET",
-        pattern: new URLPattern({ pathname: "/highlights" }),
-        handler: indexHighlights,
     },
     {
         method: "POST",

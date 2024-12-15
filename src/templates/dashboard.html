@@ -1,4 +1,4 @@
-{% extends "template.html" %} {% block title %}Home{% endblock %} {% block
+{% extends "template.html" %} {% block title %}Dashboard{% endblock %} {% block
 content %}
 
 <main class="dashboard">
@@ -7,81 +7,137 @@ content %}
     <nav class="breadcrumb" aria-label="Breadcrumb">
       <a href="/" class="breadcrumb__link">&larr; Startseite</a>
     </nav>
+  </div>
 
-    <h1 class="dashboard__title">Dashboard</h1>
-    <a href="/films/add" class="dashboard__add-link">Film hinzufügen</a>
+  <div class="container dashboard__container">
+    <aside class="dashboard__aside">
+      <nav>
+        <ul class="dashboard__menu">
+          <li>
+            <button
+              class="dashboard__menu-link active"
+              data-section="movies-section"
+            >
+              Filme
+            </button>
+          </li>
+          <li>
+            <button
+              class="dashboard__menu-link"
+              data-section="highlights-section"
+            >
+              Highlights
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </aside>
 
-    <section class="dashboard__movies">
-      <h2 class="dashboard__movies-title">Filme:</h2>
+    <section class="dashboard__section dashboard__movies" id="movies-section">
+      <div class="container">
+        <header class="dashboard__header">
+          <h2 class="dashboard__title">Filme:</h2>
+          <a href="/films/add" class="dashboard__add-button">Film hinzufügen</a>
+        </header>
 
-      <!-- Film 1 -->
-      {% for film in films %}
-      <article class="dashboard__movie">
-        <div class="dashboard__movie-content">
-          <div class="dashboard__movie-aside">
+        {% for film in films %}
+        <article class="dashboard__movie">
+          <div class="dashboard__movie-content">
+            <div class="dashboard__movie-aside">
               <img
                 src="/{{ film.poster }}"
                 alt="Filmplakat von {{ film.title }}"
                 class="dashboard__movie-img"
-            </a>
-            <div class="dashboard__movie-actions">
-              <a href="/films/{{ film.id }}" class="dashboard__movie-link"
+              />
+              <div class="dashboard__movie-actions">
+                <a href="/films/{{ film.id }}" class="dashboard__movie-link"
                 >Film ansehen</a>
-              <a href="/films/{{ film.id }}/edit" class="dashboard__movie-link"
-              >Film bearbeiten</a>
+                <a
+                  href="/films/{{ film.id }}/edit"
+                  class="dashboard__movie-link"
+                >Film bearbeiten</a>
+                <a href="/film_remove_form/{{ film.id }}">Film entfernen</a>
+              </div>
+            </div>
 
-              <a href="/film_remove_form/{{ film.id }}">Film entfernen</a>
+            <div class="dashboard__movie-info">
+              <ul class="dashboard__movie-list">
+                <li><strong>Titel:</strong> {{ film.title }}</li>
+                <li>
+                  <strong>Genre:</strong>
+                  {% for genre in film.genres %} {{ genre }} {% endfor %}
+                </li>
+                <li><strong>Regisseur:</strong> {{ film.director }}</li>
+                <li><strong>Produzenten:</strong> {{ film.producer }}</li>
+                <li><strong>Länge:</strong> {{ film.duration }} Minuten</li>
+                <li>
+                  <strong>Produktionsland:</strong>
+                  {% for country in film.countries %} {{ country }} {% endfor %}
+                </li>
+                <li><strong>FSK:</strong> {{ film.rating }}</li>
+                <li>
+                  <strong>Spielzeiten:</strong>
+                  <ul>
+                    {% for date, times in film.showtimes %} {% if date == "null"
+                    %} Keine Spielzeiten {% else %}
+                    <div class="dashboard__movie-schedule">
+                      <span class="dashboard__movie-date">{{ date }}:</span>
+                      {% for timeDetails in times %} {{ timeDetails.time }} {%
+                      if timeDetails.is3D %}<span
+                        class="schedule__item-time-tag"
+                      >3D</span>{% endif %} {% if timeDetails.isOriginalVersion
+                      %}<span class="schedule__item-time-tag">OV</span>{% endif
+                      %} {% if not loop.last %} | {% endif %} {% endfor %}
+                    </div>
+                    {% endif %} {% else %} Keine Spielzeiten verfügbar {% endfor
+                    %}
+                  </ul>
+                </li>
+                <li><strong>Erstellt am:</strong> {{ film.createdAt }}</li>
+              </ul>
             </div>
           </div>
+        </article>
+        {% endfor %}
+      </div>
+    </section>
 
-          <div class="dashboard__movie-info">
-            <ul class="dashboard__movie-list">
-              <li><strong>Titel:</strong> {{ film.title }}</li>
-
-              <li>
-                <strong>Genre:</strong> {% for genre in film.genres %} {{ genre
-                }} {% endfor %}
-              </li>
-              <li><strong>Regisseur:</strong> {{ film.director}}</li>
-              <li>
-                <strong>Produzenten:</strong> {{ film.producer }}
-              </li>
-              <li><strong>Länge:</strong> {{ film.duration }} Minuten</li>
-              <li>
-                <strong>Produktionsland:</strong> {% for country in
-                film.countries %} {{ country }} {% endfor %}
-              </li>
-              <li><strong>FSK:</strong> {{ film.rating }}</li>
-              <li>
-                <strong>Spielzeiten:</strong>
-                <ul>
-                  {% for date, times in film.showtimes %}
-                    {% if date == "null" %}
-                      Keine Spielzeiten
-                    {% else %}
-                      <div class="dashboard__movie-schedule">
-                        <span class="dashboard__movie-date">{{ date }}:</span>
-                        {% for timeDetails in times %}
-                          {{ timeDetails.time }}
-                          {% if timeDetails.is3D %}<span class="schedule__item-time-tag">3D</span>{% endif %}
-                          {% if timeDetails.isOriginalVersion %}<span class="schedule__item-time-tag">OV</span>{% endif %}
-                          {% if not loop.last %} | {% endif %}
-                        {% endfor %}
-                      </div>
-                    {% endif %}
-                  {% else %}
-                    Keine Spielzeiten verfügbar
-                  {% endfor %}
-                </ul>
-                
-              </li>
-
-              <li><strong>Erstellt am:</strong> {{ film.createdAt }}</li>
-            </ul>
+    <section
+      class="dashboard__section dashboard__highlights hidden"
+      id="highlights-section"
+    >
+      <div class="container">
+        <header class="dashboard__header">
+          <h2 class="dashboard__title">Highlights:</h2>
+          <a href="/highlights/add" class="dashboard__add-button"
+          >Highlight hinzufügen</a>
+        </header>
+        {% for highlight in highlights %}
+        <article class="highlight__article">
+          <div class="highlight__content">
+            <div class="highlight__aside">
+              <img
+                src="/{{ highlight.image }}"
+                alt="Filmplakat von {{ highlight.title }}"
+                class="highlight__img"
+              />
+              <div class="highlight__actions">
+                <a
+                  href="/highlights/{{ highlight.id }}/edit"
+                  class="highlight__link"
+                >Highlight bearbeiten</a>
+                <a href="/highlight_remove_form/{{ highlight.id }}"
+                >Highlight entfernen</a>
+              </div>
+            </div>
+            <div class="highlight__info">
+              <strong>Beschreibung:</strong>
+              <p>{{ highlight.description }}</p>
+            </div>
           </div>
-        </div>
-      </article>
-      {% endfor %}
+        </article>
+        {% endfor %}
+      </div>
     </section>
   </div>
 </main>

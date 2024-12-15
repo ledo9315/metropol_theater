@@ -10,10 +10,15 @@ content %}
         </nav>
         <header class="highlight__header">
             <h1 class="highlight__title">Highlights</h1>
-            <a class="highlight__add-button" href="/highlights/add" role="button">
+            <a
+                class="dashboard__add-button"
+                href="/highlights/add"
+                role="button"
+            >
                 Highlight hinzufügen
             </a>
         </header>
+
 
         {% for highlight in highlights %}
         <article class="highlight__article">

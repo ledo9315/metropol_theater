@@ -1263,18 +1263,7 @@ header {
 .dashboard__movies {
     width: 100%;
 }
-.dashboard__movies-title {
-    font-weight: 300;
-    font-size: 2.5rem;
-    margin-bottom: 30px;
-    line-height: 1.2;
-    color: var(--accent-color);
-}
-@media (max-width: 960px) {
-    .dashboard__movies-title {
-        font-size: 2rem;
-    }
-}
+
 .dashboard__movie {
     margin-bottom: 100px;
 }
@@ -1326,6 +1315,13 @@ header {
 .dashboard__movie-actions {
     display: flex;
     flex-direction: column;
+}
+
+.dashboard__movie-aside {
+    @media (max-width: 620px) {
+        width: 100%;
+        margin-bottom: 20px;
+    }
 }
 .dashboard__movie-img {
     margin-top: 20px;
@@ -1658,29 +1654,11 @@ header {
     margin-bottom: 10px;
 }
 
-.highlight__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 80px;
-}
-
 .highlight__title {
     font-weight: 300;
     font-size: 3rem;
     line-height: 1.2;
     color: var(--accent-color);
-}
-.highlight__add-button {
-    height: 50px;
-    padding: 10px 20px;
-    background-color: var(--accent-color);
-    color: white;
-}
-
-.highlight__add-button:hover {
-    background-color: #6b1414;
-    text-decoration: none;
 }
 
 .highlight__article {
@@ -1694,11 +1672,14 @@ header {
 }
 
 .highlight__content {
-    max-width: 800px;
     width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 2fr;
+    display: flex;
     column-gap: 50px;
+
+    @media (max-width: 960px) {
+        flex-direction: column;
+        row-gap: 50px;
+    }
 }
 
 .highlight__img {
@@ -1710,9 +1691,12 @@ header {
 .highlight__actions {
     display: flex;
     flex-direction: column;
+    text-decoration: underline;
 }
 
 .highlight__info {
+    max-width: 500px;
+    width: 100%;
     strong {
         color: var(--accent-color);
         font-weight: 500;
@@ -1787,4 +1771,99 @@ header {
 .add-highlight__button--cancel:hover {
     text-decoration: none;
     background: none;
+}
+
+.dashboard__section {
+    width: 100%;
+}
+
+.dashboard__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 50px;
+
+    @media (max-width: 620px) {
+        flex-direction: column;
+        row-gap: 20px;
+        align-items: flex-start;
+    }
+}
+
+.dashboard__container {
+    display: flex;
+    gap: 2rem;
+
+    @media (max-width: 960px) {
+        flex-direction: column;
+    }
+}
+
+.dashboard__aside {
+    width: 20%;
+    background-color: #f7f7f7;
+    padding: 1rem;
+    border-right: 1px solid #ddd;
+
+    @media (max-width: 960px) {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+    }
+}
+
+.dashboard__menu {
+    list-style: none;
+    padding: 0;
+}
+
+.dashboard__menu-link {
+    display: block;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    text-align: left;
+    color: #333;
+}
+
+.dashboard__menu-link:hover {
+    background-color: #f0f0f0;
+    text-decoration: none;
+}
+
+.dashboard__menu-link.active {
+    font-weight: bold;
+    color: #b22222;
+}
+
+.dashboard__content {
+    flex: 1;
+}
+
+.dashboard__add-button {
+    height: 50px;
+    padding: 10px 20px;
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.dashboard__add-button:hover {
+    background-color: #6b1414;
+    text-decoration: none;
+}
+
+.dashboard__title {
+    font-weight: 300;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    line-height: 1.2;
+    color: var(--accent-color);
+}
+@media (max-width: 960px) {
+    .dashboard__title {
+        font-size: 2rem;
+    }
 }

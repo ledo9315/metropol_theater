@@ -220,7 +220,6 @@
               <button
               type="button"
               class="add-movie__button add-movie__button--remove"
-              onclick="removeGenreField(this)"
             >
               Entfernen
             </button>
@@ -239,11 +238,7 @@
             </div>
           {% endif %}
         </div>
-        <button
-          type="button"
-          class="add-movie__button add-movie__button--add"
-          onclick="addGenreField()"
-        >
+        <button id="add-genre-button" type="button" class="add-movie__button">
           Genre hinzufügen
         </button>
         {% if errors.genres %}
