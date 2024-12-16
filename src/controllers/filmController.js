@@ -230,3 +230,78 @@ export const renderHighlightForm = () => {
     return new Response("Interner Serverfehler", { status: 500 });
   }
 };
+
+export const renderFilmRemoveForm = async (_, params) => {
+  try {
+    const { id } = params.pathname.groups;
+
+    return createResponse(render("remove.html", { id }));
+  } catch (error) {
+    console.error("Fehler beim Laden des Films für das Entfernen:", error);
+    return new Response("Interner Serverfehler", { status: 500 });
+  }
+};
+
+export const editHighlight = async (_, params) => {
+  try {
+    const { id } = params.pathname.groups;
+    const data = await filmService.getHighlightById(id);
+
+    console.log("Highlight:", data);
+
+    if (!data) {
+      return new Response("Highlight nicht gefunden", { status: 404 });
+    }
+
+    return createResponse(render("edit_highlight.html", { highlight: data }));
+  } catch (error) {
+    console.error("Fehler beim Bearbeiten des Highlights:", error);
+    return new Response("Interner Serverfehler", { status: 500 });
+  }
+};
+
+export const updateHighlight = async (req, params) => {
+  try {
+    const { id } = params.pathname.groups;
+    const response = await filmService.updateHighlight(id, req);
+
+    if (response.status === 400) {
+      console.log("Validierungsfehler erkannt, Seite neu rendern");
+      return response;
+    }
+
+    return new Response(null, {
+      status: 302,
+      headers: { Location: "/dashboard" },
+    });
+  } catch (error) {
+    console.error("Fehler beim Aktualisieren des Highlights:", error);
+    return new Response("Interner Serverfehler", { status: 500 });
+  }
+};
+
+export const renderHighlightRemoveForm = async (_, params) => {
+  try {
+    const { id } = params.pathname.groups;
+
+    return createResponse(render("remove_highlight.html", { id }));
+  } catch (error) {
+    console.error("Fehler beim Laden des Highlights für das Entfernen:", error);
+    return new Response("Interner Serverfehler", { status: 500 });
+  }
+};
+
+export const destroyHighlight = async (_, params) => {
+  try {
+    const { id } = params.pathname.groups;
+    await filmService.deleteHighlight(id);
+
+    return new Response(null, {
+      status: 302,
+      headers: { Location: "/dashboard" },
+    });
+  } catch (error) {
+    console.error("Fehler beim Löschen des Highlights:", error);
+    return new Response("Interner Serverfehler", { status: 500 });
+  }
+};

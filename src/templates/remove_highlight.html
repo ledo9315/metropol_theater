@@ -1,0 +1,25 @@
+{% extends "template.html" %} {% block title %}Highlight löschen{% endblock %}
+{% block content %}
+<main class="delete">
+    <div class="container">
+        <h1 class="delete__title">Highlight löschen</h1>
+
+        <div class="delete__actions">
+            <p class="delete__text">
+                Möchten Sie das Highlight löschen? Dieser Vorgang kann nicht
+                rückgängig gemacht werden.
+            </p>
+            <form
+                action="/highlights/{{ id }}/delete"
+                method="POST"
+                class="delete__form"
+            >
+                <button type="submit" class="button button--danger">
+                    Ja, löschen
+                </button>
+            </form>
+            <a href="/dashboard" class="button button--secondary">Abbrechen</a>
+        </div>
+    </div>
+</main>
+{% endblock %}

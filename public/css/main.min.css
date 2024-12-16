@@ -1703,7 +1703,7 @@ header {
     }
 }
 
-.add-highlight__title {
+.add-highlight__title, .edit-highlight__title {
     font-weight: 300;
     font-size: 3rem;
     line-height: 1.2;
@@ -1715,7 +1715,7 @@ header {
     }
 }
 
-.add-highlight__group {
+.add-highlight__group, .edit-highlight__group {
     display: grid;
     grid-template-columns: 1fr 2fr;
     -webkit-column-gap: 20px;
@@ -1730,18 +1730,18 @@ header {
     }
 }
 
-.add-highlight__group:last-of-type {
+.add-highlight__group:last-of-type, .edit-highlight__group:last-of-type {
     margin-bottom: 30px;
 }
 
-.add-highlight__label {
+.add-highlight__label, .edit-highlight__label {
     font-family: "Futura Std", Arial, Helvetica, sans-serif;
     font-size: 1.125rem;
     font-weight: 500;
     color: var(--accent-color);
 }
 
-.add-highlight__textarea {
+.add-highlight__textarea, .edit-highlight__textarea {
     background: #e9e9e9;
     border: none;
     font-family: "Futura Std", Arial, Helvetica, sans-serif;
@@ -1750,7 +1750,7 @@ header {
     color: var(--text-color);
     padding: 10px;
 }
-.add-highlight__actions {
+.add-highlight__actions, .edit-highlight__actions {
     max-width: 750px;
     display: flex;
     -webkit-box-pack: end;
@@ -1759,16 +1759,16 @@ header {
     column-gap: 10px;
     margin-bottom: 100px;
 }
-.add-highlight__button {
+.add-highlight__button, .edit-highlight__button {
     padding: 10px 20px;
 }
-.add-highlight__button--cancel {
+.add-highlight__button--cancel, .edit-highlight__button--cancel {
     background: none;
     color: var(--accent-color);
     text-decoration: underline;
 }
 
-.add-highlight__button--cancel:hover {
+.add-highlight__button--cancel:hover, .edit-highlight__button--cancel:hover {
     text-decoration: none;
     background: none;
 }
@@ -1866,4 +1866,21 @@ header {
     .dashboard__title {
         font-size: 2rem;
     }
+}
+
+.error__wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 250px;
+}
+.error__title {
+    font-weight: 300;
+    font-size: 3rem;
+    color: var(--accent-color);
+}
+.error__subtitle {
+    color: var(--accent-color);
+    font-weight: 500;
 }

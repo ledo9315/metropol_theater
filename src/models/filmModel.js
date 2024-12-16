@@ -526,3 +526,36 @@ export const getAllHighlights = () => {
 
   return db.query("SELECT * FROM highlights");
 };
+
+export const getHighlightById = (id) => {
+  const db = connection();
+  const result = db.query("SELECT * FROM highlights WHERE id = ?", [id]);
+  return result[0] || null;
+};
+
+export const updateHighlight = (image, description, id) => {
+  const db = connection();
+
+  db.query(
+    `
+    UPDATE 
+      highlights 
+    SET
+      highlight_image = ?,
+      description = ?
+    WHERE id = ?;
+    `,
+    [image, description, id],
+  );
+};
+
+export const deleteHighlight = (id) => {
+  const db = connection();
+
+  db.query(
+    `
+    DELETE FROM highlights WHERE id = ?
+  `,
+    [id],
+  );
+};

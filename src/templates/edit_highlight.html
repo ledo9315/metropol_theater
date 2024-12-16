@@ -1,0 +1,84 @@
+{% extends "template.html" %} {% block title %}Home{% endblock %} {% block
+content %}
+
+<main class="edit-highlight">
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav
+            class="breadcrumb edit-highlight__breadcrumb"
+            aria-label="Breadcrumb"
+        >
+            <a href="/dashboard" class="breadcrumb__link"
+            >&larr; Zurück zum Dashboard</a>
+        </nav>
+
+        <h1 class="edit-highlight__title">Highlight bearbeiten</h1>
+        <form
+            action="/highlights/{{ highlight.id }}/edit"
+            method="POST"
+            class="edit-highlight__form"
+            enctype="multipart/form-data"
+        >
+            <!-- Poster -->
+            <div class="edit-highlight__group">
+                <label for="poster" class="edit-highlight__label"
+                >Poster:</label>
+                {% if highlight.image %}
+                <img
+                    src="/{{ highlight.image }}"
+                    width="200"
+                    alt="Poster"
+                    class="edit-highlight__image"
+                />
+                {% endif %}
+                <input
+                    type="file"
+                    id="image"
+                    name="highlight_image"
+                    class="edit-highlight__file"
+                    accept="image/*"
+                    {%
+                    if
+                    not
+                    highlight.image
+                    %}required{%
+                    endif
+                    %}
+                />
+            </div>
+
+            <!-- Beschreibung -->
+            <div class="edit-highlight__group">
+                <label for="description" class="edit-highlight__label"
+                >Beschreibung:</label>
+                <textarea
+                    id="description"
+                    name="description"
+                    rows="5"
+                    class="edit-highlight__textarea"
+                >{{ highlight.description }}</textarea>
+                {% if errors.description %}
+                <p class="edit-highlight__error">{{ errors.description }}</p>
+                {% endif %}
+            </div>
+
+            <!-- Buttons -->
+            <div class="edit-highlight__actions">
+                <button
+                    type="reset"
+                    class="edit-highlight__button edit-highlight__button--cancel"
+                >
+                    Abbrechen
+                </button>
+                <button
+                    type="submit"
+                    class="edit-highlight__button edit-highlight__button--submit"
+                >
+                    Highlight speichern
+                </button>
+            </div>
+        </form>
+    </div>
+</main>
+
+{% endblock %}

@@ -2,6 +2,7 @@
 
 import {
     deleteFilm as modelDeleteFilm,
+    deleteHighlight as modelDeleteHighlight,
     findCountryIdByName as modelFindCountryIdByName,
     findDirectorIdByName as modelFindDirectorIdByName,
     findGenreIdByName as modelFindGenreIdByName,
@@ -9,6 +10,7 @@ import {
     getAllHighlights as modelGetHighlights,
     getComingSoonFilms as modelGetComingSoonFilms,
     getFilmById as modelGetFilmById,
+    getHighlightById as modelGetHighlightById,
     getShowtimesForFilm as modelGetShowtimesForFilm,
     getUpcomingFilms as modelGetUpcomingFilms,
     insertCountry as modelInsertCountry,
@@ -20,12 +22,14 @@ import {
     setFilmGenres as modelSetFilmGenres,
     setShowtimesForFilm as modelSetShowtimesForFilm,
     updateFilm as modelUpdateFilm,
+    updateHighlight as modelUpdateHighlight,
 } from "../models/filmModel.js";
 
 import {
     buildFilmObject,
     extractFilmFormData,
     extractShowtimes,
+    uploadFiles,
 } from "../utils/filmUtils.js";
 
 import {
@@ -35,7 +39,7 @@ import {
     groupAndSortShowtimes,
 } from "../utils/formatDate.js";
 
-import { saveFile, uploadFiles } from "../utils/fileUtils.js";
+import { saveFile } from "../utils/fileUtils.js";
 import { validateFilmData } from "../utils/validators.js";
 import { render } from "../services/render.js";
 
@@ -443,11 +447,78 @@ export const addHighlight = async (req) => {
 };
 
 export const getHighlights = async () => {
-    const highlights = await modelGetHighlights();
+    try {
+        const highlights = await modelGetHighlights();
 
-    return highlights.map((highlight) => ({
-        id: highlight[0],
-        image: highlight[1],
-        description: highlight[2],
-    }));
+        return highlights.map((highlight) => ({
+            id: highlight[0],
+            image: highlight[1],
+            description: highlight[2],
+        }));
+    } catch (error) {
+        console.error("Fehler beim Abrufen der Highlights:", error);
+        throw new Error("Highlights konnten nicht abgerufen werden.");
+    }
+};
+
+export const getHighlightById = async (id) => {
+    try {
+        const highlight = await modelGetHighlightById(id);
+
+        if (!highlight) {
+            console.warn(`Highlight mit ID ${id} nicht gefunden.`);
+            return null;
+        }
+
+        return {
+            id: highlight[0],
+            image: highlight[1],
+            description: highlight[2],
+        };
+    } catch (error) {
+        console.error("Fehler beim Abrufen des Highlights:", error);
+        throw new Error("Highlight konnte nicht abgerufen werden.");
+    }
+};
+
+export const updateHighlight = async (id, req) => {
+    try {
+        const formData = await req.formData();
+        const description = formData.get("description");
+
+        let image = formData.get("highlight_image");
+        if (image instanceof File && image.size > 0) {
+            image = await saveFile(image, "uploads/highlight_poster");
+        } else {
+            const existingHighlight = modelGetHighlightById(id);
+            image = existingHighlight[1];
+        }
+
+        modelUpdateHighlight(image, description, id);
+        return new Response(null, { status: 200 });
+    } catch (error) {
+        console.error("Fehler beim Aktualisieren des Highlights:", error);
+        throw new Error("Highlight konnte nicht aktualisiert werden.");
+    }
+};
+
+export const deleteHighlight = (id) => {
+    try {
+        const existingHighlight = getHighlightById(id);
+
+        if (!existingHighlight) {
+            console.warn(`Highlight mit ID ${id} nicht gefunden.`);
+            return new Response("Highlight nicht gefunden", { status: 404 });
+        }
+
+        modelDeleteHighlight(id);
+
+        return new Response(null, { status: 204 });
+    } catch (error) {
+        console.error(
+            `Fehler beim Löschen des Highlights mit ID ${id}:`,
+            error,
+        );
+        throw new Error("Highlight konnte nicht gelöscht werden.");
+    }
 };

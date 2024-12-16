@@ -1,12 +1,12 @@
 {% extends "template.html" %} {% block title %}Home{% endblock %} {% block
-content %} 
+content %}
 
-<main class="container">
-    <div class="row">
-        <div class="col-12">
-            <h1>404</h1>
-            <p>Page not found</p>
-        </div>
+<main class="container error__container">
+    <div class="error__wrapper">
+        <h1 class="error__title">404</h1>
+        <h2 class="error__subtitle">Seite nicht gefunden</h2>
+        <p>Die Seite konnte nicht gefunden werden.</p>
     </div>
+</main>
 
 {% endblock %}
