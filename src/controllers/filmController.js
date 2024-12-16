@@ -181,7 +181,7 @@ export const homePage = async () => {
         programm,
         daten,
         films: comingFilms,
-        highlights: highliglights[1],
+        highlights: highliglights[0],
       }),
       {
         headers: { "Content-Type": "text/html" },

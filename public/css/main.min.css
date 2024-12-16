@@ -706,6 +706,10 @@ header {
     margin-bottom: 200px;
     max-width: 750px;
 }
+
+.info__text a {
+    text-decoration: underline;
+}
 .info__title {
     font-weight: 300;
     font-size: 3rem;
@@ -723,7 +727,7 @@ header {
     font-size: 3rem;
     color: var(--accent-color);
     line-height: 1.2;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 @media (max-width: 960px) {
@@ -892,10 +896,10 @@ header {
 }
 .highlights__title {
     font-size: 5rem;
-    line-height: 1.2;
+    line-height: 1;
     font-weight: 300;
     color: var(--accent-color);
-    margin-bottom: 50px;
+    margin-bottom: 30px;
 }
 @media (max-width: 1200px) {
     .highlights__title {
@@ -915,6 +919,12 @@ header {
         margin-bottom: 30px;
     }
 }
+
+.highlights__text {
+    font-size: 1.125rem;
+    margin-bottom: 30px;
+}
+
 .programm {
     margin-bottom: var(--section-margin);
     overflow: hidden;
