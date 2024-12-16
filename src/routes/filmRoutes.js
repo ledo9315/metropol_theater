@@ -1,18 +1,12 @@
 import {
     add,
     create,
-    createHighlight,
     destroy,
-    destroyHighlight,
     edit,
-    editHighlight,
     index,
-    renderFilmRemoveForm,
-    renderHighlightForm,
-    renderHighlightRemoveForm,
+    remove,
     show,
     update,
-    updateHighlight,
 } from "../controllers/filmController.js";
 
 export default [
@@ -40,7 +34,7 @@ export default [
     {
         method: "GET",
         pattern: new URLPattern({ pathname: "/films/:id/delete" }),
-        handler: renderFilmRemoveForm,
+        handler: remove,
     },
     {
         method: "POST",
@@ -52,36 +46,7 @@ export default [
         pattern: new URLPattern({ pathname: "/films/:id" }),
         handler: show,
     },
-    {
-        method: "POST",
-        pattern: new URLPattern({ pathname: "/highlights/add" }),
-        handler: createHighlight,
-    },
-    {
-        method: "GET",
-        pattern: new URLPattern({ pathname: "/highlights/add" }),
-        handler: renderHighlightForm,
-    },
-    {
-        method: "GET",
-        pattern: new URLPattern({ pathname: "/highlights/:id/edit" }),
-        handler: editHighlight,
-    },
-    {
-        method: "POST",
-        pattern: new URLPattern({ pathname: "/highlights/:id/edit" }),
-        handler: updateHighlight,
-    },
-    {
-        method: "GET",
-        pattern: new URLPattern({ pathname: "/highlights/:id/delete" }),
-        handler: renderHighlightRemoveForm,
-    },
-    {
-        method: "POST",
-        pattern: new URLPattern({ pathname: "/highlights/:id/delete" }),
-        handler: destroyHighlight,
-    },
+
     {
         method: "GET",
         pattern: new URLPattern({ pathname: "/dashboard" }),

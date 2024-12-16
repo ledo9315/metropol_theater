@@ -43,7 +43,7 @@ export const uploadFiles = async (formData, formValues, existingFilm) => {
     if (poster instanceof File && poster.size > 0) {
         formValues.poster = await saveFile(poster, "uploads/posters");
     } else {
-        formValues.poster = existingFilm[6]; // Vorhandenes Poster übernehmen
+        formValues.poster = existingFilm[6];
     }
 
     // Trailer
@@ -52,7 +52,7 @@ export const uploadFiles = async (formData, formValues, existingFilm) => {
         formValues.trailer = await saveFile(trailer, "uploads/trailers");
     } else {
         console.log("Vorhandener Trailer:", existingFilm[7]);
-        formValues.trailer = existingFilm[7]; // Vorhandenes Trailer übernehmen
+        formValues.trailer = existingFilm[7];
     }
 
     // Trailer Poster
@@ -63,6 +63,6 @@ export const uploadFiles = async (formData, formValues, existingFilm) => {
             "uploads/posters",
         );
     } else {
-        formValues.trailer_poster = existingFilm[8]; // Vorhandenes Trailer-Poster übernehmen
+        formValues.trailer_poster = existingFilm[8];
     }
 };

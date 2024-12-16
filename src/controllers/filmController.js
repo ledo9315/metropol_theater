@@ -4,10 +4,9 @@ import { render } from "../services/render.js";
 import { createResponse } from "../utils/response.js";
 
 /**
- * Holt die Filme für ein bestimmtes Datum.
+ * Zeigt das Dashboard mit allen Filmen und Highlights.
  *
- *  @param {string} date - Das Datum, für das die Filme abgerufen werden sollen.
- * @returns {Promise<Array>} Ein Array mit den Filmen für das angegebene Datum.
+ * @returns {Promise<Response>} Eine HTML-Antwort mit dem Dashboard.
  */
 export const index = async () => {
   const films = await filmService.getAllFilms();
@@ -22,10 +21,11 @@ export const index = async () => {
 };
 
 /**
- * Holt die Filme für ein bestimmtes Datum.
+ * Zeigt die Details eines Films.
  *
- * @param {string} date - Das Datum, für das die Filme abgerufen werden sollen.
- * @returns {Promise<Array>} Ein Array mit den Filmen für das angegebene Datum.
+ * @param {Object} _ - Der Request-Parameter (nicht genutzt).
+ * @param {Object} params - Die URL-Parameter mit der Film-ID.
+ * @returns {Promise<Response>} Eine HTML-Antwort mit den Filmdetails.
  */
 export const show = async (_, params) => {
   try {
@@ -49,9 +49,9 @@ export const show = async (_, params) => {
 };
 
 /**
- *  Zeigt das Formular zum Hinzufügen eines neuen Films an.
+ * Zeigt das Formular zum Hinzufügen eines neuen Films an.
  *
- *  @returns {Response} Eine HTML-Antwort mit dem Formular zum Hinzufügen eines Films.
+ * @returns {Response} Eine HTML-Antwort mit dem Formular.
  */
 export const add = () => {
   try {
@@ -63,10 +63,10 @@ export const add = () => {
 };
 
 /**
- * Erstellt einen neuen Film.
+ * Erstellt einen neuen Film basierend auf der Anfrage.
  *
- * @param {Request} req - Die eingehende Anfrage mit den Daten des neuen Films.
- * @returns {Response} Eine Weiterleitung zur Dashboard-Seite oder ein HTML-Response bei Validierungsfehlern.
+ * @param {Request} req - Die eingehende Anfrage mit den Filmdaten.
+ * @returns {Promise<Response>} Eine Weiterleitung zur Dashboard-Seite oder ein Validierungsfehler.
  */
 export const create = async (req) => {
   try {
@@ -90,10 +90,11 @@ export const create = async (req) => {
 };
 
 /**
- *  Zeigt das Formular zum Bearbeiten eines Films an.
+ * Zeigt das Formular zum Bearbeiten eines Films an.
  *
- * @param {Object} params - Die URL-Parameter mit der ID des zu bearbeitenden Films.
- * @returns {Response} Eine HTML-Antwort mit dem Formular zum Bearbeiten des Films.
+ * @param {Object} _ - Der Request-Parameter (nicht genutzt).
+ * @param {Object} params - Die URL-Parameter mit der Film-ID.
+ * @returns {Promise<Response>} Eine HTML-Antwort mit dem Bearbeitungsformular.
  */
 export const edit = async (_, params) => {
   try {
@@ -116,11 +117,11 @@ export const edit = async (_, params) => {
 };
 
 /**
- * Aktualisiert einen Film.
+ * Aktualisiert einen bestehenden Film.
  *
- * @param {Request} req - Die eingehende Anfrage mit den aktualisierten Daten des Films.
- * @param {Object} params - Die URL-Parameter mit der ID des zu aktualisierenden Films.
- * @returns {Response} Eine Weiterleitung zur Dashboard-Seite oder ein HTML-Response bei Validierungsfehlern.
+ * @param {Request} req - Die eingehende Anfrage mit aktualisierten Filmdaten.
+ * @param {Object} params - Die URL-Parameter mit der Film-ID.
+ * @returns {Promise<Response>} Eine Weiterleitung zur Dashboard-Seite oder ein Validierungsfehler.
  */
 export const update = async (req, params) => {
   try {
@@ -143,10 +144,28 @@ export const update = async (req, params) => {
 };
 
 /**
+ * Zeigt das Formular zum Löschen eines Films an.
+ * @param {Object} _ - Der Request-Parameter (nicht genutzt).
+ * @param {Object} params - Die URL-Parameter mit der Film-ID.
+ * @returns {Promise<Response>} Eine HTML-Antwort mit dem Löschformular.
+ */
+export const remove = async (_, params) => {
+  try {
+    const { id } = params.pathname.groups;
+
+    return createResponse(render("remove.html", { id }));
+  } catch (error) {
+    console.error("Fehler beim Laden des Films für das Entfernen:", error);
+    return new Response("Interner Serverfehler", { status: 500 });
+  }
+};
+
+/**
  * Löscht einen Film.
  *
- * @param {Object} params - Die URL-Parameter mit der ID des zu löschenden Films.
- * @returns {Response} Eine Weiterleitung zur Dashboard-Seite.
+ * @param {Object} _ - Der Request-Parameter (nicht genutzt).
+ * @param {Object} params - Die URL-Parameter mit der Film-ID.
+ * @returns {Promise<Response>} Eine Weiterleitung zur Dashboard-Seite.
  */
 export const destroy = async (_, params) => {
   try {
@@ -189,121 +208,6 @@ export const homePage = async () => {
     );
   } catch (error) {
     console.error("Fehler beim Rendern der Startseite:", error);
-    return new Response("Interner Serverfehler", { status: 500 });
-  }
-};
-
-/**
- * Rendert die Seite mit den Highlights.
- *
- * @returns {Response} Eine HTML-Antwort mit den gerenderten Highlights.
- */
-export const createHighlight = async (req) => {
-  try {
-    const response = await filmService.addHighlight(req);
-
-    // if (response.status === 400) {
-    //   console.log("Validierungsfehler erkannt, Seite neu rendern");
-    //   return response;
-    // }
-
-    return new Response(null, {
-      status: 302,
-      headers: { Location: "/dashboard" },
-    });
-  } catch (error) {
-    console.error("Fehler beim Hinzufügen des Highlights:", error);
-    return new Response("Interner Serverfehler", { status: 500 });
-  }
-};
-
-/**
- * Rendert die Seite mit den Highlights.
- * @returns {Response} Eine HTML-Antwort mit den gerenderten Highlights.
- */
-export const renderHighlightForm = () => {
-  try {
-    return createResponse(render("add_highlight.html"));
-  } catch (error) {
-    console.error(
-      "Fehler beim Laden des Formulars zum Hinzufügen von Highlights:",
-      error,
-    );
-    return new Response("Interner Serverfehler", { status: 500 });
-  }
-};
-
-export const renderFilmRemoveForm = async (_, params) => {
-  try {
-    const { id } = params.pathname.groups;
-
-    return createResponse(render("remove.html", { id }));
-  } catch (error) {
-    console.error("Fehler beim Laden des Films für das Entfernen:", error);
-    return new Response("Interner Serverfehler", { status: 500 });
-  }
-};
-
-export const editHighlight = async (_, params) => {
-  try {
-    const { id } = params.pathname.groups;
-    const data = await filmService.getHighlightById(id);
-
-    console.log("Highlight:", data);
-
-    if (!data) {
-      return new Response("Highlight nicht gefunden", { status: 404 });
-    }
-
-    return createResponse(render("edit_highlight.html", { highlight: data }));
-  } catch (error) {
-    console.error("Fehler beim Bearbeiten des Highlights:", error);
-    return new Response("Interner Serverfehler", { status: 500 });
-  }
-};
-
-export const updateHighlight = async (req, params) => {
-  try {
-    const { id } = params.pathname.groups;
-    const response = await filmService.updateHighlight(id, req);
-
-    if (response.status === 400) {
-      console.log("Validierungsfehler erkannt, Seite neu rendern");
-      return response;
-    }
-
-    return new Response(null, {
-      status: 302,
-      headers: { Location: "/dashboard" },
-    });
-  } catch (error) {
-    console.error("Fehler beim Aktualisieren des Highlights:", error);
-    return new Response("Interner Serverfehler", { status: 500 });
-  }
-};
-
-export const renderHighlightRemoveForm = async (_, params) => {
-  try {
-    const { id } = params.pathname.groups;
-
-    return createResponse(render("remove_highlight.html", { id }));
-  } catch (error) {
-    console.error("Fehler beim Laden des Highlights für das Entfernen:", error);
-    return new Response("Interner Serverfehler", { status: 500 });
-  }
-};
-
-export const destroyHighlight = async (_, params) => {
-  try {
-    const { id } = params.pathname.groups;
-    await filmService.deleteHighlight(id);
-
-    return new Response(null, {
-      status: 302,
-      headers: { Location: "/dashboard" },
-    });
-  } catch (error) {
-    console.error("Fehler beim Löschen des Highlights:", error);
     return new Response("Interner Serverfehler", { status: 500 });
   }
 };

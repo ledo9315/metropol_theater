@@ -1,6 +1,7 @@
 // router.js
 import filmRoutes from "./routes/filmRoutes.js";
 import pageRoutes from "./routes/pageRoutes.js";
+import highlightRoutes from "./routes/highlightRoutes.js";
 import { render } from "./services/render.js";
 import { createResponse } from "./utils/response.js";
 
@@ -12,6 +13,7 @@ export default async function router(req) {
     // Kombinierte Routendefinitionen
     const routes = [
       ...filmRoutes,
+      ...highlightRoutes,
       ...pageRoutes,
     ];
 
