@@ -56,7 +56,10 @@ content %}
                   href="/films/{{ film.id }}/edit"
                   class="dashboard__movie-link"
                 >Film bearbeiten</a>
-                <a href="/films/{{ film.id }}/delete">Film entfernen</a>
+                <a
+                  href="/films/{{ film.id }}/delete"
+                  class="dashboard__movie-link"
+                >Film entfernen</a>
               </div>
             </div>
 
@@ -133,6 +136,8 @@ content %}
               </div>
             </div>
             <div class="highlight__info">
+              <strong>Titel:</strong>
+              <p>{{ highlight.title }}</p>
               <strong>Beschreibung:</strong>
               <p>{{ highlight.description }}</p>
             </div>

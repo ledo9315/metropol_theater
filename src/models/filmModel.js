@@ -510,13 +510,14 @@ export const getComingSoonFilms = async (
   return data;
 };
 
-export const insertHighlight = (image, description) => {
+export const insertHighlight = (image, description, title) => {
   const db = connection();
   db.query(
-    "INSERT INTO highlights (highlight_image, description) VALUES (?,?)",
+    "INSERT INTO highlights (highlight_image, description, highlight_title) VALUES (?,?,?)",
     [
       image,
       description,
+      title,
     ],
   );
 };
@@ -533,7 +534,7 @@ export const getHighlightById = (id) => {
   return result[0] || null;
 };
 
-export const updateHighlight = (image, description, id) => {
+export const updateHighlight = (image, description, title, id) => {
   const db = connection();
 
   db.query(
@@ -542,10 +543,11 @@ export const updateHighlight = (image, description, id) => {
       highlights 
     SET
       highlight_image = ?,
-      description = ?
+      description = ?,
+      highlight_title = ?
     WHERE id = ?;
     `,
-    [image, description, id],
+    [image, description, title, id],
   );
 };
 

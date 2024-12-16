@@ -16,6 +16,22 @@ block content %}
             class="add-highlight__form"
             enctype="multipart/form-data"
         >
+            <!-- Titel -->
+            <div class="add-highlight__group">
+                <label for="title" class="add-highlight__label">Titel:</label>
+                <input
+                    type="text"
+                    id="title"
+                    name="highlight_title"
+                    class="add-highlight__input"
+                    value="{{ formValues.title }}"
+                    required
+                />
+                {% if errors.title %}
+                <p class="add-highlight__error">{{ errors.title }}</p>
+                {% endif %}
+            </div>
+
             <!-- Poster -->
             <div class="add-highlight__group">
                 <label for="poster" class="add-movie__label">Poster:</label>

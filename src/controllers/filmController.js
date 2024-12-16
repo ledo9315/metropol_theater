@@ -172,14 +172,16 @@ export const homePage = async () => {
   try {
     const { programm, daten } = await getProgramOverview();
     const comingFilms = await filmService.getComingFilms();
+    const highliglights = await filmService.getHighlights();
 
-    console.log("Coming films:", comingFilms);
+    console.log("Coming Films:", comingFilms);
 
     return new Response(
       render("index.html", {
         programm,
         daten,
         films: comingFilms,
+        highlights: highliglights[1],
       }),
       {
         headers: { "Content-Type": "text/html" },

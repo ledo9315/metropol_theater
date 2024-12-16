@@ -7,31 +7,30 @@ content %}
     <div class="container">
       <div class="highlights__container">
         <img
-          src="/img/miyazaki.jpg"
+          src="/{{ highlights.image }}"
           alt="Illustration mit Highlights des aktuellen Filmprogramms"
           class="highlights__image"
         />
         <article class="highlights__content">
-          <h1 class="highlights__title">Miyazaki Nacht</h1>
+          <h1 class="highlights__title">{{ highlights.title }}</h1>
           <div class="highlights__text">
-            <p>
-              Am 6. Juli findet bei uns ein einzigartiges Ereignis für alle
-              Anime-Liebhaber statt – die „Die Nacht von Hayao Miyazaki“.
-            </p>
-            <p>
-              Die ganze Nacht hindurch werden wir die Filme des legendären
-              Regisseurs ansehen. Auf dem Programm stehen die Werke „Chihiros
-              Reise ins Zauberland“, „Prinzessin Mononoke“ und „Ponyo - Das
-              große Abenteuer am Meer“.
-            </p>
-            <p>
-              Eintauchen in die Kunst des Animes wird uns die Japanologin Elena
-              Sycheva helfen. Vor der Vorführung wird sie mit einem Vortrag
-              auftreten.
-            </p>
+            {{ highlights.description }}
           </div>
         </article>
       </div>
+      <!-- Infos
+      <article class="info" id="info">
+        <div class="info__content">
+          <h2 class="info__highlights-tile">Reservierungen</h2>
+          <p class="info__text">
+            Kartenvorbestellungen täglich ab 19:00 Uhr <br> telefonisch unter
+            der Nummer +49 4852 9344
+          </p>
+          <p>
+            Wir freuen uns auf Ihren Besuch!
+          </p>
+        </div>
+      </article> -->
     </div>
   </section>
 
@@ -41,13 +40,13 @@ content %}
 
       <!-- Navigationsbuttons für die nächsten 5 Tage -->
       <nav class="programm__dates">
-        {% for tag in daten %}
+        {% for date in daten %}
         <button
           class="programm__date {% if loop.index == 1 %}programm__date--active{% endif %}"
-          data-date="{{ tag.date }}"
+          data-date="{{ date.date }}"
         >
-          <span>{{ tag.weekday }}</span>
-          <time datetime="{{ tag.date }}">{{ tag.day }}</time>
+          <span>{{ date.weekday }}</span>
+          <time datetime="{{ date.date }}">{{ date.day_month }}</time>
         </button>
         {% endfor %}
       </nav>
@@ -118,7 +117,8 @@ content %}
               <figcaption>{{ film.title }}</figcaption>
             </figure>
             <div class="coming-soon__movie-details">
-              {{ film.duration }} MIN / {{ film.genre }} / FSK {{ film.age }}
+              {{ film.duration }} MIN / {{ film.genres | join(', ') }} / FSK {{
+              film.rating }}
             </div>
           </a>
         </li>

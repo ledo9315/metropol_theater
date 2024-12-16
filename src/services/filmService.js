@@ -300,7 +300,10 @@ export const getProgramOverview = async () => {
         datum.setDate(heute.getDate() + i);
         daten.push({
             date: datum.toISOString().split("T")[0],
-            day: datum.getDate().toString().padStart(2, "0"),
+            day_month: datum.toLocaleDateString("de-DE", {
+                day: "2-digit",
+                month: "2-digit",
+            }),
             weekday: datum.toLocaleDateString("de-DE", { weekday: "short" })
                 .toUpperCase(),
         });
@@ -432,13 +435,14 @@ export const addHighlight = async (req) => {
     try {
         const formData = await req.formData();
         const description = formData.get("description");
+        const title = formData.get("highlight_title");
 
         let image = formData.get("highlight_image");
         if (image instanceof File && image.size > 0) {
             image = await saveFile(image, "uploads/highlight_poster");
         }
 
-        modelInsertHighlight(image, description);
+        modelInsertHighlight(image, description, title);
         return new Response(null, { status: 201 });
     } catch (error) {
         console.error("Fehler beim Hinzufügen des Highlights:", error);
@@ -454,6 +458,7 @@ export const getHighlights = async () => {
             id: highlight[0],
             image: highlight[1],
             description: highlight[2],
+            title: highlight[3],
         }));
     } catch (error) {
         console.error("Fehler beim Abrufen der Highlights:", error);
@@ -474,6 +479,7 @@ export const getHighlightById = async (id) => {
             id: highlight[0],
             image: highlight[1],
             description: highlight[2],
+            title: highlight[3],
         };
     } catch (error) {
         console.error("Fehler beim Abrufen des Highlights:", error);
@@ -485,6 +491,7 @@ export const updateHighlight = async (id, req) => {
     try {
         const formData = await req.formData();
         const description = formData.get("description");
+        const title = formData.get("highlight_title");
 
         let image = formData.get("highlight_image");
         if (image instanceof File && image.size > 0) {
@@ -494,7 +501,7 @@ export const updateHighlight = async (id, req) => {
             image = existingHighlight[1];
         }
 
-        modelUpdateHighlight(image, description, id);
+        modelUpdateHighlight(image, description, title, id);
         return new Response(null, { status: 200 });
     } catch (error) {
         console.error("Fehler beim Aktualisieren des Highlights:", error);

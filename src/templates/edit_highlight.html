@@ -19,6 +19,22 @@ content %}
             class="edit-highlight__form"
             enctype="multipart/form-data"
         >
+            <!-- Titel -->
+            <div class="edit-highlight__group">
+                <label for="title" class="edit-highlight__label">Titel:</label>
+                <input
+                    type="text"
+                    id="title"
+                    name="highlight_title"
+                    class="add-highlight__input"
+                    value="{{ highlight.title }}"
+                    required
+                />
+                {% if errors.title %}
+                <p class="edit-highlight__error">{{ errors.title }}</p>
+                {% endif %}
+            </div>
+
             <!-- Poster -->
             <div class="edit-highlight__group">
                 <label for="poster" class="edit-highlight__label"
