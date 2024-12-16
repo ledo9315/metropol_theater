@@ -1,24 +1,6 @@
 import * as filmService from "../services/filmService.js";
-import { getProgramOverview } from "../services/filmService.js";
 import { render } from "../services/render.js";
 import { createResponse } from "../utils/response.js";
-
-/**
- * Zeigt das Dashboard mit allen Filmen und Highlights.
- *
- * @returns {Promise<Response>} Eine HTML-Antwort mit dem Dashboard.
- */
-export const index = async () => {
-  const films = await filmService.getAllFilms();
-  const highlights = await filmService.getHighlights();
-
-  try {
-    return createResponse(render("dashboard.html", { films, highlights }));
-  } catch (error) {
-    console.error("Fehler beim Abrufen der Filme:", error);
-    return new Response("Interner Serverfehler", { status: 500 });
-  }
-};
 
 /**
  * Zeigt die Details eines Films.
@@ -30,7 +12,7 @@ export const index = async () => {
 export const show = async (_, params) => {
   try {
     const { id } = params.pathname.groups;
-    const data = await filmService.getFilmById(id);
+    const data = await filmService.show(id);
 
     if (!data) {
       return new Response("Film nicht gefunden", { status: 404 });
@@ -70,7 +52,7 @@ export const add = () => {
  */
 export const create = async (req) => {
   try {
-    const response = await filmService.addFilm(req);
+    const response = await filmService.add(req);
 
     if (response.status === 400) {
       // Validierungsfehler: HTML-Response zurückgeben
@@ -99,7 +81,7 @@ export const create = async (req) => {
 export const edit = async (_, params) => {
   try {
     const { id } = params.pathname.groups;
-    const data = await filmService.getFilmById(id);
+    const data = await filmService.show(id);
 
     if (!data) {
       return new Response("Film nicht gefunden", { status: 404 });
@@ -126,7 +108,7 @@ export const edit = async (_, params) => {
 export const update = async (req, params) => {
   try {
     const { id } = params.pathname.groups;
-    const response = await filmService.updateFilm(id, req);
+    const response = await filmService.update(id, req);
 
     if (response.status === 400) {
       console.log("Validierungsfehler erkannt, Seite neu rendern");
@@ -170,7 +152,7 @@ export const remove = async (_, params) => {
 export const destroy = async (_, params) => {
   try {
     const { id } = params.pathname.groups;
-    await filmService.deleteFilm(id);
+    await filmService.destroy(id);
 
     return new Response(null, {
       status: 302,
@@ -178,36 +160,6 @@ export const destroy = async (_, params) => {
     });
   } catch (error) {
     console.error("Fehler beim Löschen des Films:", error);
-    return new Response("Interner Serverfehler", { status: 500 });
-  }
-};
-
-/**
- * Rendert die Startseite mit der Programmübersicht und den kommenden Filmen.
- *
- * @returns {Response} Eine HTML-Antwort mit den gerenderten Daten.
- */
-export const homePage = async () => {
-  try {
-    const { programm, daten } = await getProgramOverview();
-    const comingFilms = await filmService.getComingFilms();
-    const highliglights = await filmService.getHighlights();
-
-    console.log("Coming Films:", comingFilms);
-
-    return new Response(
-      render("index.html", {
-        programm,
-        daten,
-        films: comingFilms,
-        highlights: highliglights[0],
-      }),
-      {
-        headers: { "Content-Type": "text/html" },
-      },
-    );
-  } catch (error) {
-    console.error("Fehler beim Rendern der Startseite:", error);
     return new Response("Interner Serverfehler", { status: 500 });
   }
 };

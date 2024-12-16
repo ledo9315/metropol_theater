@@ -3,7 +3,6 @@ import {
     create,
     destroy,
     edit,
-    index,
     remove,
     show,
     update,
@@ -45,11 +44,5 @@ export default [
         method: "GET",
         pattern: new URLPattern({ pathname: "/films/:id" }),
         handler: show,
-    },
-
-    {
-        method: "GET",
-        pattern: new URLPattern({ pathname: "/dashboard" }),
-        handler: index,
     },
 ];

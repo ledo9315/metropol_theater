@@ -1,4 +1,4 @@
-import * as filmService from "../services/filmService.js";
+import * as highlightsService from "../services/highlightsService.js";
 import { render } from "../services/render.js";
 import { createResponse } from "../utils/response.js";
 
@@ -9,7 +9,7 @@ import { createResponse } from "../utils/response.js";
  */
 export const create = async (req) => {
     try {
-        const response = await filmService.addHighlight(req);
+        const response = await highlightsService.add(req);
         return new Response(null, {
             status: 302,
             headers: { Location: "/dashboard" },
@@ -42,7 +42,7 @@ export const add = () => {
 export const edit = async (_, params) => {
     try {
         const { id } = params.pathname.groups;
-        const data = await filmService.getHighlightById(id);
+        const data = await highlightsService.show(id);
         if (!data) {
             return new Response("Highlight nicht gefunden", { status: 404 });
         }
@@ -65,7 +65,7 @@ export const edit = async (_, params) => {
 export const update = async (req, params) => {
     try {
         const { id } = params.pathname.groups;
-        const response = await filmService.updateHighlight(id, req);
+        const response = await highlightsService.update(id, req);
         if (response.status === 400) return response;
 
         return new Response(null, {
@@ -108,7 +108,7 @@ export const remove = async (_, params) => {
 export const destroy = async (_, params) => {
     try {
         const { id } = params.pathname.groups;
-        await filmService.deleteHighlight(id);
+        await highlightsService.destroy(id);
 
         return new Response(null, {
             status: 302,

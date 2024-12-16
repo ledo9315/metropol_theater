@@ -1,19 +1,53 @@
 import { render } from "../services/render.js";
 import { createResponse } from "../utils/response.js";
+import * as filmService from "../services/filmService.js";
+import * as highlightsService from "../services/highlightsService.js";
+import * as schedulingService from "../services/schedulingService.js";
 
-export function renderPage(templateName, status) {
+/**
+ * Zeigt das Dashboard mit allen Filmen und Highlights.
+ *
+ * @returns {Promise<Response>} Eine HTML-Antwort mit dem Dashboard.
+ */
+export const index = async () => {
+    const films = await filmService.index();
+    const highlights = await highlightsService.index();
+
     try {
-        const pageContent = render(templateName);
-        return createResponse(pageContent, status, "text/html");
+        return createResponse(render("dashboard.html", { films, highlights }));
     } catch (error) {
-        console.error(`Fehler beim Rendern der Seite ${templateName}:`, error);
-        return createResponse("Interner Serverfehler", 500, "text/plain");
+        console.error("Fehler beim Abrufen der Filme:", error);
+        return new Response("Interner Serverfehler", { status: 500 });
     }
-}
+};
 
-export const renderHomePage = async () => renderPage("index.html", 200);
-export const renderAboutPage = async () => renderPage("about.html", 200);
-export const renderPricesPage = async () => renderPage("prices.html", 200);
-export const renderContactPage = async () => renderPage("contact.html", 200);
-export const renderChroniclePage = async () =>
-    renderPage("chronicle.html", 200);
+/**
+ * Rendert die Startseite mit der Programmübersicht und den kommenden Filmen.
+ *
+ * @returns {Response} Eine HTML-Antwort mit den gerenderten Daten.
+ */
+export const homePage = async () => {
+    try {
+        const { programm, daten } = await schedulingService
+            .getProgramOverview();
+        const comingFilms = await schedulingService.getComingFilms();
+        const highliglights = await highlightsService.index();
+
+        console.log("Coming Films:", comingFilms);
+
+        return new Response(
+            render("index.html", {
+                programm,
+                daten,
+                films: comingFilms,
+                highlights: highliglights[0],
+            }),
+            {
+                headers: { "Content-Type": "text/html" },
+            },
+        );
+    } catch (error) {
+        console.error("Fehler beim Rendern der Startseite:", error);
+        return new Response("Interner Serverfehler", { status: 500 });
+    }
+};
