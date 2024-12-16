@@ -23,3 +23,10 @@ export function connection() {
   if (!db) throw new Error("Datenbank ist nicht initialisiert");
   return db;
 }
+
+export function handleDatabaseError(error) {
+  console.error("Datenbankfehler:", error.message);
+  throw new Error(
+    "Interner Serverfehler. Bitte versuchen Sie es später erneut.",
+  );
+}

@@ -8,7 +8,8 @@ import { connection } from "../services/db.js";
  * @returns {Promise<Array>} Ein Array mit Filmdaten im angegebenen Zeitraum.
  */
 export const getUpcomingFilms = async (startDate, endDate) => {
-    const db = connection();
+  const db = connection();
+  try {
     const query = `
       SELECT 
         films.id,
@@ -34,9 +35,12 @@ export const getUpcomingFilms = async (startDate, endDate) => {
     const result = db.query(query, [startDate, endDate]);
     const data = [];
     for await (const row of result) {
-        data.push(row);
+      data.push(row);
     }
     return data;
+  } catch (error) {
+    handleDatabaseError(error);
+  }
 };
 
 /**
@@ -48,11 +52,12 @@ export const getUpcomingFilms = async (startDate, endDate) => {
  * @returns {Promise<Array>} Ein Array mit kommenden Filmen außerhalb des Ausschlusszeitraums.
  */
 export const getComingSoonFilms = async (
-    startDate,
-    exclusionStartDate,
-    exclusionEndDate,
+  startDate,
+  exclusionStartDate,
+  exclusionEndDate,
 ) => {
-    const db = connection();
+  const db = connection();
+  try {
     const query = `
       SELECT 
         films.id,
@@ -80,13 +85,16 @@ export const getComingSoonFilms = async (
     `;
 
     const result = db.query(query, [
-        startDate,
-        exclusionStartDate,
-        exclusionEndDate,
+      startDate,
+      exclusionStartDate,
+      exclusionEndDate,
     ]);
     const data = [];
     for await (const row of result) {
-        data.push(row);
+      data.push(row);
     }
     return data;
+  } catch (error) {
+    handleDatabaseError(error);
+  }
 };

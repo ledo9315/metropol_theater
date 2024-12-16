@@ -1,4 +1,4 @@
-import { connection } from "../services/db.js";
+import { connection, handleDatabaseError } from "../services/db.js";
 
 /**
  * Fügt einen neuen Regisseur ein und gibt dessen ID zurück.
@@ -8,8 +8,12 @@ import { connection } from "../services/db.js";
  */
 export const add = (directorName) => {
     const db = connection();
-    db.query("INSERT INTO director (name) VALUES (?)", [directorName]);
-    return db.lastInsertRowId;
+    try {
+        db.query("INSERT INTO director (name) VALUES (?)", [directorName]);
+        return db.lastInsertRowId;
+    } catch (error) {
+        handleDatabaseError(error);
+    }
 };
 
 /**
@@ -20,8 +24,12 @@ export const add = (directorName) => {
  */
 export const show = (directorName) => {
     const db = connection();
-    const rows = db.query("SELECT id FROM director WHERE name = ?", [
-        directorName,
-    ]);
-    return rows.length > 0 ? rows[0][0] : null;
+    try {
+        const rows = db.query("SELECT id FROM director WHERE name = ?", [
+            directorName,
+        ]);
+        return rows.length > 0 ? rows[0][0] : null;
+    } catch (error) {
+        handleDatabaseError(error);
+    }
 };

@@ -1,34 +1,46 @@
-import { connection } from "../services/db.js";
+import { connection, handleDatabaseError } from "../services/db.js";
 
 export const add = (image, description, title) => {
     const db = connection();
-    db.query(
-        "INSERT INTO highlights (highlight_image, description, highlight_title) VALUES (?,?,?)",
-        [
-            image,
-            description,
-            title,
-        ],
-    );
+    try {
+        db.query(
+            "INSERT INTO highlights (highlight_image, description, highlight_title) VALUES (?,?,?)",
+            [
+                image,
+                description,
+                title,
+            ],
+        );
+    } catch (error) {
+        handleDatabaseError(error);
+    }
 };
 
 export const index = () => {
     const db = connection();
 
-    return db.query("SELECT * FROM highlights");
+    try {
+        return db.query("SELECT * FROM highlights");
+    } catch (error) {
+        handleDatabaseError(error);
+    }
 };
 
 export const show = (id) => {
-    const db = connection();
-    const result = db.query("SELECT * FROM highlights WHERE id = ?", [id]);
-    return result[0] || null;
+    try {
+        const db = connection();
+        const result = db.query("SELECT * FROM highlights WHERE id = ?", [id]);
+        return result[0] || null;
+    } catch (error) {
+        handleDatabaseError(error);
+    }
 };
 
 export const update = (image, description, title, id) => {
     const db = connection();
-
-    db.query(
-        `
+    try {
+        db.query(
+            `
       UPDATE 
         highlights 
       SET
@@ -37,17 +49,18 @@ export const update = (image, description, title, id) => {
         highlight_title = ?
       WHERE id = ?;
       `,
-        [image, description, title, id],
-    );
+            [image, description, title, id],
+        );
+    } catch (error) {
+        handleDatabaseError(error);
+    }
 };
 
 export const destroy = (id) => {
     const db = connection();
-
-    db.query(
-        `
-      DELETE FROM highlights WHERE id = ?
-    `,
-        [id],
-    );
+    try {
+        db.query(`DELETE FROM highlights WHERE id = ?`, [id]);
+    } catch (error) {
+        handleDatabaseError(error);
+    }
 };

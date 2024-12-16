@@ -1,4 +1,4 @@
-import { connection } from "../services/db.js";
+import { connection, handleDatabaseError } from "../services/db.js";
 
 /**
  * Ruft alle Filme und deren Details ab.
@@ -7,8 +7,9 @@ import { connection } from "../services/db.js";
  */
 export const index = () => {
   const db = connection();
-  const data = [...db.query(
-    `SELECT
+  try {
+    const data = [...db.query(
+      `SELECT
       films.id, 
       films.title,
       films.producer,
@@ -34,8 +35,11 @@ export const index = () => {
     LEFT JOIN show_details ON show_times.id = show_details.show_time_id
     GROUP BY films.id, show_dates.show_date, show_times.show_time
     `,
-  )];
-  return data;
+    )];
+    return data;
+  } catch (error) {
+    handleDatabaseError(error);
+  }
 };
 
 /**
@@ -46,8 +50,9 @@ export const index = () => {
  */
 export const show = (id) => {
   const db = connection();
-  const result = db.query(
-    `SELECT 
+  try {
+    const result = db.query(
+      `SELECT 
           films.id AS film_id,
           films.title,
           films.duration,
@@ -70,10 +75,13 @@ export const show = (id) => {
       LEFT JOIN genres ON film_genres.genre_id = genres.id
       WHERE films.id = ?
       GROUP BY films.id;`,
-    [id],
-  );
+      [id],
+    );
 
-  return result[0] || null;
+    return result[0] || null;
+  } catch (error) {
+    handleDatabaseError(error);
+  }
 };
 
 /**
@@ -84,28 +92,33 @@ export const show = (id) => {
  */
 export const add = async (film) => {
   const db = connection();
-  const query = `INSERT INTO films 
+  try {
+    const query = `INSERT INTO films 
     (title, duration, production_year, rating, description, poster, trailer, trailer_poster, director_id, country_id, producer, createdAt)
   VALUES 
     (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
 
-  const values = [
-    film.title,
-    film.duration,
-    film.production_year,
-    film.rating,
-    film.description,
-    film.poster,
-    film.trailer,
-    film.trailer_poster,
-    film.director_id,
-    film.country_id,
-    film.producer,
-    film.createdAt,
-  ];
+    const values = [
+      film.title,
+      film.duration,
+      film.production_year,
+      film.rating,
+      film.description,
+      film.poster,
+      film.trailer,
+      film.trailer_poster,
+      film.director_id,
+      film.country_id,
+      film.producer,
+      film.createdAt,
+    ];
 
-  db.query(query, values);
-  return db.lastInsertRowId;
+    db.query(query, values);
+    return db.lastInsertRowId;
+  } catch (error) {
+    handleDatabaseError(error);
+    throw error;
+  }
 };
 
 /**
@@ -139,8 +152,7 @@ export const destroy = (filmId) => {
     db.query(`DELETE FROM show_dates WHERE film_id = ?`, [filmId]);
     db.query(`DELETE FROM films WHERE id = ?`, [filmId]);
   } catch (error) {
-    console.error("Fehler beim Löschen des Films:", error);
-    throw error;
+    handleDatabaseError(error);
   }
 };
 
@@ -154,7 +166,8 @@ export const update = (id, data) => {
   const db = connection();
   const { film, genreIds, showtimes } = data;
 
-  const query = `UPDATE films
+  try {
+    const query = `UPDATE films
       SET title = ?,
           duration = ?,
           production_year = ?,
@@ -167,71 +180,77 @@ export const update = (id, data) => {
           producer = ?
       WHERE id = ?;`;
 
-  const values = [
-    film.title,
-    film.duration,
-    film.production_year,
-    film.rating,
-    film.description,
-    film.poster,
-    film.trailer,
-    film.trailer_poster,
-    film.director_id,
-    film.producer,
-    id,
-  ];
-
-  db.query(query, values);
-
-  // Genres überschreiben
-  db.query("DELETE FROM film_genres WHERE film_id = ?", [id]);
-  for (const gid of genreIds) {
-    db.query("INSERT INTO film_genres (film_id, genre_id) VALUES (?, ?)", [
+    const values = [
+      film.title,
+      film.duration,
+      film.production_year,
+      film.rating,
+      film.description,
+      film.poster,
+      film.trailer,
+      film.trailer_poster,
+      film.director_id,
+      film.producer,
       id,
-      gid,
+    ];
+
+    db.query(query, values);
+
+    // Genres überschreiben
+    db.query("DELETE FROM film_genres WHERE film_id = ?", [id]);
+    for (const gid of genreIds) {
+      db.query("INSERT INTO film_genres (film_id, genre_id) VALUES (?, ?)", [
+        id,
+        gid,
+      ]);
+    }
+
+    // Land überschreiben
+    db.query("DELETE FROM film_countries WHERE film_id = ?", [id]);
+    db.query("INSERT INTO film_countries (film_id, country_id) VALUES (?, ?)", [
+      id,
+      film.country_id,
     ]);
-  }
 
-  // Land überschreiben
-  db.query("DELETE FROM film_countries WHERE film_id = ?", [id]);
-  db.query("INSERT INTO film_countries (film_id, country_id) VALUES (?, ?)", [
-    id,
-    film.country_id,
-  ]);
-
-  // Spielzeiten überschreiben
-  db.query(
-    `DELETE FROM show_details WHERE show_time_id IN (
+    // Spielzeiten überschreiben
+    db.query(
+      `DELETE FROM show_details WHERE show_time_id IN (
        SELECT show_times.id FROM show_times
        INNER JOIN show_dates ON show_times.show_date_id = show_dates.id
        WHERE show_dates.film_id = ?
      )`,
-    [id],
-  );
-  db.query(
-    `DELETE FROM show_times WHERE show_date_id IN (
+      [id],
+    );
+    db.query(
+      `DELETE FROM show_times WHERE show_date_id IN (
        SELECT id FROM show_dates WHERE film_id = ?
      )`,
-    [id],
-  );
-  db.query("DELETE FROM show_dates WHERE film_id = ?", [id]);
-
-  for (const { date, time, isOriginalVersion, is3D } of showtimes) {
-    db.query("INSERT INTO show_dates (film_id, show_date) VALUES (?, ?)", [
-      id,
-      date,
-    ]);
-    const showDateId = db.lastInsertRowId;
-
-    db.query("INSERT INTO show_times (show_date_id, show_time) VALUES (?, ?)", [
-      showDateId,
-      time,
-    ]);
-    const showTimeId = db.lastInsertRowId;
-
-    db.query(
-      "INSERT INTO show_details (show_time_id, is_original_version, is_3d) VALUES (?, ?, ?)",
-      [showTimeId, isOriginalVersion ? 1 : 0, is3D ? 1 : 0],
+      [id],
     );
+    db.query("DELETE FROM show_dates WHERE film_id = ?", [id]);
+
+    for (const { date, time, isOriginalVersion, is3D } of showtimes) {
+      db.query("INSERT INTO show_dates (film_id, show_date) VALUES (?, ?)", [
+        id,
+        date,
+      ]);
+      const showDateId = db.lastInsertRowId;
+
+      db.query(
+        "INSERT INTO show_times (show_date_id, show_time) VALUES (?, ?)",
+        [
+          showDateId,
+          time,
+        ],
+      );
+      const showTimeId = db.lastInsertRowId;
+
+      db.query(
+        "INSERT INTO show_details (show_time_id, is_original_version, is_3d) VALUES (?, ?, ?)",
+        [showTimeId, isOriginalVersion ? 1 : 0, is3D ? 1 : 0],
+      );
+    }
+  } catch (error) {
+    handleDatabaseError(error);
   }
 };
