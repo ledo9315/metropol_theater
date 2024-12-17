@@ -14,7 +14,7 @@ bearbeiten {% endblock %} {% block content %}
 
         <h1 class="edit-highlight__title">Highlight bearbeiten</h1>
         <form
-            action="/highlights/{{ highlight.id }}/edit"
+            action="/highlights/{% if formValues.id %}{{ formValues.id }}{% else %}{{ highlight.id }}{% endif %}/edit"
             method="POST"
             class="edit-highlight__form"
             enctype="multipart/form-data"
@@ -27,7 +27,7 @@ bearbeiten {% endblock %} {% block content %}
                     id="title"
                     name="highlight_title"
                     class="add-highlight__input"
-                    value="{{ highlight.title }}"
+                    value="{% if formValues.title %}{{ formValues.title }}{% else %}{{ highlight.title }}{% endif %}"
                     required
                 />
                 {% if errors.title %}
@@ -38,10 +38,12 @@ bearbeiten {% endblock %} {% block content %}
             <!-- Poster -->
             <div class="edit-highlight__group">
                 <label for="poster" class="edit-highlight__label"
-                >Poster:</label>
-                {% if highlight.image %}
+                >Poster (max. 10MB):</label>
+
+                {% set currentImage = poster if poster else highlight.image %}
+                {% if currentImage %}
                 <img
-                    src="/{{ highlight.image }}"
+                    src="/{{ currentImage }}"
                     width="200"
                     alt="Poster"
                     class="edit-highlight__image"
@@ -56,7 +58,7 @@ bearbeiten {% endblock %} {% block content %}
                     {%
                     if
                     not
-                    highlight.image
+                    currentImage
                     %}required{%
                     endif
                     %}
@@ -72,7 +74,8 @@ bearbeiten {% endblock %} {% block content %}
                     name="description"
                     rows="5"
                     class="edit-highlight__textarea"
-                >{{ highlight.description }}</textarea>
+                >{% if formValues.description %}{{ formValues.description }}{% else %}{{ highlight.description }}{% endif %}</textarea
+                >
                 {% if errors.description %}
                 <p class="edit-highlight__error">{{ errors.description }}</p>
                 {% endif %}

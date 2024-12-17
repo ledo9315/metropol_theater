@@ -10,9 +10,16 @@ import { createResponse } from "../utils/response.js";
 export const create = async (req) => {
     try {
         const response = await highlightsService.add(req);
+
+        if (response.status === 400) {
+            // Validierungsfehler: HTML-Response zurückgeben
+            console.log("Validierungsfehler erkannt, Seite neu rendern");
+            return response;
+        }
+
         return new Response(null, {
             status: 302,
-            headers: { Location: "/dashboard" },
+            headers: { Location: "/dashboard?section=highlights-section" },
         });
     } catch (error) {
         console.error("Fehler beim Hinzufügen des Highlights:", error);
@@ -70,7 +77,7 @@ export const update = async (req, params) => {
 
         return new Response(null, {
             status: 302,
-            headers: { Location: "/dashboard" },
+            headers: { Location: "/dashboard?section=highlights-section" },
         });
     } catch (error) {
         console.error("Fehler beim Aktualisieren des Highlights:", error);
@@ -112,10 +119,28 @@ export const destroy = async (_, params) => {
 
         return new Response(null, {
             status: 302,
-            headers: { Location: "/dashboard" },
+            headers: { Location: "/dashboard?section=highlights-section" },
         });
     } catch (error) {
         console.error("Fehler beim Löschen des Highlights:", error);
+        return new Response("Interner Serverfehler", { status: 500 });
+    }
+};
+
+export const toggleVisible = async (req, params) => {
+    try {
+        const { id } = params.pathname.groups;
+        await highlightsService.toggleVisible(id, req);
+
+        return new Response(null, {
+            status: 302,
+            headers: { Location: "/dashboard?section=highlights-section" },
+        });
+    } catch (error) {
+        console.error(
+            "Fehler beim Umschalten der Sichtbarkeit des Highlights:",
+            error,
+        );
         return new Response("Interner Serverfehler", { status: 500 });
     }
 };

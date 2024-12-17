@@ -125,6 +125,22 @@ endblock %} {% block content %}
                 class="highlight__img"
               />
               <div class="highlight__actions">
+                <form
+                  action="/highlights/{{ highlight.id }}/toggle-visible"
+                  method="POST"
+                >
+                  <input
+                    type="hidden"
+                    name="show_in_carousel"
+                    value="{% if highlight.showInCarousel == 1 %}0{% else %}1{% endif %}"
+                  />
+
+                  <button type="submit">
+                    {% if highlight.showInCarousel == 1 %} Ausblenden {% else %}
+                    Einblenden {% endif %}
+                  </button>
+                </form>
+
                 <a
                   href="/highlights/{{ highlight.id }}/edit"
                   class="highlight__link"

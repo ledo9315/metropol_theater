@@ -254,3 +254,31 @@ export const update = (id, data) => {
     handleDatabaseError(error);
   }
 };
+
+export const showPoster = (id) => {
+  const db = connection();
+  try {
+    const result = db.query(
+      `SELECT poster FROM films WHERE id = ?;`,
+      [id],
+    );
+
+    return result[0] || null;
+  } catch (error) {
+    handleDatabaseError(error);
+  }
+};
+
+export const showFiles = (id) => {
+  const db = connection();
+  try {
+    const result = db.query(
+      `SELECT poster, trailer, trailer_poster FROM films WHERE id = ?;`,
+      [id],
+    );
+
+    return result[0] || null;
+  } catch (error) {
+    handleDatabaseError(error);
+  }
+};

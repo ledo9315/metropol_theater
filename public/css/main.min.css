@@ -831,6 +831,10 @@ header {
 }
 .coming-soon__movie {
     width: 315px;
+
+    @media (max-width: 620px) {
+        justify-self: center;
+    }
 }
 
 .coming-soon__movie-poster {
@@ -857,7 +861,7 @@ header {
 }
 
 .highlights {
-    margin-bottom: var(--section-margin);
+    margin-bottom: 150px;
 }
 @media (max-width: 960px) {
     .highlights {
@@ -870,7 +874,6 @@ header {
     -webkit-column-gap: 50px;
     -moz-column-gap: 50px;
     column-gap: 50px;
-    margin-bottom: 50px;
 }
 @media (max-width: 960px) {
     .highlights__container {
@@ -1489,7 +1492,7 @@ header {
     margin-bottom: 10px;
 }
 
-.add-movie__error {
+.add-movie__error, .add-highlight__error, .edit-highlight__error {
     grid-column: 2;
     justify-self: start;
     color: red;
@@ -1925,4 +1928,82 @@ header {
 .error__subtitle {
     color: var(--accent-color);
     font-weight: 500;
+}
+
+.highlights__carousel {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+}
+
+.highlights__slides {
+    display: flex;
+    transform: translateX(0); /* Startposition */
+    transition: transform 0.5s ease-in-out; /* Sanfter Übergang */
+}
+
+.highlights__slide {
+    display: flex;
+    column-gap: 50px; /* Abstand zwischen Inhaltsspalten */
+    flex-shrink: 0;
+    opacity: 0; /* Unsichtbar standardmäßig */
+    transition: opacity 0.5s ease-in-out; /* Transparenzübergang */
+    position: absolute; /* Überlagerung der Slides */
+    top: 0;
+    left: 0;
+    width: 100%; /* Jede Slide nimmt die gesamte Breite ein */
+
+    /* Responsive Anpassung */
+    @media (max-width: 1200px) {
+        flex-direction: column; /* Inhalt untereinander anordnen */
+        row-gap: 50px; /* Abstand zwischen den Elementen */
+    }
+
+    @media (max-width: 600px) {
+        column-gap: 20px;
+        row-gap: 20px;
+        padding: 10px; /* Abstand innerhalb der Slides */
+    }
+}
+
+.highlights__slide.active {
+    opacity: 1; /* Aktive Slide sichtbar */
+    position: relative; /* Behält Position bei */
+}
+
+.highlights__control {
+    position: absolute;
+    top: 50%; /* Vertikale Mitte */
+    transform: translateY(-50%); /* Exakte Zentrierung */
+    background: rgba(167, 167, 167, 0.486); /* Transparenter Hintergrund */
+    color: #fff; /* Weiße Textfarbe */
+    border: none; /* Keine Umrandung */
+    font-size: 2rem; /* Schriftgröße */
+    cursor: pointer; /* Zeiger bei Hover */
+    z-index: 10; /* Über andere Elemente */
+    padding: 0.5rem 1rem; /* Polsterung */
+
+    @media (max-width: 1200px) {
+        top: 25%; /* Vertikale Mitte */
+    }
+
+    @media (max-width: 960px) {
+        top: 25%; /* Vertikale Mitte */
+    }
+
+    @media (max-width: 620px) {
+        top: 20%; /* Vertikale Mitte */
+    }
+
+    @media (max-width: 460px) {
+        top: 15%; /* Vertikale Mitte */
+    }
+}
+
+.highlights__control--prev {
+    left: 10px; /* Linksbündig */
+}
+
+.highlights__control--next {
+    right: 10px; /* Rechtsbündig */
 }

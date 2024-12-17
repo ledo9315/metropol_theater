@@ -1,11 +1,30 @@
 import * as highlightModel from "../models/highlightsModel.js";
 import { saveFile } from "../utils/fileUtils.js";
+import { validateHighlightData } from "../utils/validators.js";
+import { render } from "../services/render.js";
 
 export const add = async (req) => {
     try {
         const formData = await req.formData();
         const description = formData.get("description");
         const title = formData.get("highlight_title");
+
+        const formValues = { title, description };
+
+        const { errors, hasErrors } = validateHighlightData(formValues);
+
+        console.log("formValues:", formValues);
+
+        if (hasErrors) {
+            console.log("Validierungsfehler:", errors);
+            return new Response(
+                render("add_highlight.html", { errors, formValues }),
+                {
+                    status: 400,
+                    headers: { "Content-Type": "text/html" },
+                },
+            );
+        }
 
         let image = formData.get("highlight_image");
         if (image instanceof File && image.size > 0) {
@@ -29,6 +48,7 @@ export const index = async () => {
             image: highlight[1],
             description: highlight[2],
             title: highlight[3],
+            showInCarousel: highlight[4],
         }));
     } catch (error) {
         console.error("Fehler beim Abrufen der Highlights:", error);
@@ -62,6 +82,29 @@ export const update = async (id, req) => {
         const formData = await req.formData();
         const description = formData.get("description");
         const title = formData.get("highlight_title");
+        const poster = await highlightModel.showImage(id);
+        const visible = await highlightModel.showVisible(id);
+        const formValues = { title, description };
+
+        console.log("showVisible", visible);
+
+        const { errors, hasErrors } = validateHighlightData(formValues);
+
+        if (hasErrors) {
+            console.log("Validierungsfehler:", errors);
+            formValues.id = id;
+            return new Response(
+                render("edit_highlight.html", {
+                    errors,
+                    formValues,
+                    poster: poster[0],
+                }),
+                {
+                    status: 400,
+                    headers: { "Content-Type": "text/html" },
+                },
+            );
+        }
 
         let image = formData.get("highlight_image");
         if (image instanceof File && image.size > 0) {
@@ -71,7 +114,9 @@ export const update = async (id, req) => {
             image = existingHighlight[1];
         }
 
-        highlightModel.update(image, description, title, id);
+        console.log("Update-Parameter:", { image, description, title, id });
+
+        highlightModel.update(image, description, title, visible[0], id);
         return new Response(null, { status: 200 });
     } catch (error) {
         console.error("Fehler beim Aktualisieren des Highlights:", error);
@@ -97,5 +142,24 @@ export const destroy = (id) => {
             error,
         );
         throw new Error("Highlight konnte nicht gelöscht werden.");
+    }
+};
+
+export const toggleVisible = async (id, req) => {
+    try {
+        const formData = await req.formData();
+        let visible = parseInt(formData.get("show_in_carousel"), 10);
+
+        highlightModel.updateVisibility(id, visible);
+
+        return new Response(null, { status: 200 });
+    } catch (error) {
+        console.error(
+            "Fehler beim Umschalten der Sichtbarkeit des Highlights:",
+            error,
+        );
+        throw new Error(
+            "Sichtbarkeit des Highlights konnte nicht umgeschaltet werden.",
+        );
     }
 };

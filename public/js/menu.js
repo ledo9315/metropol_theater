@@ -4,17 +4,31 @@ export function setupMenu() {
 
     if (menuLinks.length === 0 || sections.length === 0) return;
 
+    const showSection = (sectionId) => {
+        sections.forEach((section) => {
+            const isTargetSection = section.id === sectionId;
+            section.classList.toggle("hidden", !isTargetSection);
+        });
+
+        menuLinks.forEach((link) => {
+            const isActive = link.getAttribute("data-section") === sectionId;
+            link.classList.toggle("active", isActive);
+        });
+    };
+
     menuLinks.forEach((link) => {
         link.addEventListener("click", () => {
-            // Aktiven Link hervorheben
-            document.querySelector(".dashboard__menu-link.active")?.classList
-                .remove("active");
-            link.classList.add("active");
-
-            // Sektionen anzeigen/ausblenden
             const sectionId = link.getAttribute("data-section");
-            sections.forEach((section) => section.classList.add("hidden"));
-            document.getElementById(sectionId)?.classList.remove("hidden");
+            showSection(sectionId);
         });
     });
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const section = urlParams.get("section");
+
+    if (section) {
+        showSection(section);
+    } else {
+        showSection("movies-section");
+    }
 }

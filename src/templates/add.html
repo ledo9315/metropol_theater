@@ -62,7 +62,7 @@ hinzufügen {% endblock %}
           required
         />
         {% if errors.production_country %}
-        <p class="add-movie__error">{{ errors.productionCountry }}</p>
+        <p class="add-movie__error">{{ errors.production_country }}</p>
         {% endif %}
       </div>
 
@@ -117,30 +117,52 @@ hinzufügen {% endblock %}
         </button>
       </div>
 
+
       <!-- Genre -->
       <div class="add-movie__group">
         <label for="genres" class="add-movie__label">Genres:</label>
         <div id="genre-container" class="add-movie__dynamic-inputs">
-          <div class="add-movie__input-group">
-            <input
-              type="text"
-              name="genres"
-              class="add-movie__input"
-              required
-            />
-          </div>
+          {% if formValues.genres %}
+            {% for genre in formValues.genres %}
+            <div class="add-movie__input-group">
+              <input
+                type="text"
+                name="genres"
+                class="add-movie__input"
+                value="{{ genre }}"
+                required
+              />
+              {% if errors.genres[loop.index0] %}
+              <p class="add-movie__error">{{ errors.genres[loop.index0] }}</p>
+              {% endif %}
+            </div>
+            {% endfor %}
+          {% else %}
+            <div class="add-movie__input-group">
+              <input
+                type="text"
+                name="genres"
+                class="add-movie__input"
+                required
+              />
+            </div>
+          {% endif %}
         </div>
+
+        <!-- Button immer rendern -->
         <button id="add-genre-button" type="button" class="add-movie__button">
           Genre hinzufügen
         </button>
-        {% if errors.genres %}
-        <p class="add-movie__error">{{ errors.genres }}</p>
+
+        {% if errors.genre %}
+        <p class="add-movie__error">{{ errors.genre }}</p>
         {% endif %}
       </div>
 
+
       <!-- Poster -->
       <div class="add-movie__group">
-        <label for="poster" class="add-movie__label">Poster:</label>
+        <label for="poster" class="add-movie__label">Poster (max. 10MB):</label>
         <input
           type="file"
           id="poster"
@@ -175,6 +197,7 @@ hinzufügen {% endblock %}
           value="{{ formValues.director }}"
           required
         />
+        {% if errors.director %} <p class="add-movie__error">{{ errors.director }}</p> {% endif %}
       </div>
 
       <!-- Produzenten -->
@@ -188,11 +211,12 @@ hinzufügen {% endblock %}
           value="{{ formValues.producer }}"
           required
         />
+        {% if errors.producer %} <p class="add-movie__error">{{ errors.producer }}</p> {% endif %}
       </div>
 
       <!-- Trailer -->
       <div class="add-movie__group">
-        <label for="trailer" class="add-movie__label">Trailer (Video):</label>
+        <label for="trailer" class="add-movie__label">Trailer (max. 20MB):</label>
         <input
           type="file"
           id="trailer"
@@ -204,7 +228,7 @@ hinzufügen {% endblock %}
 
       <!-- Trailer Poster -->
       <div class="add-movie__group">
-        <label for="trailer_poster" class="add-movie__label">Trailer Poster:</label>
+        <label for="trailer_poster" class="add-movie__label">Trailer Poster (max. 10MB):</label>
         <input
           type="file"
           id="trailer_poster"

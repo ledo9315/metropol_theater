@@ -4,6 +4,7 @@ import {
     destroy,
     edit,
     remove,
+    toggleVisible,
     update,
 } from "../controllers/highlightsController.js";
 
@@ -37,5 +38,11 @@ export default [
         method: "POST",
         pattern: new URLPattern({ pathname: "/highlights/:id/delete" }),
         handler: destroy,
+    },
+
+    {
+        method: "POST",
+        pattern: new URLPattern({ pathname: "/highlights/:id/toggle-visible" }),
+        handler: toggleVisible,
     },
 ];

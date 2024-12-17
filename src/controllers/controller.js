@@ -13,6 +13,8 @@ export const index = async () => {
     const films = await filmService.index();
     const highlights = await highlightsService.index();
 
+    console.log("Highlights:", highlights);
+
     try {
         return createResponse(render("dashboard.html", { films, highlights }));
     } catch (error) {
@@ -40,7 +42,7 @@ export const homePage = async () => {
                 programm,
                 daten,
                 films: comingFilms,
-                highlights: highliglights[0],
+                highlights: highliglights,
             }),
             {
                 headers: { "Content-Type": "text/html" },

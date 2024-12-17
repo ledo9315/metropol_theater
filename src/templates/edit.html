@@ -12,26 +12,29 @@ hinzufügen {% endblock %}
 
     <h1 class="add-movie__title">Bearbeiten</h1>
     <form
-      action="/films/{{film.id}}/edit"
+      action="/films/{% if formValues and formValues.id %}{{ formValues.id }}{% else %}{{ film.id }}{% endif %}/edit"
       method="POST"
       class="add-movie__form"
       enctype="multipart/form-data"
     >
-      <!-- Titel -->
-      <div class="add-movie__group">
-        <label for="title" class="add-movie__label">Titel des Films:</label>
-        <input
-          type="text"
-          id="title"
-          name="title"
-          class="add-movie__input"
-          value="{{ film.title }}"
-          required
-        />
-        {% if errors.title %}
-        <p class="add-movie__error">{{ errors.title }}</p>
-        {% endif %}
-      </div>
+
+
+    <!-- Titel -->
+    <div class="add-movie__group">
+      <label for="title" class="add-movie__label">Titel des Films:</label>
+      <input
+        type="text"
+        id="title"
+        name="title"
+        class="add-movie__input"
+        value="{% if formValues and formValues.title %}{{ formValues.title }}{% else %}{{ film.title }}{% endif %}"
+        required
+      />
+      {% if errors.title %}
+      <p class="add-movie__error">{{ errors.title }}</p>
+      {% endif %}
+    </div>
+
 
       <!-- Länge -->
       <div class="add-movie__group">
@@ -42,7 +45,7 @@ hinzufügen {% endblock %}
           name="duration"
           class="add-movie__input"
           min="0"
-          value="{{ film.duration }}"
+          value="{% if formValues and formValues.duration %}{{ formValues.duration }}{% else %}{{ film.duration }}{% endif %}"
           required
         />
         {% if errors.duration %}
@@ -58,10 +61,10 @@ hinzufügen {% endblock %}
           id="production_country"
           name="production_country"
           class="add-movie__input"
-          value="{{ film.country_names }}"
+          value="{% if formValues and formValues.production_country %}{{ formValues.production_country }}{% else %}{{ film.country_names }}{% endif %}"
           required
         />
-        {% if errors.production_country %}
+        {% if errors.productionCountry %}
         <p class="add-movie__error">{{ errors.productionCountry }}</p>
         {% endif %}
       </div>
@@ -76,7 +79,7 @@ hinzufügen {% endblock %}
           class="add-movie__input"
           min="1900"
           max="2100"
-          value="{{ film.production_year }}"
+          value="{% if formValues and formValues.production_year %}{{ formValues.production_year }}{% else %}{{ film.production_year }}{% endif %}"
           required
         />
         {% if errors.production_year %}
@@ -93,22 +96,66 @@ hinzufügen {% endblock %}
           class="add-movie__select"
           required
         >
-          <option value="0" {% if film.rating == "0" %}selected{% endif %}>0</option>
-          <option value="6" {% if film.rating == "6" %}selected{% endif %}>6</option>
-          <option value="12" {% if film.rating == "12" %}selected{% endif %}>12</option>
-          <option value="16" {% if film.rating == "16" %}selected{% endif %}>16</option>
-          <option value="18" {% if film.rating == "18" %}selected{% endif %}>18</option>
+          {% set selected_fsk = formValues.fsk if formValues and formValues.fsk else film.rating %}
+
+          <option value="0" {% if selected_fsk == "0" %}selected{% endif %}>0</option>
+          <option value="6" {% if selected_fsk == "6" %}selected{% endif %}>6</option>
+          <option value="12" {% if selected_fsk == "12" %}selected{% endif %}>12</option>
+          <option value="16" {% if selected_fsk == "16" %}selected{% endif %}>16</option>
+          <option value="18" {% if selected_fsk == "18" %}selected{% endif %}>18</option>
         </select>
+
         {% if errors.fsk %}
         <p class="add-movie__error">{{ errors.fsk }}</p>
         {% endif %}
       </div>
 
+
       <!-- Spielzeiten -->
       <div class="add-movie__group">
         <label class="add-movie__label">Spielzeiten:</label>
         <div id="showtimes-container" class="add-movie__showtimes">
-          {% if showtimes.length > 0 %}
+          {% if formValues and formValues.show_dates %}
+            <!-- Spielzeiten aus formValues bei Validierungsfehlern -->
+            {% for index in range(0, formValues.show_dates.length) %}
+            <div class="add-movie__time">
+              <div class="add-movie__input-wrapper">
+                <input
+                  type="date"
+                  name="show_date[]"
+                  class="add-movie__input"
+                  value="{{ formValues.show_dates[index] }}"
+                  required
+                />
+                <input
+                  type="time"
+                  name="show_time[]"
+                  class="add-movie__input"
+                  value="{{ formValues.show_times[index] }}"
+                  required
+                />
+              </div>
+              <div class="add-movie__select-wrapper">
+                <label class="add-movie__select-label">
+                  OV:
+                  <select name="is_original_version[]" class="add-movie__select">
+                    <option value="0" {% if formValues.is_original_versions[index] == "0" %}selected{% endif %}>Nein</option>
+                    <option value="1" {% if formValues.is_original_versions[index] == "1" %}selected{% endif %}>Ja</option>
+                  </select>
+                </label>
+                <label class="add-movie__select-label">
+                  3D:
+                  <select name="is_3d[]" class="add-movie__select">
+                    <option value="0" {% if formValues.is_3ds[index] == "0" %}selected{% endif %}>Nein</option>
+                    <option value="1" {% if formValues.is_3ds[index] == "1" %}selected{% endif %}>Ja</option>
+                  </select>
+                </label>
+              </div>
+              <button type="button" class="add-movie__button add-movie__button--remove">Entfernen</button>
+            </div>
+            {% endfor %}
+          {% elif showtimes and showtimes.length > 0 %}
+            <!-- Spielzeiten aus der Datenbank -->
             {% for showtime in showtimes %}
             <div class="add-movie__time">
               <div class="add-movie__input-wrapper">
@@ -131,23 +178,15 @@ hinzufügen {% endblock %}
                 <label class="add-movie__select-label">
                   OV:
                   <select name="is_original_version[]" class="add-movie__select">
-                    <option value="0" {% if not showtime.isOriginalVersion %}selected{% endif %}>
-                      Nein
-                    </option>
-                    <option value="1" {% if showtime.isOriginalVersion %}selected{% endif %}>
-                      Ja
-                    </option>
+                    <option value="0" {% if not showtime.isOriginalVersion %}selected{% endif %}>Nein</option>
+                    <option value="1" {% if showtime.isOriginalVersion %}selected{% endif %}>Ja</option>
                   </select>
                 </label>
                 <label class="add-movie__select-label">
                   3D:
                   <select name="is_3d[]" class="add-movie__select">
-                    <option value="0" {% if not showtime.is3D %}selected{% endif %}>
-                      Nein
-                    </option>
-                    <option value="1" {% if showtime.is3D %}selected{% endif %}>
-                      Ja
-                    </option>
+                    <option value="0" {% if not showtime.is3D %}selected{% endif %}>Nein</option>
+                    <option value="1" {% if showtime.is3D %}selected{% endif %}>Ja</option>
                   </select>
                 </label>
               </div>
@@ -155,7 +194,7 @@ hinzufügen {% endblock %}
             </div>
             {% endfor %}
           {% else %}
-            <!-- Standard leerer Eintrag -->
+            <!-- Standard leerer Eintrag, falls keine Daten vorhanden sind -->
             <div class="add-movie__time">
               <div class="add-movie__input-wrapper">
                 <input
@@ -176,14 +215,14 @@ hinzufügen {% endblock %}
               <div class="add-movie__select-wrapper">
                 <label class="add-movie__select-label">
                   OV:
-                  <select name="is_original_version[]" class="add-movie__select">
+                  <select name="is_original_versions[]" class="add-movie__select">
                     <option value="0" selected>Nein</option>
                     <option value="1">Ja</option>
                   </select>
                 </label>
                 <label class="add-movie__select-label">
                   3D:
-                  <select name="is_3d[]" class="add-movie__select">
+                  <select name="is_3ds[]" class="add-movie__select">
                     <option value="0" selected>Nein</option>
                     <option value="1">Ja</option>
                   </select>
@@ -193,6 +232,8 @@ hinzufügen {% endblock %}
             </div>
           {% endif %}
         </div>
+
+        <!-- Button zum Hinzufügen neuer Spielzeiten -->
         <button
           type="button"
           id="showtime-button"
@@ -204,70 +245,71 @@ hinzufügen {% endblock %}
 
 
 
-      <!-- Genre -->
+
+      <!-- Genres -->
       <div class="add-movie__group">
-        <label for="genres" class="add-movie__label">Genres:</label>
+        <label class="add-movie__label">Genres:</label>
         <div id="genre-container" class="add-movie__dynamic-inputs">
-          {% if film.genres.length > 0 %}
-            {% for genre in film.genres %}
-            <div class="add-movie__input-group">
-              <input
-                type="text"
-                name="genres"
-                class="add-movie__input"
-                value="{{ genre }}"
-                required
-              />
-              <button
-              type="button"
-              class="add-movie__button add-movie__button--remove"
-            >
-              Entfernen
-            </button>
-            </div>
-            
-            {% endfor %}
+          {% if formValues and formValues.genres %}
+            {% set genres = formValues.genres %}
           {% else %}
-            <!-- Standard leerer Eintrag -->
-            <div class="add-movie__input-group">
-              <input
-                type="text"
-                name="genres"
-                class="add-movie__input"
-                required
-              />
-            </div>
+            {% set genres = film.genres %}
           {% endif %}
+
+          {% for genre in genres %}
+          <div class="add-movie__input-group">
+            <input
+              type="text"
+              name="genres"
+              class="add-movie__input"
+              value="{{ genre }}"
+              required
+            />
+            {% if errors.genres and errors.genres[loop.index0] %}
+            <p class="add-movie__error">{{ errors.genres[loop.index0] }}</p>
+            {% endif %}
+          </div>
+          {% endfor %}
         </div>
+
+        <!-- Button zum Hinzufügen -->
         <button id="add-genre-button" type="button" class="add-movie__button">
           Genre hinzufügen
         </button>
-        {% if errors.genres %}
-        <p class="add-movie__error">{{ errors.genres }}</p>
+
+        {% if errors.genre %}
+        <p class="add-movie__error">{{ errors.genre }}</p>
         {% endif %}
       </div>
 
-        <!-- Poster -->
-        <div class="add-movie__group">
-          <label for="poster" class="add-movie__label">Poster:</label>
-          
-          <!-- Zeigt das aktuelle Poster an -->
-          {% if film.poster %}
-          <div class="add-movie__current-poster">
-            <img src="/{{ film.poster }}" alt="Aktuelles Poster" class="add-movie__poster-preview" />
-          </div>
-          {% endif %}
-          
-          <!-- Eingabe für neues Poster -->
-          <input
-            type="file"
-            id="poster"
-            name="poster"
-            class="add-movie__file"
-            accept="image/*"
-            {% if not film.poster %}required{% endif %}
+      <!-- Poster -->
+      <div class="add-movie__group">
+        <label for="poster" class="add-movie__label">Poster (max. 10MB):</label>
+        
+        <!-- Zeigt das aktuelle oder validierte Poster an -->
+        {% set currentPoster = fileObject.poster if fileObject and fileObject.poster else film.poster %}
+        {% if currentPoster %}
+        <div class="add-movie__current-poster">
+          <img
+            src="/{{ currentPoster }}"
+            alt="Aktuelles Poster"
+            class="add-movie__poster-preview"
+            width="200"
           />
         </div>
+        {% endif %}
+        
+        <!-- Eingabe für neues Poster -->
+        <input
+          type="file"
+          id="poster"
+          name="poster"
+          class="add-movie__file"
+          accept="image/*"
+          {% if not currentPoster %}required{% endif %}
+        />
+      </div>
+
 
 
       <!-- Beschreibung -->
@@ -278,7 +320,7 @@ hinzufügen {% endblock %}
           name="description"
           rows="5"
           class="add-movie__textarea"
-        >{{ film.description }}</textarea>
+        >{% if formValues and formValues.description %}{{ formValues.description }}{% else %}{{ film.description }}{% endif %}</textarea>
         {% if errors.description %}
         <p class="add-movie__error">{{ errors.description }}</p>
         {% endif %}
@@ -291,9 +333,12 @@ hinzufügen {% endblock %}
           type="text"
           name="director"
           class="add-movie__input"
-          value="{{ film.director_name }}"
+          value="{% if formValues and formValues.director %}{{ formValues.director }}{% else %}{{ film.director_name }}{% endif %}"
           required
         />
+        {% if errors.director %} 
+        <p class="add-movie__error">{{ errors.director }}</p> 
+        {% endif %}
       </div>
 
       <!-- Produzenten -->
@@ -304,43 +349,54 @@ hinzufügen {% endblock %}
           id="producer"
           name="producer"
           class="add-movie__input"
-          value="{{ film.producer }}"
+          value="{% if formValues and formValues.producer %}{{ formValues.producer }}{% else %}{{ film.producer }}{% endif %}"
           required
         />
+        {% if errors.producer %} 
+        <p class="add-movie__error">{{ errors.producer }}</p> 
+        {% endif %}
       </div>
 
-      <!-- Trailer (Video) -->
-      <div class="add-movie__group">
-        <label for="trailer" class="add-movie__label">Trailer (Video):</label>
-        
-        <!-- Zeigt den aktuellen Trailer an -->
-        {% if film.trailer %}
-        <div class="add-movie__current-trailer">
-          <video width="300px" class="add-movie__video-preview" controls>
-            <source src="/{{ film.trailer }}" type="video/mp4">
-            Ihr Browser unterstützt dieses Videoformat nicht.
-          </video>
-        </div>
-        {% endif %}
-        
-        <!-- Eingabe für neuen Trailer -->
-        <input
-          type="file"
-          id="trailer"
-          name="trailer"
-          class="add-movie__file"
-          accept="video/*"
-        />
+    <!-- Trailer (Video) -->
+    <div class="add-movie__group">
+      <label for="trailer" class="add-movie__label">Trailer (max. 20MB):</label>
+      
+      <!-- Zeigt den aktuellen oder validierten Trailer an -->
+      {% set currentTrailer = fileObject.trailer if fileObject and fileObject.trailer else film.trailer %}
+      {% if currentTrailer %}
+      <div class="add-movie__current-trailer">
+        <video width="400px" class="add-movie__video-preview" controls>
+          <source src="/{{ currentTrailer }}" type="video/mp4">
+          Ihr Browser unterstützt dieses Videoformat nicht.
+        </video>
       </div>
+      {% endif %}
+      
+      <!-- Eingabe für neuen Trailer -->
+      <input
+        type="file"
+        id="trailer"
+        name="trailer"
+        class="add-movie__file"
+        accept="video/*"
+      />
+    </div>
+
 
       <!-- Trailer Poster -->
       <div class="add-movie__group">
-        <label for="trailer_poster" class="add-movie__label">Trailer Poster:</label>
+        <label for="trailer_poster" class="add-movie__label">Trailer Poster (max. 10MB):</label>
         
-        <!-- Zeigt das aktuelle Trailer-Poster an -->
-        {% if film.trailer_poster %}
+        <!-- Zeigt das aktuelle oder validierte Trailer-Poster an -->
+        {% set currentTrailerPoster = fileObject.trailer_poster if fileObject and fileObject.trailer_poster else film.trailer_poster %}
+        {% if currentTrailerPoster %}
         <div class="add-movie__current-poster">
-          <img src="/{{ film.trailer_poster }}" alt="Aktuelles Trailer Poster" class="add-movie__poster-preview" />
+          <img
+            src="/{{ currentTrailerPoster }}"
+            alt="Aktuelles Trailer Poster"
+            class="add-movie__poster-preview"
+            width="300"
+          />
         </div>
         {% endif %}
         
@@ -353,6 +409,7 @@ hinzufügen {% endblock %}
           accept="image/*"
         />
       </div>
+
 
 
       <!-- Buttons -->

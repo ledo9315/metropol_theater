@@ -1,15 +1,20 @@
-export const validateFilmData = (formData) => {
+export const validateFilmData = (formValues) => {
     const errors = {};
     let hasErrors = false;
 
-    const title = formData.get("title");
-    const duration = formData.get("duration");
-    const description = formData.get("description");
-    const productionCountry = formData.get("production_country");
-    const productionYear = formData.get("production_year");
-    const fsk = formData.get("fsk");
+    const title = formValues.title;
+    const duration = formValues.duration;
+    const productionCountry = formValues.production_country;
+    const productionYear = formValues.production_year;
+    const fsk = formValues.fsk;
+    const genres = formValues.genres || [];
+    const description = formValues.description;
+    const director = formValues.director;
+    const producer = formValues.producer;
 
-    // Validierungen
+    console.log("productionCountry", productionCountry);
+
+    // Validierungen für einzelne Felder
     if (!title || title.trim() === "" || title.length < 3) {
         errors.title = "Bitte geben Sie einen Titel ein. (mind. 3 Zeichen)";
         hasErrors = true;
@@ -27,8 +32,12 @@ export const validateFilmData = (formData) => {
         hasErrors = true;
     }
 
-    if (!productionCountry || productionCountry.trim() === "") {
-        errors.production_country = "Bitte geben Sie ein Produktionsland ein.";
+    if (
+        !productionCountry || productionCountry.trim() === "" ||
+        productionCountry.length < 3
+    ) {
+        errors.productionCountry =
+            "Bitte geben Sie ein Produktionsland ein. (mind. 3 Zeichen)";
         hasErrors = true;
     }
 
@@ -45,6 +54,54 @@ export const validateFilmData = (formData) => {
 
     if (!fsk || !["0", "6", "12", "16", "18"].includes(fsk)) {
         errors.fsk = "Bitte wählen Sie eine gültige FSK-Freigabe.";
+        hasErrors = true;
+    }
+
+    // Validierung für jedes Genre
+    const genreErrors = [];
+    genres.forEach((genre, index) => {
+        if (!genre || genre.trim() === "" || genre.length < 3) {
+            genreErrors[index] = `Genre #${
+                index + 1
+            } muss mindestens 3 Zeichen enthalten.`;
+            hasErrors = true;
+        }
+    });
+
+    if (genreErrors.length > 0) {
+        errors.genres = genreErrors;
+    }
+
+    if (!director || director.trim() === "" || director.length < 3) {
+        errors.director =
+            "Bitte geben Sie einen Regisseur ein. (mind. 3 Zeichen)";
+        hasErrors = true;
+    }
+
+    if (!producer || producer.trim() === "" || producer.length < 3) {
+        errors.producer =
+            "Bitte geben Sie einen Produzenten ein. (mind. 3 Zeichen)";
+        hasErrors = true;
+    }
+
+    return { errors, hasErrors };
+};
+
+export const validateHighlightData = (formValues) => {
+    const errors = {};
+    let hasErrors = false;
+
+    const title = formValues.title;
+    const description = formValues.description;
+
+    if (!title || title.trim() === "" || title.length < 3) {
+        errors.title = "Bitte geben Sie einen Titel ein. (mind. 3 Zeichen)";
+        hasErrors = true;
+    }
+
+    if (!description || description.trim() === "" || description.length < 10) {
+        errors.description =
+            "Bitte geben Sie eine Beschreibung ein. (mind. 10 Zeichen)";
         hasErrors = true;
     }
 

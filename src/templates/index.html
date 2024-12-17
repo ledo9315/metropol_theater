@@ -2,33 +2,51 @@
 endblock %} {% block content %}
 
 <main>
-  <!-- Highlights -->
   <section class="highlights" id="highlights">
     <div class="container">
-      <div class="highlights__container">
-        <img
-          src="/{{ highlights.image }}"
-          alt="Illustration mit Highlights des aktuellen Filmprogramms"
-          class="highlights__image"
-        />
-        <article class="highlights__content">
-          <h1 class="highlights__title">{{ highlights.title }}</h1>
-          <div class="highlights__text">
-            {{ highlights.description }}
+      <div class="highlights__carousel">
+        <div class="highlights__slides">
+          {% for highlight in highlights %} {% if highlight.showInCarousel %}
+          <div
+            class="highlights__slide {% if loop.index == 1 %}active{% endif %}"
+            data-index="{{ loop.index }}"
+          >
+            <img
+              src="{{ highlight.image }}"
+              alt="Illustration mit Highlights des aktuellen Filmprogramms"
+              class="highlights__image"
+            />
+            <article class="highlights__content">
+              <h1 class="highlights__title">{{ highlight.title }}</h1>
+              <div class="highlights__text">
+                {{ highlight.description }}
+              </div>
+              <!-- <div class="info__content">
+                <h2 class="info__highlights-tile">Reservierungen</h2>
+                <p class="info__text">
+                  Kartenvorbestellungen täglich ab 19:00 Uhr <br> telefonisch
+                  unter der Nummer <a href="tel:+49123456789">+49 4852 9344</a>
+                </p>
+                <p>
+                  Wir freuen uns auf Ihren Besuch!
+                </p>
+              </div> -->
+            </article>
           </div>
-          <article class="info" id="info">
-            <div class="info__content">
-              <h2 class="info__highlights-tile">Reservierungen</h2>
-              <p class="info__text">
-                Kartenvorbestellungen täglich ab 19:00 Uhr <br> telefonisch
-                unter der Nummer <a href="tel:+49123456789">+49 4852 9344</a>
-              </p>
-              <p>
-                Wir freuen uns auf Ihren Besuch!
-              </p>
-            </div>
-          </article>
-        </article>
+          {% endif %} {% endfor %}
+        </div>
+        <button
+          class="highlights__control highlights__control--prev"
+          aria-label="Vorheriges Highlight"
+        >
+          &#10094;
+        </button>
+        <button
+          class="highlights__control highlights__control--next"
+          aria-label="Nächstes Highlight"
+        >
+          &#10095;
+        </button>
       </div>
     </div>
   </section>

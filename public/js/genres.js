@@ -1,11 +1,12 @@
 export function setupGenreFields() {
-    const container = document.getElementById("genre-container");
+  const container = document.getElementById("genre-container");
+  if (!container) return; // Container nicht vorhanden, Funktion beenden
 
-    // Feld hinzufügen
-    const addGenreField = () => {
-        const newField = document.createElement("div");
-        newField.className = "add-movie__input-group";
-        newField.innerHTML = `
+  // Feld hinzufügen
+  const addGenreField = () => {
+    const newField = document.createElement("div");
+    newField.className = "add-movie__input-group";
+    newField.innerHTML = `
         <input
           type="text"
           name="genres"
@@ -19,19 +20,19 @@ export function setupGenreFields() {
           Entfernen
         </button>
       `;
-        container.appendChild(newField);
-    };
+    container.appendChild(newField);
+  };
 
-    // Event-Listener für "Hinzufügen"
-    document.getElementById("add-genre-button")?.addEventListener(
-        "click",
-        addGenreField,
-    );
+  // Event-Listener für "Hinzufügen"
+  document.getElementById("add-genre-button")?.addEventListener(
+    "click",
+    addGenreField,
+  );
 
-    // Event-Listener für "Entfernen" (Event Delegation)
-    container.addEventListener("click", (e) => {
-        if (e.target.classList.contains("add-movie__button--remove")) {
-            e.target.closest(".add-movie__input-group").remove();
-        }
-    });
+  // Event-Listener für "Entfernen" (Event Delegation)
+  container.addEventListener("click", (e) => {
+    if (e.target.classList.contains("add-movie__button--remove")) {
+      e.target.closest(".add-movie__input-group").remove();
+    }
+  });
 }

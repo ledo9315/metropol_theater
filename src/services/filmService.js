@@ -132,8 +132,9 @@ export const show = async (id) => {
 export const add = async (req) => {
     try {
         const formData = await req.formData();
-        const { errors, hasErrors } = validateFilmData(formData);
+
         const formValues = extractFilmFormData(formData);
+        const { errors, hasErrors } = validateFilmData(formValues);
 
         if (hasErrors) {
             console.log("Validierungsfehler:", errors);
@@ -190,15 +191,29 @@ export const add = async (req) => {
 export const update = async (id, req) => {
     try {
         const formData = await req.formData();
-        const { errors, hasErrors } = validateFilmData(formData);
         const formValues = extractFilmFormData(formData);
+        const { errors, hasErrors } = validateFilmData(formValues);
+
+        const files = await filmModel.showFiles(id);
+
+        const fileObject = {
+            poster: files[0],
+            trailer: files[1],
+            trailer_poster: files[2],
+        };
+
+        console.log("files", files);
 
         if (hasErrors) {
             console.log("Validierungsfehler:", errors);
-            return new Response(render("edit.html", { errors, formValues }), {
-                status: 400,
-                headers: { "Content-Type": "text/html" },
-            });
+            formValues.id = id;
+            return new Response(
+                render("edit.html", { errors, formValues, fileObject }),
+                {
+                    status: 400,
+                    headers: { "Content-Type": "text/html" },
+                },
+            );
         }
 
         const existingFilm = filmModel.show(id);
@@ -230,6 +245,7 @@ export const update = async (id, req) => {
         }
 
         const film = buildFilmObject(formValues, directorId, countryId);
+
         await filmModel.update(id, { film, showtimes, genreIds });
 
         return new Response(null, { status: 200 });

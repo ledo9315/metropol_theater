@@ -2,8 +2,7 @@ import * as path from "https://deno.land/std@0.203.0/path/mod.ts";
 import { contentType } from "https://deno.land/std@0.203.0/media_types/mod.ts";
 
 function buildFullPath(base, pathname) {
-    const decodedPath = decodeURI(pathname);
-    return path.resolve(base, `.${decodedPath}`);
+    return path.join(base, decodeURI(pathname));
 }
 
 function pathOk(fullPath, base) {
@@ -15,7 +14,7 @@ async function openFile(fullPath) {
         const fileInfo = await Deno.stat(fullPath);
         if (!fileInfo.isFile) return undefined;
         return await Deno.open(fullPath, { read: true });
-    } catch {
+    } catch (err) {
         return undefined;
     }
 }
@@ -36,12 +35,15 @@ export async function serveStatic(req, publicDir) {
 
     const ext = path.extname(fullPath);
     const mimeType = contentType(ext) || "application/octet-stream";
+    const cacheControl = ext === ".html"
+        ? "public, max-age=0, must-revalidate"
+        : "public, max-age=3600";
 
     return new Response(file.readable, {
         status: 200,
         headers: {
             "Content-Type": mimeType,
-            "Cache-Control": "public, max-age=3600",
+            "Cache-Control": cacheControl,
         },
     });
 }
