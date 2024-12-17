@@ -1801,13 +1801,17 @@ header {
 .add-highlight__button, .edit-highlight__button {
     padding: 10px 20px;
 }
-.add-highlight__button--cancel, .edit-highlight__button--cancel {
+.add-highlight__button--cancel,
+.edit-highlight__button--cancel,
+.remove-highlight__button--cancel {
     background: none;
     color: var(--accent-color);
     text-decoration: underline;
 }
 
-.add-highlight__button--cancel:hover, .edit-highlight__button--cancel:hover {
+.add-highlight__button--cancel:hover,
+.edit-highlight__button--cancel:hover,
+.remove-highlight__button--cancel:hover {
     text-decoration: none;
     background: none;
 }
