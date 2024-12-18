@@ -1,5 +1,11 @@
 import { saveFile } from "./fileUtils.js";
 
+/**
+ * Extrahiert die Daten eines Films aus einem Formular.
+ *
+ * @param {FormData} formData - Die Formulardaten.
+ * @returns {Object} Die extrahierten Daten.
+ */
 export const extractFilmFormData = (formData) => ({
     title: formData.get("title")?.trim() || "",
     duration: formData.get("duration")?.trim() || "",
@@ -18,6 +24,12 @@ export const extractFilmFormData = (formData) => ({
     is_3ds: formData.getAll("is_3ds[]").map((v) => v.trim()),
 });
 
+/**
+ * Extrahiert die Daten eines Films aus einem Formular.
+ *
+ * @param {FormData} formData - Die Formulardaten.
+ * @returns {Object} Die extrahierten Daten.
+ */
 export const extractShowtimes = (formValues) =>
     formValues.show_dates.map((date, index) => ({
         date,
@@ -40,6 +52,11 @@ export const buildFilmObject = (formValues, directorId, countryId) => ({
     country_id: countryId,
 });
 
+/**
+ * Prüft, ob ein Film bereits existiert und speichert ihn falls nicht.
+ * @param {FormData} formData - Die Formulardaten.
+ * @returns {Object} Die extrahierten Daten.
+ */
 export const uploadFiles = async (formData, formValues, existingFilm) => {
     // Poster
     const poster = formData.get("poster");

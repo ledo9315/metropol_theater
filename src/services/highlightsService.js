@@ -3,6 +3,12 @@ import { saveFile } from "../utils/fileUtils.js";
 import { validateHighlightData } from "../utils/validators.js";
 import { render } from "../services/render.js";
 
+/**
+ *  Erstellt ein neues Highlight basierend auf der Anfrage.
+ *
+ * @param {Request} req - Die eingehende Anfrage mit den Highlight-Daten.
+ * @returns {Promise<Response>} Eine Weiterleitung zur Dashboard-Seite oder ein Validierungsfehler.
+ */
 export const add = async (req) => {
     try {
         const formData = await req.formData();
@@ -39,6 +45,12 @@ export const add = async (req) => {
     }
 };
 
+/**
+ * Zeigt das Formular zum Bearbeiten eines Highlights an.
+ *
+ * @param {number} id - Die ID des zu bearbeitenden Highlights.
+ * @returns {Promise<Response>} Eine HTML-Antwort mit dem Formular.
+ */
 export const index = async () => {
     try {
         const highlights = await highlightModel.index();
@@ -56,6 +68,12 @@ export const index = async () => {
     }
 };
 
+/**
+ * Zeigt das Formular zum Bearbeiten eines Highlights an.
+ *
+ * @param {number} id - Die ID des zu bearbeitenden Highlights.
+ * @returns {Promise<Response>} Eine HTML-Antwort mit dem Formular.
+ */
 export const show = async (id) => {
     try {
         const highlight = await highlightModel.show(id);
@@ -77,6 +95,13 @@ export const show = async (id) => {
     }
 };
 
+/**
+ * Zeigt das Formular zum Bearbeiten eines Highlights an.
+ *
+ * @param {number} id - Die ID des zu bearbeitenden Highlights.
+ * @param {Request} req - Die eingehende Anfrage mit den Highlight-Daten.
+ * @returns {Promise<Response>} Eine HTML-Antwort mit dem Formular.
+ */
 export const update = async (id, req) => {
     try {
         const formData = await req.formData();
@@ -120,6 +145,12 @@ export const update = async (id, req) => {
     }
 };
 
+/**
+ * Löscht ein bestehendes Highlight.
+ *
+ * @param {number} id - Die ID des zu löschenden Highlights.
+ * @returns {Promise<Response>} Eine leere Antwort oder ein Fehler.
+ */
 export const destroy = (id) => {
     try {
         const existingHighlight = show(id);
@@ -141,6 +172,13 @@ export const destroy = (id) => {
     }
 };
 
+/**
+ * Schaltet die Sichtbarkeit eines Highlights um.
+ *
+ * @param {number} id - Die ID des Highlights.
+ * @param {Request} req - Die eingehende Anfrage mit den Daten.
+ * @returns {Promise<Response>} Eine leere Antwort oder ein Fehler.
+ */
 export const toggleVisible = async (id, req) => {
     try {
         const formData = await req.formData();

@@ -1,5 +1,10 @@
 import { connection, handleDatabaseError } from "../services/db.js";
 
+/**
+ * Speichert ein neues Highlight in der Datenbank.
+ *
+ * @returns {Array} Ein Array mit allen Highlights.
+ */
 export const add = (image, description, title) => {
     const db = connection();
     try {
@@ -16,6 +21,11 @@ export const add = (image, description, title) => {
     }
 };
 
+/**
+ * Ruft alle Highlights ab.
+ *
+ * @returns {Array} Ein Array mit allen Highlights.
+ */
 export const index = () => {
     const db = connection();
 
@@ -26,6 +36,12 @@ export const index = () => {
     }
 };
 
+/**
+ * Ruft ein einzelnes Highlight anhand seiner ID ab.
+ *
+ * @param {number} id - Die ID des Highlights.
+ * @returns {object|null} Ein Objekt mit den Highlightdetails oder null, wenn kein Highlight gefunden wurde.
+ */
 export const show = (id) => {
     try {
         const db = connection();
@@ -36,6 +52,16 @@ export const show = (id) => {
     }
 };
 
+/**
+ * Aktualisiert ein Highlight in der Datenbank.
+ *
+ * @param {string} image - Das Bild des Highlights.
+ * @param {string} description - Die Beschreibung des Highlights.
+ * @param {string} title - Der Titel des Highlights.
+ * @param {boolean} show_in_carousel - Die Sichtbarkeit des Highlights.
+ * @param {number} id - Die ID des Highlights.
+ * @returns {void}
+ */
 export const update = (image, description, title, show_in_carousel, id) => {
     const db = connection();
     try {
@@ -57,6 +83,12 @@ export const update = (image, description, title, show_in_carousel, id) => {
     }
 };
 
+/**
+ * Löscht ein Highlight aus der Datenbank.
+ *
+ * @param {number} id - Die ID des Highlights.
+ * @returns {void}
+ */
 export const destroy = (id) => {
     const db = connection();
     try {
@@ -66,6 +98,13 @@ export const destroy = (id) => {
     }
 };
 
+/**
+ * Schaltet die Sichtbarkeit eines Highlights um.
+ *
+ * @param {number} id - Die ID des Highlights.
+ * @param {number} value - Der neue Wert für die Sichtbarkeit.
+ * @returns {void}
+ */
 export const updateVisibility = (id, value) => {
     const db = connection();
 
@@ -82,6 +121,12 @@ export const updateVisibility = (id, value) => {
     }
 };
 
+/**
+ * Ruft ein einzelnes Bild anhand seiner ID ab.
+ *
+ * @param {number} id - Die ID des Highlights.
+ * @returns {void}
+ */
 export const showImage = (id) => {
     const db = connection();
     try {
@@ -95,6 +140,12 @@ export const showImage = (id) => {
     }
 };
 
+/**
+ * Ruft die Sichtbarkeit eines Highlights ab.
+ *
+ * @param {number} id - Die ID des Highlights.
+ * @returns {void}
+ */
 export const showVisible = (id) => {
     const db = connection();
     try {

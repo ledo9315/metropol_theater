@@ -262,6 +262,12 @@ export const update = (id, data) => {
   }
 };
 
+/**
+ *  Gibt das Poster eines Films zurück.
+ *
+ * @param {number} id - Die ID des Films.
+ * @returns {string|null} Der Pfad zum Poster oder null, wenn kein Film gefunden wurde.
+ */
 export const showPoster = (id) => {
   const db = connection();
   try {
@@ -276,6 +282,11 @@ export const showPoster = (id) => {
   }
 };
 
+/**
+ * Gibt die Dateien eines Films zurück (Poster, Trailer, Trailer-Poster).
+ * @param {number} id - Die ID des Films.
+ * @returns {string|null} Die Dateien des Films oder null, wenn kein Film gefunden wurde.
+ */
 export const showFiles = (id) => {
   const db = connection();
   try {
