@@ -73,3 +73,19 @@ export const saveFile = async (file, directory) => {
     console.log(`Datei gespeichert: ${filePath} (Typ: ${fileType})`);
     return path.join(directory, uniqueName);
 };
+
+/**
+ * Löscht eine Datei aus dem Dateisystem.
+ *
+ * @param {string} filePath - Der Pfad der zu löschenden Datei.
+ */
+export const deleteFile = async (filePath) => {
+    const safePath = path.join("public", filePath);
+
+    try {
+        await Deno.remove(safePath);
+        console.log(`Datei gelöscht: ${safePath}`);
+    } catch (error) {
+        console.error(`Fehler beim Löschen der Datei: ${safePath}`, error);
+    }
+};

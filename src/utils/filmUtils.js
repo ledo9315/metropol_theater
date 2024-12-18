@@ -1,19 +1,21 @@
 import { saveFile } from "./fileUtils.js";
 
 export const extractFilmFormData = (formData) => ({
-    title: formData.get("title"),
-    duration: formData.get("duration"),
-    production_country: formData.get("production_country"),
-    production_year: formData.get("production_year"),
-    fsk: formData.get("fsk"),
-    description: formData.get("description"),
-    producer: formData.get("producer"),
-    director: formData.get("director"),
-    genres: formData.getAll("genres"),
-    show_dates: formData.getAll("show_date[]"),
-    show_times: formData.getAll("show_time[]"),
-    is_original_versions: formData.getAll("is_original_version[]"),
-    is_3ds: formData.getAll("is_3d[]"),
+    title: formData.get("title")?.trim() || "",
+    duration: formData.get("duration")?.trim() || "",
+    production_country: formData.get("production_country")?.trim() || "",
+    production_year: formData.get("production_year")?.trim() || "",
+    fsk: formData.get("fsk")?.trim() || "",
+    description: formData.get("description")?.trim() || "",
+    producer: formData.getAll("producers").map((p) => p.trim()),
+    director: formData.get("director")?.trim() || "",
+    genres: formData.getAll("genres").map((g) => g.trim()),
+    show_dates: formData.getAll("show_date[]").map((d) => d.trim()),
+    show_times: formData.getAll("show_time[]").map((t) => t.trim()),
+    is_original_versions: formData.getAll("is_original_versions[]").map((v) =>
+        v.trim()
+    ),
+    is_3ds: formData.getAll("is_3ds[]").map((v) => v.trim()),
 });
 
 export const extractShowtimes = (formValues) =>
@@ -33,7 +35,6 @@ export const buildFilmObject = (formValues, directorId, countryId) => ({
     poster: formValues.poster,
     trailer: formValues.trailer,
     trailer_poster: formValues.trailer_poster,
-    producer: formValues.producer,
     createdAt: new Date(),
     director_id: directorId,
     country_id: countryId,
@@ -62,7 +63,7 @@ export const uploadFiles = async (formData, formValues, existingFilm) => {
     if (trailerPoster instanceof File && trailerPoster.size > 0) {
         formValues.trailer_poster = await saveFile(
             trailerPoster,
-            "uploads/posters",
+            "uploads/trailer_poster",
         );
     } else {
         formValues.trailer_poster = existingFilm[8];

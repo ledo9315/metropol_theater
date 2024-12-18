@@ -1,4 +1,3 @@
-import { DB } from "https://deno.land/x/sqlite@v3.9.0/mod.ts";
 import { connection, handleDatabaseError } from "../services/db.js";
 
 export const add = (image, description, title) => {

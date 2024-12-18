@@ -78,10 +78,18 @@ export const validateFilmData = (formValues) => {
         hasErrors = true;
     }
 
-    if (!producer || producer.trim() === "" || producer.length < 3) {
-        errors.producer =
-            "Bitte geben Sie einen Produzenten ein. (mind. 3 Zeichen)";
-        hasErrors = true;
+    const producerErrors = [];
+    producer.forEach((producer, index) => {
+        if (!producer || producer.trim() === "" || producer.length < 3) {
+            producerErrors[index] = `Produzent #${
+                index + 1
+            } muss mindestens 3 Zeichen enthalten.`;
+            hasErrors = true;
+        }
+    });
+
+    if (producerErrors.length > 0) {
+        errors.producers = producerErrors;
     }
 
     return { errors, hasErrors };

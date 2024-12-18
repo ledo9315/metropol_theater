@@ -68,10 +68,13 @@ endblock %} {% block content %}
                 <li><strong>Titel:</strong> {{ film.title }}</li>
                 <li>
                   <strong>Genre:</strong>
-                  {% for genre in film.genres %} {{ genre }} {% endfor %}
+                  {% for genre in film.genres %} {{ genre }} / {% endfor %}
                 </li>
                 <li><strong>Regisseur:</strong> {{ film.director }}</li>
-                <li><strong>Produzenten:</strong> {{ film.producer }}</li>
+                <li>
+                  <strong>Produzenten:</strong> {{ film.producers | join(" / ")
+                  }}
+                </li>
                 <li><strong>Länge:</strong> {{ film.duration }} Minuten</li>
                 <li>
                   <strong>Produktionsland:</strong>
@@ -90,7 +93,7 @@ endblock %} {% block content %}
                         class="schedule__item-time-tag"
                       >3D</span>{% endif %} {% if timeDetails.isOriginalVersion
                       %}<span class="schedule__item-time-tag">OV</span>{% endif
-                      %} {% if not loop.last %} | {% endif %} {% endfor %}
+                      %} {% if not loop.last %} / {% endif %} {% endfor %}
                     </div>
                     {% endif %} {% else %} Keine Spielzeiten verfügbar {% endfor
                     %}

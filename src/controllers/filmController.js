@@ -89,6 +89,8 @@ export const edit = async (_, params) => {
 
     const { film, showtimes } = data;
 
+    console.log("Showtimes:", showtimes);
+
     return createResponse(
       render("edit.html", { film: film, showtimes: showtimes }),
     );

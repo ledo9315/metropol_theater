@@ -70,7 +70,8 @@
                 <div class="film__info-title">
                   <span class="film__info-label">Produzenten</span>
                   <span class="film__info-value">
-                    {{ film.producer }}
+                    {% for producer in film.producers %} {{ producer }} {% if
+                    not loop.last %} / {% endif %} {% endfor %}
                   </span>
                 </div>
               </div>

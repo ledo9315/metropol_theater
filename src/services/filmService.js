@@ -3,6 +3,7 @@ import * as showtimeModel from "../models/showtimeModel.js";
 import * as genreModel from "../models/genresModel.js";
 import * as countryModel from "../models/countryModel.js";
 import * as directorModel from "../models/directorModel.js";
+import * as producerModel from "../models/producerModel.js";
 
 import {
     buildFilmObject,
@@ -10,6 +11,8 @@ import {
     extractShowtimes,
     uploadFiles,
 } from "../utils/filmUtils.js";
+
+import { deleteFile } from "../utils/fileUtils.js";
 
 import {
     formatDateToGermanLocale,
@@ -36,13 +39,13 @@ export const index = async () => {
                 films[filmId] = {
                     id: row[0],
                     title: row[1],
-                    producer: row[2],
-                    duration: row[3],
-                    rating: row[4],
-                    poster: row[5],
-                    createdAt: formatDateToGermanLocale(row[6]),
-                    genres: row[7] ? row[7].split(",") : [],
-                    director: row[8],
+                    duration: row[2],
+                    rating: row[3],
+                    poster: row[4],
+                    createdAt: formatDateToGermanLocale(row[5]),
+                    genres: row[6] ? row[6].split(",") : [],
+                    producers: row[7] ? row[7].split(",") : [],
+                    director: row[8] ? row[8].split(",") : [],
                     countries: row[9] ? row[9].split(",") : [],
                     showtimes: {},
                 };
@@ -81,7 +84,7 @@ export const index = async () => {
  */
 export const show = async (id) => {
     try {
-        let film = filmModel.show(id);
+        let film = await filmModel.show(id);
 
         if (!film) {
             console.log(`Kein Film mit der ID ${id} gefunden.`);
@@ -99,13 +102,13 @@ export const show = async (id) => {
             trailer: film[7],
             trailer_poster: film[8],
             createdAt: film[9],
-            producer: film[10],
+            producers: film[10] ? film[10].split(",") : [],
             director_name: film[11],
             country_names: film[12] ? film[12].split(",") : [],
             genres: film[13] ? film[13].split(",") : [],
         };
 
-        const showtimes = showtimeModel.show(id);
+        const showtimes = await showtimeModel.show(id);
 
         const formattedShowtimes = showtimes.map((row) => ({
             date: formatDateWithWeekday(row.date),
@@ -133,8 +136,12 @@ export const add = async (req) => {
     try {
         const formData = await req.formData();
 
+        console.log("Formulardaten:", formData);
+
         const formValues = extractFilmFormData(formData);
         const { errors, hasErrors } = validateFilmData(formValues);
+
+        console.log("Formularwerte:", formValues);
 
         if (hasErrors) {
             console.log("Validierungsfehler:", errors);
@@ -163,6 +170,7 @@ export const add = async (req) => {
         countryModel.update(filmId, countryId);
         showtimeModel.update(filmId, showtimes);
 
+        // Genres hinzufügen
         const genreIds = [];
         for (const genre of formValues.genres) {
             let gId = genreModel.show(genre);
@@ -171,8 +179,17 @@ export const add = async (req) => {
             }
             genreIds.push(gId);
         }
-
         genreModel.update(filmId, genreIds);
+
+        const producerIds = [];
+        for (const producerName of formValues.producer) {
+            let producerId = producerModel.show(producerName);
+            if (!producerId) {
+                producerId = producerModel.add(producerName);
+            }
+            producerIds.push(producerId);
+        }
+        producerModel.update(filmId, producerIds);
 
         return new Response(null, { status: 201 });
     } catch (error) {
@@ -190,9 +207,12 @@ export const add = async (req) => {
  */
 export const update = async (id, req) => {
     try {
-        const formData = await req.formData();
+        let formData = await req.formData();
         const formValues = extractFilmFormData(formData);
         const { errors, hasErrors } = validateFilmData(formValues);
+
+        console.log("formData:", formData);
+        console.log("Formularwerte:", formValues);
 
         const files = await filmModel.showFiles(id);
 
@@ -201,8 +221,6 @@ export const update = async (id, req) => {
             trailer: files[1],
             trailer_poster: files[2],
         };
-
-        console.log("files", files);
 
         if (hasErrors) {
             console.log("Validierungsfehler:", errors);
@@ -244,9 +262,18 @@ export const update = async (id, req) => {
             genreIds.push(gId);
         }
 
+        const producerIds = [];
+        for (const producerName of formValues.producer) {
+            let producerId = producerModel.show(producerName);
+            if (!producerId) {
+                producerId = producerModel.add(producerName);
+            }
+            producerIds.push(producerId);
+        }
+
         const film = buildFilmObject(formValues, directorId, countryId);
 
-        await filmModel.update(id, { film, showtimes, genreIds });
+        await filmModel.update(id, { film, showtimes, genreIds, producerIds });
 
         return new Response(null, { status: 200 });
     } catch (error) {
@@ -267,6 +294,14 @@ export const destroy = async (id) => {
         if (!filmExists) {
             console.warn(`Film mit ID ${id} nicht gefunden.`);
             return new Response("Film nicht gefunden", { status: 404 });
+        }
+
+        const files = await filmModel.showFiles(id);
+
+        for (const file of files) {
+            if (file) {
+                await deleteFile(file);
+            }
         }
 
         await filmModel.destroy(id);

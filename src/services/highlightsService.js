@@ -86,8 +86,6 @@ export const update = async (id, req) => {
         const visible = await highlightModel.showVisible(id);
         const formValues = { title, description };
 
-        console.log("showVisible", visible);
-
         const { errors, hasErrors } = validateHighlightData(formValues);
 
         if (hasErrors) {
@@ -113,8 +111,6 @@ export const update = async (id, req) => {
             const existingHighlight = highlightModel.show(id);
             image = existingHighlight[1];
         }
-
-        console.log("Update-Parameter:", { image, description, title, id });
 
         highlightModel.update(image, description, title, visible[0], id);
         return new Response(null, { status: 200 });

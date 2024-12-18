@@ -138,14 +138,14 @@ hinzufügen {% endblock %}
               <div class="add-movie__select-wrapper">
                 <label class="add-movie__select-label">
                   OV:
-                  <select name="is_original_version[]" class="add-movie__select">
+                  <select name="is_original_versions[]" class="add-movie__select">
                     <option value="0" {% if formValues.is_original_versions[index] == "0" %}selected{% endif %}>Nein</option>
                     <option value="1" {% if formValues.is_original_versions[index] == "1" %}selected{% endif %}>Ja</option>
                   </select>
                 </label>
                 <label class="add-movie__select-label">
                   3D:
-                  <select name="is_3d[]" class="add-movie__select">
+                  <select name="is_3ds[]" class="add-movie__select">
                     <option value="0" {% if formValues.is_3ds[index] == "0" %}selected{% endif %}>Nein</option>
                     <option value="1" {% if formValues.is_3ds[index] == "1" %}selected{% endif %}>Ja</option>
                   </select>
@@ -177,14 +177,14 @@ hinzufügen {% endblock %}
               <div class="add-movie__select-wrapper">
                 <label class="add-movie__select-label">
                   OV:
-                  <select name="is_original_version[]" class="add-movie__select">
+                  <select name="is_original_versions[]" class="add-movie__select">
                     <option value="0" {% if not showtime.isOriginalVersion %}selected{% endif %}>Nein</option>
                     <option value="1" {% if showtime.isOriginalVersion %}selected{% endif %}>Ja</option>
                   </select>
                 </label>
                 <label class="add-movie__select-label">
                   3D:
-                  <select name="is_3d[]" class="add-movie__select">
+                  <select name="is_3ds[]" class="add-movie__select">
                     <option value="0" {% if not showtime.is3D %}selected{% endif %}>Nein</option>
                     <option value="1" {% if showtime.is3D %}selected{% endif %}>Ja</option>
                   </select>
@@ -242,9 +242,6 @@ hinzufügen {% endblock %}
           Spielzeit hinzufügen
         </button>
       </div>
-
-
-
 
       <!-- Genres -->
       <div class="add-movie__group">
@@ -343,19 +340,50 @@ hinzufügen {% endblock %}
 
       <!-- Produzenten -->
       <div class="add-movie__group">
-        <label for="producer" class="add-movie__label">Produzent:</label>
-        <input
-          type="text"
-          id="producer"
-          name="producer"
-          class="add-movie__input"
-          value="{% if formValues and formValues.producer %}{{ formValues.producer }}{% else %}{{ film.producer }}{% endif %}"
-          required
-        />
-        {% if errors.producer %} 
-        <p class="add-movie__error">{{ errors.producer }}</p> 
+        <label class="add-movie__label">Produzenten:</label>
+        <div id="producer-container" class="add-movie__dynamic-inputs">
+          {% if formValues and formValues.producer %}
+            {% set producers = formValues.producer %}
+          {% else %}
+            {% set producers = film.producers %}
+          {% endif %}
+
+          {% for producer in producers %}
+          <div class="add-movie__input-group">
+            <input
+              type="text"
+              name="producers"
+              class="add-movie__input"
+              value="{{ producer }}"
+              required
+            />
+            {% if errors.producers and errors.producers[loop.index0] %}
+            <p class="add-movie__error">{{ errors.producers[loop.index0] }}</p>
+            {% endif %}
+            <button
+              type="button"
+              class="add-movie__button add-movie__button--remove"
+            >
+              Entfernen
+            </button>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- Button zum Hinzufügen neuer Produzenten -->
+        <button
+          type="button"
+          id="add-producer-button"
+          class="add-movie__button add-movie__button--add"
+        >
+          Produzent hinzufügen
+        </button>
+
+        {% if errors.producer %}
+          <p class="add-movie__error">{{ errors.producer | join(', ') }}</p>
         {% endif %}
       </div>
+
 
     <!-- Trailer (Video) -->
     <div class="add-movie__group">

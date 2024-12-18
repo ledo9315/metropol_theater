@@ -10,31 +10,32 @@ export const index = () => {
   try {
     const data = [...db.query(
       `SELECT
-      films.id, 
-      films.title,
-      films.producer,
-      films.duration,
-      films.rating,
-      films.poster,
-      films.createdAt,
-      GROUP_CONCAT(DISTINCT genres.name) AS genres,
-      director.name AS director,
-      GROUP_CONCAT(DISTINCT countries.name) AS countries,
-      show_dates.show_date,
-      show_times.show_time,
-      show_details.is_original_version,
-      show_details.is_3d
-    FROM films
-    LEFT JOIN film_genres ON films.id = film_genres.film_id
-    LEFT JOIN genres ON film_genres.genre_id = genres.id
-    LEFT JOIN film_countries ON films.id = film_countries.film_id
-    LEFT JOIN countries ON film_countries.country_id = countries.id
-    LEFT JOIN director ON films.director_id = director.id
-    LEFT JOIN show_dates ON films.id = show_dates.film_id
-    LEFT JOIN show_times ON show_dates.id = show_times.show_date_id
-    LEFT JOIN show_details ON show_times.id = show_details.show_time_id
-    GROUP BY films.id, show_dates.show_date, show_times.show_time
-    `,
+        films.id, 
+        films.title,
+        films.duration,
+        films.rating,
+        films.poster,
+        films.createdAt,
+        GROUP_CONCAT(DISTINCT genres.name) AS genres,
+        GROUP_CONCAT(DISTINCT producers.name) AS producers,
+        director.name AS director,
+        GROUP_CONCAT(DISTINCT countries.name) AS countries,
+        show_dates.show_date,
+        show_times.show_time,
+        show_details.is_original_version,
+        show_details.is_3d
+      FROM films
+      LEFT JOIN film_genres ON films.id = film_genres.film_id
+      LEFT JOIN genres ON film_genres.genre_id = genres.id
+      LEFT JOIN film_producers ON films.id = film_producers.film_id 
+      LEFT JOIN producers ON film_producers.producer_id = producers.id 
+      LEFT JOIN film_countries ON films.id = film_countries.film_id
+      LEFT JOIN countries ON film_countries.country_id = countries.id
+      LEFT JOIN director ON films.director_id = director.id
+      LEFT JOIN show_dates ON films.id = show_dates.film_id
+      LEFT JOIN show_times ON show_dates.id = show_times.show_date_id
+      LEFT JOIN show_details ON show_times.id = show_details.show_time_id
+      GROUP BY films.id, show_dates.show_date, show_times.show_time;`,
     )];
     return data;
   } catch (error) {
@@ -63,7 +64,7 @@ export const show = (id) => {
           films.trailer,
           films.trailer_poster,
           films.createdAt,
-          films.producer,
+          GROUP_CONCAT(DISTINCT producers.name) AS producers,
           director.name AS director_name,
           GROUP_CONCAT(DISTINCT countries.name) AS country_names,
           GROUP_CONCAT(DISTINCT genres.name) AS genres
@@ -73,6 +74,8 @@ export const show = (id) => {
       LEFT JOIN countries ON film_countries.country_id = countries.id
       LEFT JOIN film_genres ON films.id = film_genres.film_id
       LEFT JOIN genres ON film_genres.genre_id = genres.id
+      LEFT JOIN film_producers ON films.id = film_producers.film_id 
+      LEFT JOIN producers ON film_producers.producer_id = producers.id 
       WHERE films.id = ?
       GROUP BY films.id;`,
       [id],
@@ -90,13 +93,14 @@ export const show = (id) => {
  * @param {object} film - Das Filmobjekt mit allen nötigen Feldern.
  * @returns {number} Die ID des neu eingefügten Films.
  */
-export const add = async (film) => {
+export const add = (film) => {
   const db = connection();
   try {
-    const query = `INSERT INTO films 
-    (title, duration, production_year, rating, description, poster, trailer, trailer_poster, director_id, country_id, producer, createdAt)
-  VALUES 
-    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
+    const query = `
+      INSERT INTO films 
+        (title, duration, production_year, rating, description, poster, trailer, trailer_poster, director_id, country_id, createdAt)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    `;
 
     const values = [
       film.title,
@@ -109,7 +113,6 @@ export const add = async (film) => {
       film.trailer_poster,
       film.director_id,
       film.country_id,
-      film.producer,
       film.createdAt,
     ];
 
@@ -117,7 +120,6 @@ export const add = async (film) => {
     return db.lastInsertRowId;
   } catch (error) {
     handleDatabaseError(error);
-    throw error;
   }
 };
 
@@ -132,6 +134,7 @@ export const destroy = (filmId) => {
   try {
     db.query(`DELETE FROM film_genres WHERE film_id = ?`, [filmId]);
     db.query(`DELETE FROM film_countries WHERE film_id = ?`, [filmId]);
+    db.query(`DELETE FROM film_producers WHERE film_id = ?`, [filmId]);
     db.query(
       `DELETE FROM show_details 
        WHERE show_time_id IN (
@@ -164,9 +167,10 @@ export const destroy = (filmId) => {
  */
 export const update = (id, data) => {
   const db = connection();
-  const { film, genreIds, showtimes } = data;
+  const { film, genreIds, showtimes, producerIds } = data;
 
   try {
+    // 1. Film aktualisieren
     const query = `UPDATE films
       SET title = ?,
           duration = ?,
@@ -176,8 +180,7 @@ export const update = (id, data) => {
           poster = ?,
           trailer = ?,
           trailer_poster = ?,
-          director_id = ?,
-          producer = ?
+          director_id = ?
       WHERE id = ?;`;
 
     const values = [
@@ -190,13 +193,11 @@ export const update = (id, data) => {
       film.trailer,
       film.trailer_poster,
       film.director_id,
-      film.producer,
       id,
     ];
 
     db.query(query, values);
 
-    // Genres überschreiben
     db.query("DELETE FROM film_genres WHERE film_id = ?", [id]);
     for (const gid of genreIds) {
       db.query("INSERT INTO film_genres (film_id, genre_id) VALUES (?, ?)", [
@@ -205,14 +206,20 @@ export const update = (id, data) => {
       ]);
     }
 
-    // Land überschreiben
+    db.query("DELETE FROM film_producers WHERE film_id = ?", [id]);
+    for (const pid of producerIds) {
+      db.query(
+        "INSERT INTO film_producers (film_id, producer_id) VALUES (?, ?)",
+        [id, pid],
+      );
+    }
+
     db.query("DELETE FROM film_countries WHERE film_id = ?", [id]);
     db.query("INSERT INTO film_countries (film_id, country_id) VALUES (?, ?)", [
       id,
       film.country_id,
     ]);
 
-    // Spielzeiten überschreiben
     db.query(
       `DELETE FROM show_details WHERE show_time_id IN (
        SELECT show_times.id FROM show_times
