@@ -2,19 +2,22 @@ export const validateFilmData = (formValues) => {
     const errors = {};
     let hasErrors = false;
 
+    console.log("formValues aus validator", formValues);
+
     const title = formValues.title;
     const duration = formValues.duration;
     const productionCountry = formValues.production_country;
     const productionYear = formValues.production_year;
     const fsk = formValues.fsk;
-    const genres = formValues.genres || [];
     const description = formValues.description;
-    const director = formValues.director;
     const producer = formValues.producer;
+    const director = formValues.director;
+    const genres = formValues.genres || [];
+    const showDates = formValues.show_dates || [];
+    const showTimes = formValues.show_times || [];
+    const isOriginalVersions = formValues.is_original_versions || [];
+    const is3D = formValues.is_3d || [];
 
-    console.log("productionCountry", productionCountry);
-
-    // Validierungen für einzelne Felder
     if (!title || title.trim() === "" || title.length < 3) {
         errors.title = "Bitte geben Sie einen Titel ein. (mind. 3 Zeichen)";
         hasErrors = true;
@@ -90,6 +93,20 @@ export const validateFilmData = (formValues) => {
 
     if (producerErrors.length > 0) {
         errors.producers = producerErrors;
+    }
+
+    const showDateErrors = [];
+    showDates.forEach((date, index) => {
+        if (!date || date.trim() === "") {
+            showDateErrors[index] = `Datum #${
+                index + 1
+            } muss ein gültiges Datum enthalten.`;
+            hasErrors = true;
+        }
+    });
+
+    if (showDateErrors.length > 0) {
+        errors.showDates = showDateErrors;
     }
 
     return { errors, hasErrors };

@@ -190,7 +190,9 @@ hinzufügen {% endblock %}
                   </select>
                 </label>
               </div>
+              {% if not loop.first %}
               <button type="button" class="add-movie__button add-movie__button--remove">Entfernen</button>
+              {% endif %}
             </div>
             {% endfor %}
           {% else %}
@@ -228,7 +230,7 @@ hinzufügen {% endblock %}
                   </select>
                 </label>
               </div>
-              <button type="button" class="add-movie__button add-movie__button--remove">Entfernen</button>
+              <!-- <button type="button" class="add-movie__button add-movie__button--remove">Entfernen</button> -->
             </div>
           {% endif %}
         </div>
@@ -252,7 +254,7 @@ hinzufügen {% endblock %}
           {% else %}
             {% set genres = film.genres %}
           {% endif %}
-
+      
           {% for genre in genres %}
           <div class="add-movie__input-group">
             <input
@@ -264,6 +266,16 @@ hinzufügen {% endblock %}
             />
             {% if errors.genres and errors.genres[loop.index0] %}
             <p class="add-movie__error">{{ errors.genres[loop.index0] }}</p>
+            {% endif %}
+            
+            <!-- Entfernen-Button nur ab dem zweiten Genre -->
+            {% if not loop.first %}
+            <button
+              type="button"
+              class="add-movie__button add-movie__button--remove"
+            >
+              Entfernen
+            </button>
             {% endif %}
           </div>
           {% endfor %}
@@ -278,6 +290,7 @@ hinzufügen {% endblock %}
         <p class="add-movie__error">{{ errors.genre }}</p>
         {% endif %}
       </div>
+      
 
       <!-- Poster -->
       <div class="add-movie__group">
@@ -360,12 +373,14 @@ hinzufügen {% endblock %}
             {% if errors.producers and errors.producers[loop.index0] %}
             <p class="add-movie__error">{{ errors.producers[loop.index0] }}</p>
             {% endif %}
+            {% if not loop.first %}
             <button
               type="button"
               class="add-movie__button add-movie__button--remove"
             >
               Entfernen
             </button>
+            {% endif %}
           </div>
           {% endfor %}
         </div>
