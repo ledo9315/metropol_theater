@@ -2,6 +2,7 @@ import * as highlightModel from "../models/highlightsModel.js";
 import { saveFile } from "../utils/fileUtils.js";
 import { validateHighlightData } from "../utils/validators.js";
 import { render } from "../services/render.js";
+import { deleteFile } from "../utils/fileUtils.js";
 
 /**
  *  Erstellt ein neues Highlight basierend auf der Anfrage.
@@ -14,10 +15,11 @@ export const add = async (req) => {
         const formData = await req.formData();
         const description = formData.get("description");
         const title = formData.get("highlight_title");
+        let image = formData.get("highlight_image");
 
-        const formValues = { title, description };
+        const formValues = { title, description, image };
 
-        const { errors, hasErrors } = validateHighlightData(formValues);
+        const { errors, hasErrors } = validateHighlightData(formValues, true);
 
         console.log("formValues:", formValues);
 
@@ -32,7 +34,6 @@ export const add = async (req) => {
             );
         }
 
-        let image = formData.get("highlight_image");
         if (image instanceof File && image.size > 0) {
             image = await saveFile(image, "uploads/highlight_poster");
         }
@@ -111,7 +112,7 @@ export const update = async (id, req) => {
         const visible = await highlightModel.showVisible(id);
         const formValues = { title, description };
 
-        const { errors, hasErrors } = validateHighlightData(formValues);
+        const { errors, hasErrors } = validateHighlightData(formValues, false);
 
         if (hasErrors) {
             console.log("Validierungsfehler:", errors);
@@ -154,10 +155,14 @@ export const update = async (id, req) => {
 export const destroy = (id) => {
     try {
         const existingHighlight = show(id);
-
         if (!existingHighlight) {
             console.warn(`Highlight mit ID ${id} nicht gefunden.`);
             return new Response("Highlight nicht gefunden", { status: 404 });
+        }
+
+        const file = highlightModel.showImage(id);
+        if (file) {
+            deleteFile(file[0]);
         }
 
         highlightModel.destroy(id);

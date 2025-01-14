@@ -191,12 +191,13 @@ export const validateFilmData = (formValues, isAddPage = false) => {
     return { errors, hasErrors };
 };
 
-export const validateHighlightData = (formValues) => {
+export const validateHighlightData = (formValues, isAddPage = false) => {
     const errors = {};
     let hasErrors = false;
 
     const title = formValues.title;
     const description = formValues.description;
+    const image = formValues.image;
 
     if (!title || title.trim() === "" || title.length < 3) {
         errors.title = "Bitte geben Sie einen Titel ein. (mind. 3 Zeichen)";
@@ -207,6 +208,13 @@ export const validateHighlightData = (formValues) => {
         errors.description =
             "Bitte geben Sie eine Beschreibung ein. (mind. 10 Zeichen)";
         hasErrors = true;
+    }
+
+    if (isAddPage) {
+        if (!image) {
+            errors.image = "Bitte laden Sie ein Bild hoch.";
+            hasErrors = true;
+        }
     }
 
     return { errors, hasErrors };

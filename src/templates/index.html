@@ -120,9 +120,9 @@ endblock %} {% block content %}
   <section class="coming-soon">
     <div class="container">
       <h2 class="coming-soon__title">Demnächst</h2>
+      {%if films and films.length > 0 %}
       <ul class="coming-soon__movies">
         {% for film in films %}
-
         <li class="coming-soon__movie">
           <a href="/films/{{ film.id }}">
             <figure>
@@ -142,6 +142,9 @@ endblock %} {% block content %}
 
         {% endfor %}
       </ul>
+      {% else %}
+      <p class="coming-soon__no-movies">Keine Filme verfügbar</p>
+      {% endif %}
     </div>
   </section>
 </main>

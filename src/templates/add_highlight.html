@@ -25,7 +25,6 @@ hinzufügen {% endblock %} {% block content %}
                     name="highlight_title"
                     class="add-highlight__input"
                     value="{{ formValues.title }}"
-                    required
                 />
                 {% if errors.title %}
                 <p class="add-highlight__error">{{ errors.title }}</p>
@@ -42,8 +41,10 @@ hinzufügen {% endblock %} {% block content %}
                     name="highlight_image"
                     class="add-highlight__file"
                     accept="image/*"
-                    required
                 />
+                {% if errors.image %}
+                <p class="add-highlight__error">{{ errors.image }}</p>
+                {% endif %}
             </div>
 
             <!-- Beschreibung -->

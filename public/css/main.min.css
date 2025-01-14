@@ -966,7 +966,7 @@ header {
     cursor: grab;
 }
 
-.programm__no-movies {
+.programm__no-movies, .coming-soon__no-movies {
     font-size: 1.5rem;
     font-weight: 500;
     color: var(--accent-color);
