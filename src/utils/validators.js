@@ -1,4 +1,4 @@
-export const validateFilmData = (formValues) => {
+export const validateFilmData = (formValues, isAddPage = false) => {
     const errors = {};
     let hasErrors = false;
 
@@ -17,6 +17,9 @@ export const validateFilmData = (formValues) => {
     const showTimes = formValues.show_times || [];
     const isOriginalVersions = formValues.is_original_versions || [];
     const is3D = formValues.is_3d || [];
+    const poster = formValues.poster;
+    const trailer = formValues.trailer;
+    const trailerPoster = formValues.trailer_poster;
 
     if (!title || title.trim() === "" || title.length < 3) {
         errors.title = "Bitte geben Sie einen Titel ein. (mind. 3 Zeichen)";
@@ -97,7 +100,7 @@ export const validateFilmData = (formValues) => {
 
     const showDateErrors = [];
     showDates.forEach((date, index) => {
-        if (!date || date.trim() === "") {
+        if (!date || date.trim() === "" || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
             showDateErrors[index] = `Datum #${
                 index + 1
             } muss ein gültiges Datum enthalten.`;
@@ -107,6 +110,82 @@ export const validateFilmData = (formValues) => {
 
     if (showDateErrors.length > 0) {
         errors.showDates = showDateErrors;
+    }
+
+    const showTimeErrors = [];
+    const uniqueShowtimes = new Set();
+
+    showTimes.forEach((time, index) => {
+        // Prüfen, ob die Spielzeit angegeben wurde und im richtigen Format ist (HH:MM)
+        if (!time || !/^\d{2}:\d{2}$/.test(time) || time.trim() === "") {
+            showTimeErrors[index] = `Spielzeit #${
+                index + 1
+            } muss im Format HH:MM sein.`;
+            hasErrors = true;
+        } else {
+            // Falls gültig, prüfen, ob die Kombination aus Datum und Zeit einzigartig ist
+            const dateTimeKey = `${showDates[index]} ${time}`;
+            if (uniqueShowtimes.has(dateTimeKey)) {
+                showTimeErrors[index] =
+                    `Die Kombination aus Datum und Spielzeit #${
+                        index + 1
+                    } ist doppelt.`;
+                hasErrors = true;
+            } else {
+                uniqueShowtimes.add(dateTimeKey);
+            }
+        }
+    });
+
+    // Zu den Fehlern hinzufügen, falls welche existieren
+    if (showTimeErrors.length > 0) {
+        errors.showTimes = showTimeErrors;
+    }
+
+    const isOriginalVersionErrors = [];
+    isOriginalVersions.forEach((version, index) => {
+        if (!["0", "1"].includes(version)) {
+            isOriginalVersionErrors[index] = `OV-Option #${
+                index + 1
+            } ist ungültig (muss 0 oder 1 sein).`;
+            hasErrors = true;
+        }
+    });
+
+    if (isOriginalVersionErrors.length > 0) {
+        errors.isOriginalVersions = isOriginalVersionErrors;
+    }
+
+    const is3DErrors = [];
+    is3D.forEach((is3D, index) => {
+        if (!["0", "1"].includes(is3D)) {
+            is3DErrors[index] = `3D-Option #${
+                index + 1
+            } ist ungültig (muss 0 oder 1 sein).`;
+            hasErrors = true;
+        }
+    });
+
+    if (is3DErrors.length > 0) {
+        errors.is3D = is3DErrors;
+    }
+
+    // Validierung nur für `add.html`
+    if (isAddPage) {
+        if (!poster) {
+            errors.poster = "Bitte laden Sie ein Poster hoch.";
+            hasErrors = true;
+        }
+
+        if (!trailer) {
+            errors.trailer = "Bitte laden Sie einen Trailer hoch.";
+            hasErrors = true;
+        }
+
+        if (!trailerPoster) {
+            errors.trailer_poster = "Bitte laden Sie ein Trailer-Poster hoch.";
+            hasErrors = true;
+        }
     }
 
     return { errors, hasErrors };

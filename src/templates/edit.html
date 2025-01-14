@@ -28,7 +28,7 @@ hinzufügen {% endblock %}
         name="title"
         class="add-movie__input"
         value="{% if formValues and formValues.title %}{{ formValues.title }}{% else %}{{ film.title }}{% endif %}"
-        required
+        
       />
       {% if errors.title %}
       <p class="add-movie__error">{{ errors.title }}</p>
@@ -44,9 +44,8 @@ hinzufügen {% endblock %}
           id="duration"
           name="duration"
           class="add-movie__input"
-          min="0"
           value="{% if formValues and formValues.duration %}{{ formValues.duration }}{% else %}{{ film.duration }}{% endif %}"
-          required
+          
         />
         {% if errors.duration %}
         <p class="add-movie__error">{{ errors.duration }}</p>
@@ -62,7 +61,7 @@ hinzufügen {% endblock %}
           name="production_country"
           class="add-movie__input"
           value="{% if formValues and formValues.production_country %}{{ formValues.production_country }}{% else %}{{ film.country_names }}{% endif %}"
-          required
+          
         />
         {% if errors.productionCountry %}
         <p class="add-movie__error">{{ errors.productionCountry }}</p>
@@ -77,13 +76,10 @@ hinzufügen {% endblock %}
           id="production_year"
           name="production_year"
           class="add-movie__input"
-          min="1900"
-          max="2100"
           value="{% if formValues and formValues.production_year %}{{ formValues.production_year }}{% else %}{{ film.production_year }}{% endif %}"
-          required
         />
         {% if errors.production_year %}
-        <p class="add-movie__error">{{ errors.productionYear }}</p>
+        <p class="add-movie__error">{{ errors.production_year }}</p>
         {% endif %}
       </div>
 
@@ -94,7 +90,7 @@ hinzufügen {% endblock %}
           id="fsk"
           name="fsk"
           class="add-movie__select"
-          required
+          
         >
           {% set selected_fsk = formValues.fsk if formValues and formValues.fsk else film.rating %}
 
@@ -125,14 +121,14 @@ hinzufügen {% endblock %}
                   name="show_date[]"
                   class="add-movie__input"
                   value="{{ formValues.show_dates[index] }}"
-                  required
+                  
                 />
                 <input
                   type="time"
                   name="show_time[]"
                   class="add-movie__input"
                   value="{{ formValues.show_times[index] }}"
-                  required
+                  
                 />
               </div>
               <div class="add-movie__select-wrapper">
@@ -164,14 +160,14 @@ hinzufügen {% endblock %}
                   name="show_date[]"
                   class="add-movie__input"
                   value="{{ showtime.date }}"
-                  required
+                  
                 />
                 <input
                   type="time"
                   name="show_time[]"
                   class="add-movie__input"
                   value="{{ showtime.time }}"
-                  required
+                  
                 />
               </div>
               <div class="add-movie__select-wrapper">
@@ -204,14 +200,14 @@ hinzufügen {% endblock %}
                   name="show_date[]"
                   class="add-movie__input"
                   value=""
-                  required
+                  
                 />
                 <input
                   type="time"
                   name="show_time[]"
                   class="add-movie__input"
                   value=""
-                  required
+                  
                 />
               </div>
               <div class="add-movie__select-wrapper">
@@ -243,6 +239,18 @@ hinzufügen {% endblock %}
         >
           Spielzeit hinzufügen
         </button>
+        {% if errors.showDates %}
+        <p class="add-movie__error">{{ errors.showDates }}</p>
+        {% endif %}
+        {% if errors.showTimes %}
+        <p class="add-movie__error">{{ errors.showTimes }}</p>
+        {% endif %}
+        {% if errors.isOriginalVersions %}
+        <p class="add-movie__error">{{ errors.isOriginalVersions }}</p>
+        {% endif %}
+        {% if errors.is3D %}
+        <p class="add-movie__error">{{ errors.is3D }}</p>
+        {% endif %}
       </div>
 
       <!-- Genres -->
@@ -262,7 +270,7 @@ hinzufügen {% endblock %}
               name="genres"
               class="add-movie__input"
               value="{{ genre }}"
-              required
+              
             />
             {% if errors.genres and errors.genres[loop.index0] %}
             <p class="add-movie__error">{{ errors.genres[loop.index0] }}</p>
@@ -316,7 +324,7 @@ hinzufügen {% endblock %}
           name="poster"
           class="add-movie__file"
           accept="image/*"
-          {% if not currentPoster %}required{% endif %}
+          {% if not currentPoster %}{% endif %}
         />
       </div>
 
@@ -344,7 +352,7 @@ hinzufügen {% endblock %}
           name="director"
           class="add-movie__input"
           value="{% if formValues and formValues.director %}{{ formValues.director }}{% else %}{{ film.director_name }}{% endif %}"
-          required
+          
         />
         {% if errors.director %} 
         <p class="add-movie__error">{{ errors.director }}</p> 
@@ -368,7 +376,7 @@ hinzufügen {% endblock %}
               name="producers"
               class="add-movie__input"
               value="{{ producer }}"
-              required
+              
             />
             {% if errors.producers and errors.producers[loop.index0] %}
             <p class="add-movie__error">{{ errors.producers[loop.index0] }}</p>

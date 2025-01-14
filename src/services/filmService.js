@@ -139,7 +139,7 @@ export const add = async (req) => {
         console.log("Formulardaten:", formData);
 
         const formValues = extractFilmFormData(formData);
-        const { errors, hasErrors } = validateFilmData(formValues);
+        const { errors, hasErrors } = validateFilmData(formValues, true);
 
         console.log("Formularwerte:", formValues);
 
@@ -209,7 +209,7 @@ export const update = async (id, req) => {
     try {
         let formData = await req.formData();
         const formValues = extractFilmFormData(formData);
-        const { errors, hasErrors } = validateFilmData(formValues);
+        const { errors, hasErrors } = validateFilmData(formValues, false);
 
         console.log("formData:", formData);
         console.log("Formularwerte:", formValues);

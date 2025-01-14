@@ -11,7 +11,7 @@ export function setupGenreFields() {
           type="text"
           name="genres"
           class="add-movie__input"
-          required
+          
         />
         <button
           type="button"

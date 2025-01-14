@@ -11,7 +11,7 @@ export function setupProducerFields() {
           type="text"
           name="producers"
           class="add-movie__input"
-          required
+          
         />
         <button
           type="button"

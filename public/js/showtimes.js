@@ -9,8 +9,8 @@ export function setupShowtimeFields() {
     showtimeDiv.classList.add("add-movie__time");
     showtimeDiv.innerHTML = `
     <div class="add-movie__input-wrapper">
-      <input type="date" name="show_date[]" class="add-movie__input" required />
-      <input type="time" name="show_time[]" class="add-movie__input" required />
+      <input type="date" name="show_date[]" class="add-movie__input" />
+      <input type="time" name="show_time[]" class="add-movie__input" />
     </div>
     <div class="add-movie__select-wrapper">
       <label class="add-movie__select-label">
