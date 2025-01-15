@@ -103,6 +103,18 @@ hinzufügen {% endblock %}
         {% endif %}
       </div>
 
+      <div class="add-movie__group">
+        <label for="is_3d" class="add-movie__label">3D:</label>
+        <input type="checkbox" id="is_3d" name="is_3d" class="add-movie__checkbox" 
+          {% if formValues.is_film_3d == "1" %}checked{% endif %} />
+          {% if errors.is_film_3d %} <p class="add-movie__error">{{ errors.is_film_3d }}</p> {% endif %}
+        <label for="is_original_version" class="add-movie__label">Originalversion (OV):</label>
+        <input type="checkbox" id="is_original_version" name="is_original_version" class="add-movie__checkbox" 
+          {% if formValues.is_film_original_version == "1" %}checked{% endif %} />
+          {% if errors.is_film_original_version %} <p class="add-movie__error">{{ errors.is_film_original_version }}</p> {% endif %}
+      </div>
+      
+
       <!-- Spielzeiten -->
       <div class="add-movie__group">
         <label class="add-movie__label">Spielzeiten:</label>

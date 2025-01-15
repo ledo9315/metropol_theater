@@ -6,6 +6,7 @@ import { setupProgramScroll } from "./scrollProgram.js";
 import { setupDateFilter } from "./dateFilter.js";
 import { setupCarousel } from "./carousel.js";
 import { setupProducerFields } from "./producers.js";
+import { setupToast } from "./showToast.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   setupMenu();
@@ -16,4 +17,5 @@ document.addEventListener("DOMContentLoaded", () => {
   setupCarousel();
   setupProgramScroll();
   setupDateFilter();
+  setupToast();
 });

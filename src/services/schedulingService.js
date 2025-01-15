@@ -37,21 +37,23 @@ export const getProgramOverview = async () => {
         }, {});
 
         for (const film of filme) {
-            const filmDatum = film[7];
+            const filmDatum = film.show_date;
             if (programm[filmDatum]) {
-                const allShowtimes = modelGetShowtimesForFilm(film[0]);
+                const allShowtimes = modelGetShowtimesForFilm(film.id);
                 const filteredShowtimes = allShowtimes.filter(
                     (showtime) => showtime.date === filmDatum,
                 );
 
                 programm[filmDatum].push({
-                    id: film[0],
-                    title: film[1],
-                    duration: film[2],
-                    rating: film[3],
-                    poster: film[4],
-                    genres: film[5] ? film[5].split(",") : [],
-                    show_times: film[6] ? film[6].split(",") : [],
+                    id: film.id,
+                    title: film.title,
+                    duration: film.duration,
+                    rating: film.rating,
+                    poster: film.poster,
+                    is_film_3d: film.is_film_3d,
+                    is_film_original_version: film.is_film_original_version,
+                    genres: film.genres,
+                    show_times: film.show_times,
                     showtimeWithDetails: filteredShowtimes,
                 });
             }
@@ -100,14 +102,16 @@ export const getComingFilms = async () => {
         );
 
         return data.map((row) => ({
-            id: row[0],
-            title: row[1],
-            duration: row[2],
-            rating: row[3],
-            poster: row[4],
-            genres: row[5] ? row[5].split(",") : [],
-            show_times: row[6] ? row[6].split(",") : [],
-            show_date: row[7],
+            id: row.id,
+            title: row.title,
+            duration: row.duration,
+            rating: row.rating,
+            poster: row.poster,
+            is_film_3d: row.is_film_3d,
+            is_film_original_version: row.is_film_original_version,
+            genres: row.genres,
+            show_times: row.show_times,
+            show_date: row.show_date,
         }));
     } catch (error) {
         console.error("Fehler beim Abrufen der kommenden Filme:", error);

@@ -21,6 +21,8 @@ export const extractFilmFormData = (formData) => ({
     genres: formData.getAll("genres").map((g) => g.trim()),
     show_dates: formData.getAll("show_date[]").map((d) => d.trim()),
     show_times: formData.getAll("show_time[]").map((t) => t.trim()),
+    is_film_original_version: formData.get("is_original_version") === "on",
+    is_film_3d: formData.get("is_3d") === "on",
     is_original_versions: formData.getAll("is_original_versions[]").map((v) =>
         v.trim()
     ),
@@ -53,6 +55,8 @@ export const buildFilmObject = (formValues, directorId, countryId) => ({
     createdAt: new Date(),
     director_id: directorId,
     country_id: countryId,
+    is_film_original_version: formValues.is_film_original_version,
+    is_film_3d: formValues.is_film_3d,
 });
 
 /**

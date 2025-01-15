@@ -68,7 +68,8 @@ endblock %} {% block content %}
                 <li><strong>Titel:</strong> {{ film.title }}</li>
                 <li>
                   <strong>Genre:</strong>
-                  {% for genre in film.genres %} {{ genre }} / {% endfor %}
+                  {% for genre in film.genres %} {{ genre }}{% if not loop.last
+                  %} / {% endif %} {% endfor %}
                 </li>
                 <li><strong>Regisseur:</strong> {{ film.director }}</li>
                 <li>
@@ -81,6 +82,14 @@ endblock %} {% block content %}
                   {% for country in film.countries %} {{ country }} {% endfor %}
                 </li>
                 <li><strong>FSK:</strong> {{ film.rating }}</li>
+                <li>
+                  <strong>3D:</strong> {% if film.is_film_3d %}Ja{% else
+                  %}Nein{% endif %}
+                </li>
+                <li>
+                  <strong>Originalversion:</strong> {% if
+                  film.is_film_original_version %}Ja{% else %}Nein{% endif %}
+                </li>
                 <li>
                   <strong>Spielzeiten:</strong>
                   <ul>

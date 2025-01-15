@@ -63,7 +63,11 @@ export const create = async (req) => {
     console.log("Film erfolgreich verarbeitet");
     return new Response(null, {
       status: 302,
-      headers: { Location: "/dashboard?section=movies-section" },
+      headers: {
+        Location: `/dashboard?section=movies-section&message=${
+          encodeURIComponent("Film erfolgreich hinzugefügt!")
+        }`,
+      },
     });
   } catch (error) {
     console.error("Fehler beim Hinzufügen des Films:", error);
@@ -117,7 +121,11 @@ export const update = async (req, params) => {
 
     return new Response(null, {
       status: 302,
-      headers: { Location: "/dashboard?section=movies-section" },
+      headers: {
+        Location: `/dashboard?section=movies-section&message=${
+          encodeURIComponent("Film erfolgreich aktualisiert!")
+        }`,
+      },
     });
   } catch (error) {
     console.error("Fehler beim Aktualisieren des Films:", error);
@@ -156,7 +164,11 @@ export const destroy = async (_, params) => {
 
     return new Response(null, {
       status: 302,
-      headers: { Location: "/dashboard?section=movies-section" },
+      headers: {
+        Location: `/dashboard?section=movies-section&message=${
+          encodeURIComponent("Film erfolgreich gelöscht!")
+        }`,
+      },
     });
   } catch (error) {
     console.error("Fehler beim Löschen des Films:", error);

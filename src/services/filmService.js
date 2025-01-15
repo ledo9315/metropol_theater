@@ -43,18 +43,20 @@ export const index = async () => {
                     rating: row[3],
                     poster: row[4],
                     createdAt: formatDateToGermanLocale(row[5]),
-                    genres: row[6] ? row[6].split(",") : [],
-                    producers: row[7] ? row[7].split(",") : [],
-                    director: row[8] ? row[8].split(",") : [],
-                    countries: row[9] ? row[9].split(",") : [],
+                    is_film_3d: !!row[6],
+                    is_film_original_version: !!row[7],
+                    genres: row[8] ? row[8].split(",") : [],
+                    producers: row[9] ? row[9].split(",") : [],
+                    director: row[10],
+                    countries: row[11] ? row[11].split(",") : [],
                     showtimes: {},
                 };
             }
 
-            const date = row[10] ? formatDateToGermanLocale(row[10]) : null;
-            const time = row[11];
-            const isOriginalVersion = !!row[12];
-            const is3D = !!row[13];
+            const date = row[12] ? formatDateToGermanLocale(row[12]) : null;
+            const time = row[13];
+            const isOriginalVersion = !!row[14];
+            const is3D = !!row[15];
 
             if (date) {
                 if (!films[filmId].showtimes[date]) {
@@ -68,7 +70,7 @@ export const index = async () => {
                 });
             }
         });
-
+        console.log("Filme aus der Datenbank:", films);
         return Object.values(films);
     } catch (error) {
         console.error("Fehler beim Abrufen der Filme:", error);
@@ -102,11 +104,15 @@ export const show = async (id) => {
             trailer: film[7],
             trailer_poster: film[8],
             createdAt: film[9],
-            producers: film[10] ? film[10].split(",") : [],
-            director_name: film[11],
-            country_names: film[12] ? film[12].split(",") : [],
-            genres: film[13] ? film[13].split(",") : [],
+            is_film_3d: film[10] === 1,
+            is_film_original_version: film[11] === 1,
+            producers: film[12] ? film[12].split(",") : [],
+            director_name: film[13],
+            country_names: film[14] ? film[14].split(",") : [],
+            genres: film[15] ? film[15].split(",") : [],
         };
+
+        console.log("Film:", film);
 
         const showtimes = await showtimeModel.show(id);
 
@@ -211,7 +217,6 @@ export const update = async (id, req) => {
         const formValues = extractFilmFormData(formData);
         const { errors, hasErrors } = validateFilmData(formValues, false);
 
-        console.log("formData:", formData);
         console.log("Formularwerte:", formValues);
 
         const files = await filmModel.showFiles(id);
@@ -272,6 +277,8 @@ export const update = async (id, req) => {
         }
 
         const film = buildFilmObject(formValues, directorId, countryId);
+
+        console.log("Film bei Aktualisierung:", film);
 
         await filmModel.update(id, { film, showtimes, genreIds, producerIds });
 

@@ -27,7 +27,8 @@
                 %} / {% endif %} {% endfor %}
               </span>
               <span>/ {{ film.production_year }} / {{ film.duration }} Min / FSK
-                {{ film.rating }}</span>
+                {{ film.rating }} {% if film.is_film_3d %} / 3D {% endif %} {%
+                if film.is_film_original_version %} / OV {% endif %}</span>
             </p>
           </aside>
         </div>
@@ -37,6 +38,8 @@
           <article class="film__description">
             <div class="video-wrapper">
               <video
+                autoplay
+                muted
                 controls
                 class="film__trailer"
                 src="/{{ film.trailer }}"

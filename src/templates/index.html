@@ -89,7 +89,8 @@ endblock %} {% block content %}
               <h3 class="programm__movie-name">{{ film.title }}</h3>
               <p class="programm__movie-details">
                 {{ film.duration }} MIN / {{ film.genres | join(', ') }} / FSK
-                {{ film.rating }}
+                {{ film.rating }} {% if film.is_film_3d %} / 3D {% endif %} {%
+                if film.is_film_original_version %} / OV {% endif %}
               </p>
               <ul class="programm__times">
                 {% for showtime in film.showtimeWithDetails %}
@@ -135,7 +136,8 @@ endblock %} {% block content %}
             </figure>
             <div class="coming-soon__movie-details">
               {{ film.duration }} MIN / {{ film.genres | join(', ') }} / FSK {{
-              film.rating }}
+              film.rating }} {% if film.is_film_3d %} / 3D {% endif %} {% if
+              film.is_film_original_version %} / OV {% endif %}
             </div>
           </a>
         </li>

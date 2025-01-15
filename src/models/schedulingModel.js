@@ -17,6 +17,8 @@ export const getUpcomingFilms = async (startDate, endDate) => {
         films.duration,
         films.rating,
         films.poster,
+        films.is_3d,
+        films.is_original_version,
         GROUP_CONCAT(DISTINCT genres.name) AS genres,
         GROUP_CONCAT(DISTINCT show_times.show_time) AS show_times,
         show_dates.show_date,
@@ -35,7 +37,20 @@ export const getUpcomingFilms = async (startDate, endDate) => {
     const result = db.query(query, [startDate, endDate]);
     const data = [];
     for await (const row of result) {
-      data.push(row);
+      data.push({
+        id: row[0],
+        title: row[1],
+        duration: row[2],
+        rating: row[3],
+        poster: row[4],
+        is_film_3d: !!row[5],
+        is_film_original_version: !!row[6],
+        genres: row[7] ? row[7].split(",") : [],
+        show_times: row[8] ? row[8].split(",") : [],
+        show_date: row[9],
+        is_original_version: !!row[10],
+        is_3d: !!row[11],
+      });
     }
     return data;
   } catch (error) {
@@ -65,6 +80,8 @@ export const getComingSoonFilms = async (
         films.duration,
         films.rating,
         films.poster,
+        films.is_3d,
+        films.is_original_version,
         GROUP_CONCAT(DISTINCT genres.name) AS genres,
         GROUP_CONCAT(DISTINCT show_times.show_time) AS show_times,
         show_dates.show_date
@@ -91,7 +108,18 @@ export const getComingSoonFilms = async (
     ]);
     const data = [];
     for await (const row of result) {
-      data.push(row);
+      data.push({
+        id: row[0],
+        title: row[1],
+        duration: row[2],
+        rating: row[3],
+        poster: row[4],
+        is_film_3d: !!row[5],
+        is_film_original_version: !!row[6],
+        genres: row[7] ? row[7].split(",") : [],
+        show_times: row[8] ? row[8].split(",") : [],
+        show_date: row[9],
+      });
     }
     return data;
   } catch (error) {

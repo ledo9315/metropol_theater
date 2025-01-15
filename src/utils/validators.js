@@ -16,10 +16,12 @@ export const validateFilmData = (formValues, isAddPage = false) => {
     const showDates = formValues.show_dates || [];
     const showTimes = formValues.show_times || [];
     const isOriginalVersions = formValues.is_original_versions || [];
-    const is3D = formValues.is_3d || [];
+    const is3D = formValues.is_3ds || [];
     const poster = formValues.poster;
     const trailer = formValues.trailer;
     const trailerPoster = formValues.trailer_poster;
+    const isFilm3D = formValues.is_film_3d;
+    const isFilmOriginalVersion = formValues.is_film_original_version;
 
     if (!title || title.trim() === "" || title.length < 3) {
         errors.title = "Bitte geben Sie einen Titel ein. (mind. 3 Zeichen)";
@@ -60,6 +62,19 @@ export const validateFilmData = (formValues, isAddPage = false) => {
 
     if (!fsk || !["0", "6", "12", "16", "18"].includes(fsk)) {
         errors.fsk = "Bitte wählen Sie eine gültige FSK-Freigabe.";
+        hasErrors = true;
+    }
+
+    // Validierung für Checkboxen
+    if (![true, false].includes(isFilm3D)) {
+        errors.is_film_3d =
+            "Bitte wählen Sie eine gültige Option für 3D (Ja oder Nein).";
+        hasErrors = true;
+    }
+
+    if (![true, false].includes(isFilmOriginalVersion)) {
+        errors.is_film_original_version =
+            "Bitte wählen Sie eine gültige Option für Originalversion (Ja oder Nein).";
         hasErrors = true;
     }
 

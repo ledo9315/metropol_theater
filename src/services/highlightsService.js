@@ -187,11 +187,24 @@ export const destroy = (id) => {
 export const toggleVisible = async (id, req) => {
     try {
         const formData = await req.formData();
-        let visible = parseInt(formData.get("show_in_carousel"), 10);
+        const visible = parseInt(formData.get("show_in_carousel"), 10);
 
-        highlightModel.updateVisibility(id, visible);
+        await highlightModel.updateVisibility(id, visible);
 
-        return new Response(null, { status: 200 });
+        const message = visible
+            ? "Highlight eingeblendet"
+            : "Highlight ausgeblendet";
+
+        return new Response(null, {
+            status: 302,
+            headers: {
+                Location: `/dashboard?section=highlights-section&message=${
+                    encodeURIComponent(
+                        message,
+                    )
+                }`,
+            },
+        });
     } catch (error) {
         console.error(
             "Fehler beim Umschalten der Sichtbarkeit des Highlights:",

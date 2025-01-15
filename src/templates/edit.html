@@ -107,6 +107,23 @@ hinzufügen {% endblock %}
       </div>
 
 
+      {% set selected_is_film_3d = formValues.is_film_3d if formValues and formValues.is_film_3d else film.is_film_3d %}
+      <div class="add-movie__group">
+        <label for="is_3d" class="add-movie__label">3D:</label>
+        <input type="checkbox" id="is_3d" name="is_3d" class="add-movie__checkbox" 
+          {% if selected_is_film_3d == "1" %}checked{% endif %} />
+          {% if errors.is_film_3d %} <p class="add-movie__error">{{ errors.is_film_3d }}</p> {% endif %}
+      </div>
+
+      {% set selected_is_film_original_version = formValues.is_film_original_version if formValues and formValues.is_film_original_version else film.is_film_original_version %}
+      <div class="add-movie__group">
+        <label for="is_original_version" class="add-movie__label">Originalversion (OV):</label>
+        <input type="checkbox" id="is_original_version" name="is_original_version" class="add-movie__checkbox" 
+          {% if selected_is_film_original_version == "1" %}checked{% endif %} />
+          {% if errors.is_film_original_version %} <p class="add-movie__error">{{ errors.is_film_original_version }}</p> {% endif %}
+      </div>
+
+
       <!-- Spielzeiten -->
       <div class="add-movie__group">
         <label class="add-movie__label">Spielzeiten:</label>

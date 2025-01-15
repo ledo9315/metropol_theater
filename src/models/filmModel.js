@@ -16,6 +16,8 @@ export const index = () => {
         films.rating,
         films.poster,
         films.createdAt,
+        films.is_3d,
+        films.is_original_version,
         GROUP_CONCAT(DISTINCT genres.name) AS genres,
         GROUP_CONCAT(DISTINCT producers.name) AS producers,
         director.name AS director,
@@ -64,6 +66,8 @@ export const show = (id) => {
           films.trailer,
           films.trailer_poster,
           films.createdAt,
+          films.is_3d,
+          films.is_original_version,
           GROUP_CONCAT(DISTINCT producers.name) AS producers,
           director.name AS director_name,
           GROUP_CONCAT(DISTINCT countries.name) AS country_names,
@@ -97,10 +101,10 @@ export const add = (film) => {
   const db = connection();
   try {
     const query = `
-      INSERT INTO films 
-        (title, duration, production_year, rating, description, poster, trailer, trailer_poster, director_id, country_id, createdAt)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-    `;
+    INSERT INTO films 
+      (title, duration, production_year, rating, description, poster, trailer, trailer_poster, director_id, country_id, createdAt, is_3d, is_original_version)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+  `;
 
     const values = [
       film.title,
@@ -114,6 +118,8 @@ export const add = (film) => {
       film.director_id,
       film.country_id,
       film.createdAt,
+      film.is_film_3d ? 1 : 0,
+      film.is_film_original_version ? 1 : 0,
     ];
 
     db.query(query, values);
@@ -180,7 +186,9 @@ export const update = (id, data) => {
           poster = ?,
           trailer = ?,
           trailer_poster = ?,
-          director_id = ?
+          director_id = ?,
+          is_3d = ?,
+          is_original_version = ?
       WHERE id = ?;`;
 
     const values = [
@@ -193,6 +201,8 @@ export const update = (id, data) => {
       film.trailer,
       film.trailer_poster,
       film.director_id,
+      film.is_film_3d ? 1 : 0,
+      film.is_film_original_version ? 1 : 0,
       id,
     ];
 

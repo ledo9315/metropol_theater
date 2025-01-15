@@ -19,7 +19,11 @@ export const create = async (req) => {
 
         return new Response(null, {
             status: 302,
-            headers: { Location: "/dashboard?section=highlights-section" },
+            headers: {
+                Location: `/dashboard?section=highlights-section&message=${
+                    encodeURIComponent("Highlight hinzugefügt")
+                }`,
+            },
         });
     } catch (error) {
         console.error("Fehler beim Hinzufügen des Highlights:", error);
@@ -77,7 +81,11 @@ export const update = async (req, params) => {
 
         return new Response(null, {
             status: 302,
-            headers: { Location: "/dashboard?section=highlights-section" },
+            headers: {
+                Location: `/dashboard?section=highlights-section&message=${
+                    encodeURIComponent("Highlight aktualisiert")
+                }`,
+            },
         });
     } catch (error) {
         console.error("Fehler beim Aktualisieren des Highlights:", error);
@@ -119,7 +127,11 @@ export const destroy = async (_, params) => {
 
         return new Response(null, {
             status: 302,
-            headers: { Location: "/dashboard?section=highlights-section" },
+            headers: {
+                Location: `/dashboard?section=highlights-section&message=${
+                    encodeURIComponent("Highlight gelöscht")
+                }`,
+            },
         });
     } catch (error) {
         console.error("Fehler beim Löschen des Highlights:", error);
@@ -129,13 +141,11 @@ export const destroy = async (_, params) => {
 
 export const toggleVisible = async (req, params) => {
     try {
-        const { id } = params.pathname.groups;
-        await highlightsService.toggleVisible(id, req);
-
-        return new Response(null, {
-            status: 302,
-            headers: { Location: "/dashboard?section=highlights-section" },
-        });
+        const response = await highlightsService.toggleVisible(
+            params.pathname.groups.id,
+            req,
+        );
+        return response;
     } catch (error) {
         console.error(
             "Fehler beim Umschalten der Sichtbarkeit des Highlights:",
