@@ -9,14 +9,23 @@ import * as schedulingService from "../services/schedulingService.js";
  *
  * @returns {Promise<Response>} Eine HTML-Antwort mit dem Dashboard.
  */
-export const index = async () => {
-    const films = await filmService.index();
+export const index = async (req) => {
+    const url = new URL(req.url);
+    const sortField = url.searchParams.get("sortfield") || "createdAt";
+    const sortOrder = url.searchParams.get("sortorder") || "ASC";
+    const search = url.searchParams.get("search") || "";
+
+    const films = await filmService.index(sortField, sortOrder, search);
     const highlights = await highlightsService.index();
 
-    console.log("Filme:", films);
-
     try {
-        return createResponse(render("dashboard.html", { films, highlights }));
+        return createResponse(
+            render("dashboard.html", {
+                films,
+                highlights,
+                currentSearch: search,
+            }),
+        );
     } catch (error) {
         console.error("Fehler beim Abrufen der Filme:", error);
         return new Response("Interner Serverfehler", { status: 500 });
@@ -34,9 +43,6 @@ export const homepage = async () => {
             .getProgramOverview();
         const comingFilms = await schedulingService.getComingFilms();
         const highliglights = await highlightsService.index();
-
-        console.log("Coming Films:", comingFilms);
-        console.log("Programm:", programm);
 
         return new Response(
             render("index.html", {

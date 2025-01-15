@@ -45,6 +45,50 @@ endblock %} {% block content %}
           <a href="/films/add" class="dashboard__add-button">Film hinzufügen</a>
         </header>
 
+        <form method="GET" action="/dashboard" class="dashboard__form">
+          <div class="dashboard__controls">
+
+        
+            <div class="dashboard__sort">
+              <label for="sortField" class="select__label">Sortieren nach:</label>
+              <select name="sortfield" id="sortField" class="sort__select">
+                <option value="createdAt" {% if currentSortField == "createdAt" %}selected{% endif %}>
+                  Erstellt am
+                </option>
+                <option value="title" {% if currentSortField == "title" %}selected{% endif %}>
+                  Titel
+                </option>
+              </select>
+        
+              <label for="sortOrder" class="select__label">Reihenfolge:</label>
+              <select name="sortorder" id="sortOrder" class="sort__select">
+                <option value="ASC" {% if currentSortOrder == "ASC" %}selected{% endif %}>
+                  Aufsteigend
+                </option>
+                <option value="DESC" {% if currentSortOrder == "DESC" %}selected{% endif %}>
+                  Absteigend
+                </option>
+              </select>
+            </div>
+
+            <div class="dashboard__search">
+              <input
+                class="form__input form__input--search"
+                type="text"
+                name="search"
+                placeholder="Filmtitel suchen"
+                value="{{ currentSearch }}"
+              />
+            </div>
+        
+            <div class="dashboard__buttons">
+              <a href="/dashboard" class="dashboard__reset-button">Zurücksetzen</a>
+              <button type="submit">Anwenden</button>
+            </div>
+          </div>
+        </form>
+        
+
         {% for film in films %}
         <article class="dashboard__movie">
           <div class="dashboard__movie-content">

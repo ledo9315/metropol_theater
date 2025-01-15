@@ -28,15 +28,31 @@ import { render } from "../services/render.js";
  *
  * @returns {Array} Array mit den Filmdetails, einschließlich Spielzeiten und zugehöriger Metadaten.
  */
-export const index = async () => {
+export const index = async (
+    sortField = "createdAt",
+    sortOrder = "ASC",
+    search = "",
+) => {
     try {
-        const data = await filmModel.index();
+        const validSortFields = ["createdAt", "title"];
+        const validSortOrders = ["ASC", "DESC"];
 
-        const films = {};
+        if (
+            !validSortFields.includes(sortField) ||
+            !validSortOrders.includes(sortOrder)
+        ) {
+            throw new Error("Ungültige Sortierparameter");
+        }
+
+        const data = await filmModel.index(sortField, sortOrder, search);
+
+        const films = [];
         data.forEach((row) => {
             const filmId = row[0];
-            if (!films[filmId]) {
-                films[filmId] = {
+            let film = films.find((f) => f.id === filmId);
+
+            if (!film) {
+                film = {
                     id: row[0],
                     title: row[1],
                     duration: row[2],
@@ -51,6 +67,7 @@ export const index = async () => {
                     countries: row[11] ? row[11].split(",") : [],
                     showtimes: {},
                 };
+                films.push(film);
             }
 
             const date = row[12] ? formatDateToGermanLocale(row[12]) : null;
@@ -59,19 +76,19 @@ export const index = async () => {
             const is3D = !!row[15];
 
             if (date) {
-                if (!films[filmId].showtimes[date]) {
-                    films[filmId].showtimes[date] = [];
+                if (!film.showtimes[date]) {
+                    film.showtimes[date] = [];
                 }
 
-                films[filmId].showtimes[date].push({
+                film.showtimes[date].push({
                     time,
                     isOriginalVersion,
                     is3D,
                 });
             }
         });
-        console.log("Filme aus der Datenbank:", films);
-        return Object.values(films);
+
+        return films;
     } catch (error) {
         console.error("Fehler beim Abrufen der Filme:", error);
         throw new Error("Filme konnten nicht abgerufen werden.");
@@ -142,12 +159,8 @@ export const add = async (req) => {
     try {
         const formData = await req.formData();
 
-        console.log("Formulardaten:", formData);
-
         const formValues = extractFilmFormData(formData);
         const { errors, hasErrors } = validateFilmData(formValues, true);
-
-        console.log("Formularwerte:", formValues);
 
         if (hasErrors) {
             console.log("Validierungsfehler:", errors);
@@ -217,8 +230,6 @@ export const update = async (id, req) => {
         const formValues = extractFilmFormData(formData);
         const { errors, hasErrors } = validateFilmData(formValues, false);
 
-        console.log("Formularwerte:", formValues);
-
         const files = await filmModel.showFiles(id);
 
         const fileObject = {
@@ -277,8 +288,6 @@ export const update = async (id, req) => {
         }
 
         const film = buildFilmObject(formValues, directorId, countryId);
-
-        console.log("Film bei Aktualisierung:", film);
 
         await filmModel.update(id, { film, showtimes, genreIds, producerIds });
 

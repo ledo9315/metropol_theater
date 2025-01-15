@@ -28,8 +28,8 @@ export default [
     {
         method: "GET",
         pattern: new URLPattern({ pathname: "/dashboard" }),
-        handler: requireAuth(async () => {
-            return index();
+        handler: requireAuth(async (req) => {
+            return index(req);
         }),
     },
 ];

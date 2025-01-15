@@ -5,43 +5,52 @@ import { connection, handleDatabaseError } from "../services/db.js";
  *
  * @returns {Array} Array mit den Filmdetails, einschließlich Spielzeiten und zugehöriger Metadaten.
  */
-export const index = () => {
+export const index = async (
+  sortField = "createdAt",
+  sortOrder = "ASC",
+  search = "",
+) => {
   const db = connection();
   try {
-    const data = [...db.query(
-      `SELECT
-        films.id, 
-        films.title,
-        films.duration,
-        films.rating,
-        films.poster,
-        films.createdAt,
-        films.is_3d,
-        films.is_original_version,
-        GROUP_CONCAT(DISTINCT genres.name) AS genres,
-        GROUP_CONCAT(DISTINCT producers.name) AS producers,
-        director.name AS director,
-        GROUP_CONCAT(DISTINCT countries.name) AS countries,
-        show_dates.show_date,
-        show_times.show_time,
-        show_details.is_original_version,
-        show_details.is_3d
-      FROM films
-      LEFT JOIN film_genres ON films.id = film_genres.film_id
-      LEFT JOIN genres ON film_genres.genre_id = genres.id
-      LEFT JOIN film_producers ON films.id = film_producers.film_id 
-      LEFT JOIN producers ON film_producers.producer_id = producers.id 
-      LEFT JOIN film_countries ON films.id = film_countries.film_id
-      LEFT JOIN countries ON film_countries.country_id = countries.id
-      LEFT JOIN director ON films.director_id = director.id
-      LEFT JOIN show_dates ON films.id = show_dates.film_id
-      LEFT JOIN show_times ON show_dates.id = show_times.show_date_id
-      LEFT JOIN show_details ON show_times.id = show_details.show_time_id
-      GROUP BY films.id, show_dates.show_date, show_times.show_time;`,
-    )];
-    return data;
+    const query = `
+          SELECT
+              films.id,
+              films.title,
+              films.duration,
+              films.rating,
+              films.poster,
+              films.createdAt,
+              films.is_3d,
+              films.is_original_version,
+              GROUP_CONCAT(DISTINCT genres.name) AS genres,
+              GROUP_CONCAT(DISTINCT producers.name) AS producers,
+              director.name AS director,
+              GROUP_CONCAT(DISTINCT countries.name) AS countries,
+              show_dates.show_date,
+              show_times.show_time,
+              show_details.is_original_version,
+              show_details.is_3d
+          FROM films
+          LEFT JOIN film_genres ON films.id = film_genres.film_id
+          LEFT JOIN genres ON film_genres.genre_id = genres.id
+          LEFT JOIN film_producers ON films.id = film_producers.film_id
+          LEFT JOIN producers ON film_producers.producer_id = producers.id
+          LEFT JOIN film_countries ON films.id = film_countries.film_id
+          LEFT JOIN countries ON film_countries.country_id = countries.id
+          LEFT JOIN director ON films.director_id = director.id
+          LEFT JOIN show_dates ON films.id = show_dates.film_id
+          LEFT JOIN show_times ON show_dates.id = show_times.show_date_id
+          LEFT JOIN show_details ON show_times.id = show_details.show_time_id
+          WHERE films.title LIKE ?
+          GROUP BY films.id, show_dates.show_date, show_times.show_time
+          ORDER BY ${sortField} ${sortOrder};
+      `;
+
+    const searchPattern = `%${search}%`; // Füge Wildcards für die Suche hinzu
+    return db.query(query, [searchPattern]);
   } catch (error) {
-    handleDatabaseError(error);
+    console.error("Fehler bei der Datenbankabfrage:", error);
+    throw new Error("Datenbankfehler");
   }
 };
 
