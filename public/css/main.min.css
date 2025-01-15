@@ -1501,7 +1501,10 @@ header {
     margin-bottom: 10px;
 }
 
-.add-movie__error, .add-highlight__error, .edit-highlight__error {
+.add-movie__error,
+.add-highlight__error,
+.edit-highlight__error,
+.login__error {
     grid-column: 2;
     justify-self: start;
     color: red;
@@ -1589,6 +1592,7 @@ header {
     -ms-flex-align: center;
     align-items: center;
     padding: 0 30px;
+    margin-bottom: 200px;
 }
 .login__container {
     max-width: 500px;
@@ -1825,6 +1829,12 @@ header {
     background: none;
 }
 
+.dashboard__logout {
+    position: absolute;
+    top: 70px;
+    right: 20px;
+}
+
 .dashboard__section {
     width: 100%;
 }
@@ -2026,11 +2036,10 @@ header {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background: var(--accent-color);
+    background: green;
     color: white;
     padding: 25px 50px;
     border-radius: 5px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     z-index: 1000;
     font-size: 20px;
 

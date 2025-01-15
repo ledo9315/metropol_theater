@@ -6,9 +6,9 @@ export default [
         pattern: new URLPattern({ pathname: "/" }),
         handler: homePage,
     },
-    {
-        method: "GET",
-        pattern: new URLPattern({ pathname: "/dashboard" }),
-        handler: index,
-    },
+    // {
+    //     method: "GET",
+    //     pattern: new URLPattern({ pathname: "/dashboard" }),
+    //     handler: index,
+    // },
 ];

@@ -1,17 +1,65 @@
-import { getUserByUsername } from "../models/userModel.js";
-import { compareSync } from "https://deno.land/x/bcrypt@v0.4.1/mod.ts";
+import { findUserByUsername, validatePassword } from "../models/userModel.js";
+import { render } from "../services/render.js";
 
 export const login = async (req) => {
-  const body = await req.json();
-  const { username, password } = body;
+  const body = await req.formData();
+  const username = body.get("username");
+  const password = body.get("password");
 
-  const user = getUserByUsername(username);
-  if (user.length > 0 && compareSync(password, user[0][2])) {
+  const user = await findUserByUsername(username);
+
+  console.log("user", user);
+  console.log("username", username);
+  console.log("password", password);
+
+  if (!user) {
     return new Response(
-      JSON.stringify({ token: "valid_token", message: "Login erfolgreich" }),
-      { status: 200, headers: { "Content-Type": "application/json" } },
+      await render("login.html", {
+        error: "Benutzername oder Passwort falsch",
+      }),
+      {
+        status: 401,
+        headers: { "Content-Type": "text/html" },
+      },
     );
   }
 
-  return new Response("Invalid credentials", { status: 401 });
+  const isValidPassword = await validatePassword(password, user.password);
+
+  console.log("isValidPassword", isValidPassword);
+
+  if (!isValidPassword) {
+    return new Response(
+      await render("login.html", {
+        error: "Benutzername oder Passwort falsch",
+      }),
+      {
+        status: 401,
+        headers: { "Content-Type": "text/html" },
+      },
+    );
+  }
+
+  // Erfolgreich eingeloggt: Setze Session-Cookie
+  return new Response(null, {
+    status: 302,
+    headers: {
+      Location: `/dashboard?section=movies-section&message=${
+        encodeURIComponent("Erfolgreich eingeloggt!")
+      }`,
+      "Set-Cookie": `session=valid; HttpOnly; Path=/; Max-Age=10`,
+    },
+  });
+};
+
+export const logout = () => {
+  return new Response(null, {
+    status: 302,
+    headers: {
+      Location: `/login?message=${
+        encodeURIComponent("Erfolgreich ausgeloggt!")
+      }`,
+      "Set-Cookie": `session=; HttpOnly; Path=/; Max-Age=1200`, // 20 Minuten
+    },
+  });
 };

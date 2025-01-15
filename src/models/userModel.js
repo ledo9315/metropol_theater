@@ -1,56 +1,27 @@
 import { connection } from "../services/db.js";
 
-// Benutzer anhand des Benutzernamens abrufen
-export const getUserByUsername = (username) => {
+// Benutzer anhand des Benutzernamens finden
+export const findUserByUsername = async (username) => {
   const db = connection();
-  const user = db.query("SELECT * FROM users WHERE username = ?", [username]);
-  if (user.length === 0) return null;
-  const [result] = user;
-  const [id, userUsername, passwordHash] = result;
-  return {
-    id,
-    username: userUsername,
-    passwordHash,
-  };
+  try {
+    const result = [
+      ...db.query("SELECT username, password FROM users WHERE username = ?", [
+        username,
+      ]),
+    ];
+    if (result.length > 0) {
+      return { username: result[0][0], password: result[0][1] };
+    }
+    console.log("Benutzer nicht gefunden");
+    return null;
+  } catch (error) {
+    console.error("Fehler beim Abrufen des Benutzers:", error);
+    return null;
+  }
 };
 
-// Benutzer anhand der ID abrufen
-export const getUserById = (id) => {
-  const db = connection();
-  const user = db.query("SELECT * FROM users WHERE id = ?", [id]);
-  if (user.length === 0) return null;
-  const [result] = user;
-  const [userId, username, passwordHash] = result;
-  return {
-    id: userId,
-    username,
-    passwordHash,
-  };
-};
-
-// Neuen Benutzer hinzufügen
-export const addUserToDB = (user) => {
-  const db = connection();
-  const { username, passwordHash } = user;
-  db.query("INSERT INTO users (username, password_hash) VALUES (?, ?)", [
-    username,
-    passwordHash,
-  ]);
-};
-
-// Benutzer anhand der ID löschen
-export const deleteUserFromDB = (id) => {
-  const db = connection();
-  db.query("DELETE FROM users WHERE id = ?", [id]);
-};
-
-// Benutzerinformationen aktualisieren
-export const updateUserInDB = (id, user) => {
-  const db = connection();
-  const { username, passwordHash } = user;
-  db.query("UPDATE users SET username = ?, password_hash = ? WHERE id = ?", [
-    username,
-    passwordHash,
-    id,
-  ]);
+// Passwort validieren
+export const validatePassword = async (password, passwordHash) => {
+  const bcrypt = await import("https://deno.land/x/bcrypt@v0.4.1/mod.ts");
+  return bcrypt.compare(password, passwordHash);
 };

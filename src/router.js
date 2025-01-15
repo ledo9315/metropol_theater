@@ -5,6 +5,7 @@ import highlightRoutes from "./routes/highlightRoutes.js";
 import mainRoutes from "./routes/mainRoutes.js";
 import { render } from "./services/render.js";
 import { createResponse } from "./utils/response.js";
+import authRoutes from "./routes/authRoutes.js";
 
 export default async function router(req) {
   try {
@@ -16,6 +17,7 @@ export default async function router(req) {
       ...filmRoutes,
       ...highlightRoutes,
       ...staticRoutes,
+      ...authRoutes,
     ];
 
     for (const route of routes) {
