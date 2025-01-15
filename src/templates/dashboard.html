@@ -9,10 +9,6 @@ endblock %} {% block content %}
     </nav>
   </div>
 
-  <form action="/logout" method="POST">
-    <button type="submit" class="dashboard__logout">Abmelden</button>
-  </form>
-
   <div class="container dashboard__container">
     <aside class="dashboard__aside">
       <nav>
@@ -32,6 +28,11 @@ endblock %} {% block content %}
             >
               Highlights
             </button>
+          </li>
+          <li>
+            <form action="/logout" method="POST">
+              <button type="submit" class="dashboard__logout">Abmelden</button>
+            </form>
           </li>
         </ul>
       </nav>

@@ -28,7 +28,7 @@ export const index = async () => {
  *
  * @returns {Response} Eine HTML-Antwort mit den gerenderten Daten.
  */
-export const homePage = async () => {
+export const homepage = async () => {
     try {
         const { programm, daten } = await schedulingService
             .getProgramOverview();

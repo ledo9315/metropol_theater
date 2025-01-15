@@ -21,7 +21,9 @@ export default [
     {
         method: "POST",
         pattern: new URLPattern({ pathname: "/logout" }),
-        handler: logout,
+        handler: requireAuth(async () => {
+            return logout();
+        }),
     },
     {
         method: "GET",

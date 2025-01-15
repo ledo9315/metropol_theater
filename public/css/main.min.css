@@ -186,6 +186,8 @@ body {
     font-weight: 300;
     color: var(--text-color);
     font-size: 1.125rem;
+    min-height: 100vh !important;
+    height: 100% !important;
 }
 .container {
     max-width: 1600px;
@@ -1393,7 +1395,7 @@ header {
     margin-top: 100px;
 }
 .add-movie__breadcrumb a {
-    text-transform: none;
+    text-transform: uppercase;
 }
 .add-movie__title {
     font-weight: 300;
@@ -1830,9 +1832,7 @@ header {
 }
 
 .dashboard__logout {
-    position: absolute;
-    top: 70px;
-    right: 20px;
+    width: 100%;
 }
 
 .dashboard__section {

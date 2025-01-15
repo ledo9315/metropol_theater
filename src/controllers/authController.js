@@ -1,5 +1,6 @@
 import { findUserByUsername, validatePassword } from "../models/userModel.js";
 import { render } from "../services/render.js";
+import * as userModel from "../models/userModel.js";
 
 export const login = async (req) => {
   const body = await req.formData();
@@ -7,10 +8,6 @@ export const login = async (req) => {
   const password = body.get("password");
 
   const user = await findUserByUsername(username);
-
-  console.log("user", user);
-  console.log("username", username);
-  console.log("password", password);
 
   if (!user) {
     return new Response(
@@ -26,8 +23,6 @@ export const login = async (req) => {
 
   const isValidPassword = await validatePassword(password, user.password);
 
-  console.log("isValidPassword", isValidPassword);
-
   if (!isValidPassword) {
     return new Response(
       await render("login.html", {
@@ -40,6 +35,10 @@ export const login = async (req) => {
     );
   }
 
+  const sessionToken = crypto.randomUUID();
+
+  await userModel.updateSessionToken(user.id, sessionToken);
+
   // Erfolgreich eingeloggt: Setze Session-Cookie
   return new Response(null, {
     status: 302,
@@ -47,7 +46,8 @@ export const login = async (req) => {
       Location: `/dashboard?section=movies-section&message=${
         encodeURIComponent("Erfolgreich eingeloggt!")
       }`,
-      "Set-Cookie": `session=valid; HttpOnly; Path=/; Max-Age=10`,
+      "Set-Cookie":
+        `session=${sessionToken}; HttpOnly; Path=/; Max-Age=1200; Secure`, // 20 Minuten
     },
   });
 };
@@ -59,7 +59,7 @@ export const logout = () => {
       Location: `/login?message=${
         encodeURIComponent("Erfolgreich ausgeloggt!")
       }`,
-      "Set-Cookie": `session=; HttpOnly; Path=/; Max-Age=1200`, // 20 Minuten
+      "Set-Cookie": `session=; HttpOnly; Path=/; Max-Age=0`, // Lösche Cookie
     },
   });
 };
