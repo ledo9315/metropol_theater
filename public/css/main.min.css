@@ -411,6 +411,9 @@ header {
     -webkit-transform-origin: center;
     transform-origin: center;
 }
+.main {
+    min-height: calc(100vh - 500px - 80px - 100px);
+}
 .footer {
     background-color: var(--accent-color);
     padding: 50px 0 20px 0;
@@ -1606,7 +1609,6 @@ header {
     -ms-flex-align: center;
     align-items: center;
     padding: 0 30px;
-    margin-bottom: 200px;
 }
 .login__container {
     max-width: 500px;
@@ -1691,6 +1693,12 @@ header {
     width: 100%; /* Video-Player passt sich an die Breite an */
     height: 100%; /* Höhe folgt dem Seitenverhältnis */
     object-fit: cover; /* Poster wird vollständig ausgefüllt */
+}
+
+.delete {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .delete__title {
@@ -1956,6 +1964,11 @@ header {
     .dashboard__title {
         font-size: 2rem;
     }
+}
+.error__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .error__wrapper {

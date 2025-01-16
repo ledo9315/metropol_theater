@@ -1,6 +1,7 @@
 import { findUserByUsername, validatePassword } from "../models/userModel.js";
 import { render } from "../services/render.js";
 import * as userModel from "../models/userModel.js";
+import { generateCsrfToken } from "../utils/generateCsrfToken.js";
 
 export const login = async (req) => {
   const body = await req.formData();
@@ -35,9 +36,9 @@ export const login = async (req) => {
     );
   }
 
-  const sessionToken = crypto.randomUUID();
+  const csrfToken = generateCsrfToken();
 
-  await userModel.updateSessionToken(user.id, sessionToken);
+  await userModel.updateSessionToken(user.id, csrfToken);
 
   // Erfolgreich eingeloggt: Setze Session-Cookie
   return new Response(null, {
@@ -47,7 +48,7 @@ export const login = async (req) => {
         encodeURIComponent("Erfolgreich eingeloggt!")
       }`,
       "Set-Cookie":
-        `session=${sessionToken}; HttpOnly; Path=/; Max-Age=1200; Secure`, // 20 Minuten
+        `session=${csrfToken}; HttpOnly; Path=/; Max-Age=1200; Secure`, // 20 Minuten
     },
   });
 };

@@ -1,4 +1,3 @@
-// router.js
 import filmRoutes from "./routes/filmRoutes.js";
 import staticRoutes from "./routes/staticRoutes.js";
 import highlightRoutes from "./routes/highlightRoutes.js";
