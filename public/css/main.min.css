@@ -1609,6 +1609,7 @@ header {
     -ms-flex-align: center;
     align-items: center;
     padding: 0 30px;
+    margin-bottom: 50px;
 }
 .login__container {
     max-width: 500px;
