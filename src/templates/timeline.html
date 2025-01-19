@@ -1,0 +1,861 @@
+{% extends "template.html" %} {% block title %}Metropol-Theater - Timeline {%
+endblock %} {% block content %}
+
+<div class="container">
+    <nav class="breadcrumb add-movie__breadcrumb" aria-label="Breadcrumb">
+        <a href="/" class="breadcrumb__link">&larr; Zurück zur Startseite</a>
+    </nav>
+    <button id="scrollToTopBtn" class="scroll-to-top">
+        ↑ Zum Anfang
+    </button>
+    <header>
+        <h1 class="timeline__title">Projekttagebuch</h1>
+    </header>
+    <main>
+        <nav class="timeline__nav">
+            <ul class="timeline__nav-list">
+                <li class="timeline__nav-item">
+                    <a href="#backend" class="timeline__nav-link">Backend</a>
+                </li>
+                <li class="timeline__nav-item">
+                    <a href="#frontend" class="timeline__nav-link">Frontend</a>
+                </li>
+            </ul>
+        </nav>
+        <section class="timeline__section">
+            <h2 class="timeline__subtitle" id="backend">Backend-Entwicklung</h2>
+
+            <article class="timeline__article">
+                <h3 class="timeline__section-title">21.11.2024</h3>
+                <ul class="timeline__list">
+                    <li class="timeline__list-item">
+                        <strong>Projektinitialisierung:</strong>
+                    </li>
+                    <ul class="timeline__list timeline__list--nested">
+                        <li class="timeline__list-item">
+                            Einrichtung der Grundstruktur:
+                        </li>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                Verzeichnisse <code
+                                    class="timeline__code-inline"
+                                >/src</code>,
+                                <code class="timeline__code-inline"
+                                >/data</code>,
+                                <code class="timeline__code-inline"
+                                >/public</code>,
+                                <code class="timeline__code-inline"
+                                >/templates</code> erstellt.
+                            </li>
+                            <li class="timeline__list-item">
+                                Platzhalterdateien für zentrale Module wie
+                                <code class="timeline__code-inline"
+                                >app.js</code>,
+                                <code class="timeline__code-inline"
+                                >router.js</code>,
+                                <code class="timeline__code-inline"
+                                >db.js</code>.
+                            </li>
+                        </ul>
+                        <li class="timeline__list-item">
+                            Verbindung zur SQLite-Datenbank:
+                        </li>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                Implementierung der Funktion
+                                <code class="timeline__code-inline"
+                                >initConnection</code> in
+                                <code class="timeline__code-inline"
+                                >db.js</code>.
+                            </li>
+                            <li class="timeline__list-item">
+                                Erstellung der Datenbankdatei
+                                <code class="timeline__code-inline"
+                                >cinema.db</code>.
+                            </li>
+                        </ul>
+                        <li class="timeline__list-item">
+                            Testlauf: Überprüfung der Datenbankverbindung mit
+                            Konsolenausgabe.
+                        </li>
+                    </ul>
+                </ul>
+            </article>
+
+            <article class="timeline__article">
+                <h3 class="timeline__section-title">23.11.2024</h3>
+                <ul class="timeline__list">
+                    <li class="timeline__list-item">
+                        <strong>Routenaufbau:</strong>
+                    </li>
+                    <ul class="timeline__list timeline__list--nested">
+                        <li class="timeline__list-item">
+                            Entwicklung von <code class="timeline__code-inline"
+                            >router.js</code>:
+                        </li>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                Implementierung der Funktion
+                                <code class="timeline__code-inline"
+                                >router(req)</code> zur Verarbeitung von
+                                HTTP-Anfragen.
+                            </li>
+                            <li class="timeline__list-item">
+                                Definition einer Standardroute <code
+                                    class="timeline__code-inline"
+                                >/</code>, die die Startseite rendert.
+                            </li>
+                        </ul>
+                        <li class="timeline__list-item">
+                            Logging hinzugefügt:
+                        </li>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                Protokollierung von Anfragen mit
+                                <code class="timeline__code-inline"
+                                >[Method] [Pathname]</code> in der Konsole.
+                            </li>
+                        </ul>
+                        <li class="timeline__list-item">Fehlerbehandlung:</li>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                Rückgabe von <code class="timeline__code-inline"
+                                >404 Not Found</code> für nicht definierte
+                                Routen.
+                            </li>
+                        </ul>
+                    </ul>
+                </ul>
+            </article>
+
+            <article class="timeline__article">
+                <h3 class="timeline__section-title">26.11.2024</h3>
+                <ul class="timeline__list">
+                    <li class="timeline__list-item">
+                        <strong>Datenbankstruktur:</strong>
+                    </li>
+                    <ul class="timeline__list timeline__list--nested">
+                        <li class="timeline__list-item">
+                            Erstellung der Tabellen <code
+                                class="timeline__code-inline"
+                            >films</code> und
+                            <code class="timeline__code-inline">showtimes</code>
+                            in SQLite:
+                        </li>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                <code class="timeline__code-inline"
+                                >films</code>: Speicherung von Filmdetails wie
+                                Titel, Dauer, Produktionsjahr.
+                            </li>
+                            <li class="timeline__list-item">
+                                <code class="timeline__code-inline"
+                                >showtimes</code>: Speicherung von
+                                Vorführungszeiten mit Verknüpfung zu
+                                <code class="timeline__code-inline">films</code>
+                                über
+                                <code class="timeline__code-inline"
+                                >filmId</code>.
+                            </li>
+                        </ul>
+                        <li class="timeline__list-item">
+                            SQL-Skripte erstellt:
+                        </li>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                <code class="timeline__code"
+                                >INSERT INTO films(title, duration, year) VALUES
+                                    (...);</code>
+                            </li>
+                            <li class="timeline__list-item">
+                                <code class="timeline__code"
+                                >INSERT INTO showtimes(filmId, date, time)
+                                    VALUES (...);</code>
+                            </li>
+                        </ul>
+                    </ul>
+                </ul>
+            </article>
+            <article class="timeline__article">
+                <h3 class="timeline__section-title">28.11.2024</h3>
+                <ul class="timeline__list">
+                    <li class="timeline__list-item">
+                        <strong>Model-Logik für Filme:</strong>
+                    </li>
+                    <ul class="timeline__list timeline__list--nested">
+                        <li class="timeline__list-item">
+                            Entwicklung von <code class="timeline__code-inline"
+                            >filmModel.js</code>:
+                        </li>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                Methoden:
+                            </li>
+                            <ul class="timeline__list timeline__list--nested">
+                                <li class="timeline__list-item">
+                                    <code class="timeline__code-inline"
+                                    >getAllFilms()</code>: Ruft alle Filme ab.
+                                </li>
+                                <li class="timeline__list-item">
+                                    <code class="timeline__code-inline"
+                                    >addFilm(data)</code>: Fügt neue Filme
+                                    hinzu.
+                                </li>
+                            </ul>
+                            <li class="timeline__list-item">
+                                SQL-Abfragen parameterisiert, um SQL-Injection
+                                zu verhindern.
+                            </li>
+                        </ul>
+                        <li class="timeline__list-item">
+                            Testdaten eingefügt und Funktionen getestet.
+                        </li>
+                    </ul>
+                </ul>
+            </article>
+            <article class="timeline__article">
+                <h3 class="timeline__section-title">30.11.2024</h3>
+                <ul class="timeline__list">
+                    <li class="timeline__list-item">
+                        <strong>Filmverwaltung:</strong>
+                    </li>
+                    <ul class="timeline__list timeline__list--nested">
+                        <li class="timeline__list-item">
+                            Erstellung von <code class="timeline__code-inline"
+                            >filmController.js</code>:
+                        </li>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                <code class="timeline__code-inline"
+                                >getAllFilmsHandler(req, res)</code> zeigt Filme
+                                in der Benutzeroberfläche an.
+                            </li>
+                            <li class="timeline__list-item">
+                                <code class="timeline__code-inline"
+                                >addFilmHandler(req, res)</code> validiert
+                                Eingaben und fügt Filme hinzu.
+                            </li>
+                        </ul>
+                        <li class="timeline__list-item">
+                            Definition der Routen in <code
+                                class="timeline__code-inline"
+                            >filmRoutes.js</code>:
+                        </li>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                <code class="timeline__code-inline"
+                                >GET /films</code>: Liste aller Filme.
+                            </li>
+                            <li class="timeline__list-item">
+                                <code class="timeline__code-inline"
+                                >POST /films</code>: Hinzufügen eines Films.
+                            </li>
+                        </ul>
+                    </ul>
+                </ul>
+            </article>
+
+            <article class="timeline__article">
+                <h3 class="timeline__section-title">02.12.2024</h3>
+                <ul class="timeline__list">
+                    <li class="timeline__list-item">
+                        <strong>Vorführungsplanung:</strong>
+                    </li>
+                    <ul class="timeline__list timeline__list--nested">
+                        <li class="timeline__list-item">
+                            Entwicklung von <code class="timeline__code-inline"
+                            >showtimeModel.js</code>:
+                        </li>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                <code class="timeline__code-inline"
+                                >addShowtime(data)</code>: Fügt neue
+                                Vorführungszeiten hinzu.
+                            </li>
+                            <li class="timeline__list-item">
+                                <code class="timeline__code-inline"
+                                >getShowtimesByFilmId(filmId)</code>: Ruft
+                                Vorführungen eines Films ab.
+                            </li>
+                        </ul>
+                        <li class="timeline__list-item">
+                            Integration in <code class="timeline__code-inline"
+                            >filmController.js</code>:
+                        </li>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                <code class="timeline__code-inline"
+                                >addShowtimeHandler(req, res)</code> erstellt
+                                neue Vorführungen.
+                            </li>
+                        </ul>
+                    </ul>
+                </ul>
+            </article>
+
+            <article class="timeline__article">
+                <h3 class="timeline__section-title">05.12.2024</h3>
+                <ul class="timeline__list">
+                    <li class="timeline__list-item">
+                        <strong>Highlight-Verwaltung:</strong>
+                    </li>
+                    <ul class="timeline__list timeline__list--nested">
+                        <li class="timeline__list-item">
+                            Erstellung von <code class="timeline__code-inline"
+                            >highlightsController.js</code>:
+                        </li>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                <code class="timeline__code-inline"
+                                >addHighlightHandler(req, res)</code>: Fügt
+                                Highlights hinzu.
+                            </li>
+                            <li class="timeline__list-item">
+                                <code class="timeline__code-inline"
+                                >getAllHighlightsHandler(req, res)</code>: Ruft
+                                Highlights ab.
+                            </li>
+                            <li class="timeline__list-item">
+                                <code class="timeline__code-inline"
+                                >deleteHighlightHandler(req, res)</code>:
+                                Entfernt Highlights.
+                            </li>
+                        </ul>
+                        <li class="timeline__list-item">
+                            Definition der Routen in <code
+                                class="timeline__code-inline"
+                            >highlightRoutes.js</code>:
+                        </li>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                <code class="timeline__code-inline"
+                                >POST /highlights</code>: Hinzufügen.
+                            </li>
+                            <li class="timeline__list-item">
+                                <code class="timeline__code-inline"
+                                >GET /highlights</code>: Anzeigen.
+                            </li>
+                            <li class="timeline__list-item">
+                                <code class="timeline__code-inline"
+                                >DELETE /highlights/:id</code>: Entfernen.
+                            </li>
+                        </ul>
+                    </ul>
+                </ul>
+            </article>
+
+            <article class="timeline__article">
+                <h3 class="timeline__section-title">07.12.2024</h3>
+                <ul class="timeline__list">
+                    <li class="timeline__list-item">
+                        <strong>Authentifizierung:</strong>
+                    </li>
+                    <ul class="timeline__list timeline__list--nested">
+                        <li class="timeline__list-item">
+                            Entwicklung von <code class="timeline__code-inline"
+                            >authController.js</code>:
+                        </li>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                <code class="timeline__code-inline"
+                                >loginHandler(req, res)</code> prüft
+                                Benutzeranmeldungen.
+                            </li>
+                            <li class="timeline__list-item">
+                                <code class="timeline__code-inline"
+                                >logoutHandler(req, res)</code> beendet
+                                Sitzungen.
+                            </li>
+                            <li class="timeline__list-item">
+                                Passwörter werden mit <code
+                                    class="timeline__code-inline"
+                                >bcrypt</code> verschlüsselt.
+                            </li>
+                        </ul>
+                        <li class="timeline__list-item">
+                            Sitzungscookies:
+                        </li>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                Generiert mit <code
+                                    class="timeline__code-inline"
+                                >crypto.randomUUID()</code> und gesichert mit
+                                <code class="timeline__code-inline"
+                                >Secure</code> und <code
+                                    class="timeline__code-inline"
+                                >HttpOnly</code> Flags.
+                            </li>
+                        </ul>
+                        <li class="timeline__list-item">
+                            Routen in <code class="timeline__code-inline"
+                            >authRoutes.js</code> definiert:
+                        </li>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                <code class="timeline__code-inline"
+                                >POST /login</code>: Anmeldung.
+                            </li>
+                            <li class="timeline__list-item">
+                                <code class="timeline__code-inline"
+                                >POST /logout</code>: Abmeldung.
+                            </li>
+                        </ul>
+                    </ul>
+                </ul>
+            </article>
+            <article class="timeline__article">
+                <h3 class="timeline__section-title">10.12.2024</h3>
+                <ul class="timeline__list">
+                    <li class="timeline__list-item">
+                        <strong>Datei-Handling:</strong>
+                    </li>
+                    <ul class="timeline__list timeline__list--nested">
+                        <li class="timeline__list-item">
+                            Entwicklung von <code class="timeline__code-inline"
+                            >fileUtils.js</code>:
+                        </li>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                Validierung von Dateitypen und -größen (Poster
+                                und Trailer).
+                            </li>
+                            <li class="timeline__list-item">
+                                Schutz vor Directory-Traversal-Angriffen.
+                            </li>
+                            <li class="timeline__list-item">
+                                Sicheres Speichern von Dateien in <code
+                                    class="timeline__code-inline"
+                                >/public/uploads</code>.
+                            </li>
+                        </ul>
+                    </ul>
+                </ul>
+            </article>
+
+            <article class="timeline__article">
+                <h3 class="timeline__section-title">13.12.2024</h3>
+                <ul class="timeline__list">
+                    <li class="timeline__list-item">
+                        <strong>Fehlerbehandlung:</strong>
+                    </li>
+                    <ul class="timeline__list timeline__list--nested">
+                        <li class="timeline__list-item">
+                            Einführung eines zentralen Fehlerhandlers in <code
+                                class="timeline__code-inline"
+                            >router.js</code>:
+                        </li>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                Rückgabe von <code class="timeline__code-inline"
+                                >500 Internal Server Error</code> bei
+                                unerwarteten Fehlern.
+                            </li>
+                            <li class="timeline__list-item">
+                                Benutzerdefiniertes Template für <code
+                                    class="timeline__code-inline"
+                                >404 Not Found</code>.
+                            </li>
+                        </ul>
+                    </ul>
+                </ul>
+            </article>
+
+            <article class="timeline__article">
+                <h3 class="timeline__section-title">15.12.2024</h3>
+                <ul class="timeline__list">
+                    <li class="timeline__list-item">
+                        <strong>Benutzerverwaltung:</strong>
+                    </li>
+                    <ul class="timeline__list timeline__list--nested">
+                        <li class="timeline__list-item">
+                            Middleware in <code class="timeline__code-inline"
+                            >authMiddleware.js</code> erstellt:
+                        </li>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                Überprüfung der Authentifizierung vor Zugriff
+                                auf geschützte Bereiche.
+                            </li>
+                            <li class="timeline__list-item">
+                                Umleitung nicht authentifizierter Benutzer zur
+                                Login-Seite.
+                            </li>
+                        </ul>
+                    </ul>
+                </ul>
+            </article>
+
+            <article class="timeline__article">
+                <h3 class="timeline__section-title">17.12.2024</h3>
+                <ul class="timeline__list">
+                    <li class="timeline__list-item">
+                        <strong>Highlight-Darstellung:</strong>
+                    </li>
+                    <ul class="timeline__list timeline__list--nested">
+                        <li class="timeline__list-item">
+                            Integration von Highlights in die Startseite (<code
+                                class="timeline__code-inline"
+                            >index.html</code>).
+                        </li>
+                        <li class="timeline__list-item">
+                            Dynamisches Abrufen der Highlights aus der
+                            Datenbank.
+                        </li>
+                    </ul>
+                </ul>
+            </article>
+        </section>
+
+        <section class="timeline__section">
+            <h2 class="timeline__subtitle" id="frontend">
+                Frontend-Entwicklung
+            </h2>
+            <article class="timeline__article">
+                <h3 class="timeline__section-title">Allgemeine Arbeiten</h3>
+                <ul class="timeline__list">
+                    <li class="timeline__list-item">
+                        Erstellung der Basisstruktur in <code
+                            class="timeline__code-inline"
+                        >index.html</code> und grundlegendes Layout in <code
+                            class="timeline__code-inline"
+                        >styles.css</code>.
+                    </li>
+                    <li class="timeline__list-item">
+                        <strong>Responsives Design:</strong>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                Einsatz von CSS Grid und Flexbox.
+                            </li>
+                            <li class="timeline__list-item">
+                                Test auf Desktop- und mobilen Geräten.
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+            <article class="timeline__article">
+                <h3 class="timeline__section-title">28.12.2024</h3>
+                <ul class="timeline__list">
+                    <li class="timeline__list-item">
+                        <strong>Highlight-Karussell:</strong>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                Entwicklung von <code
+                                    class="timeline__code-inline"
+                                >carousel.js</code>:
+                                <ul
+                                    class="timeline__list timeline__list--nested"
+                                >
+                                    <li class="timeline__list-item">
+                                        Automatischer Bildwechsel mit
+                                        Unterstützung für Touch- und
+                                        Klicknavigation.
+                                    </li>
+                                    <li class="timeline__list-item">
+                                        Dynamische Integration von
+                                        Highlight-Daten aus der Datenbank.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="timeline__list-item">
+                                Überprüfung auf Responsivität und Ladezeiten.
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+            <article class="timeline__article">
+                <h3 class="timeline__section-title">30.12.2024</h3>
+                <ul class="timeline__list">
+                    <li class="timeline__list-item">
+                        <strong>Navigationsmenü:</strong>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                Implementierung eines Hamburger-Menüs in <code
+                                    class="timeline__code-inline"
+                                >hamburger.js</code> für mobile Geräte.
+                            </li>
+                            <li class="timeline__list-item">
+                                Erweiterung der Navigationsleiste in <code
+                                    class="timeline__code-inline"
+                                >template.html</code> für Hauptseiten:
+                                <ul
+                                    class="timeline__list timeline__list--nested"
+                                >
+                                    <li class="timeline__list-item">
+                                        Links zu Startseite, Kontakt, Chronik,
+                                        Kartenpreise und Dashboard.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="timeline__list-item">
+                                Hinzufügen von ARIA-Labels zur Barrierefreiheit.
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+            <article class="timeline__article">
+                <h3 class="timeline__section-title">02.01.2025</h3>
+                <ul class="timeline__list">
+                    <li class="timeline__list-item">
+                        <strong>Formulare und Validierung:</strong>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                Entwicklung von <code
+                                    class="timeline__code-inline"
+                                >contact.html</code>:
+                                <ul
+                                    class="timeline__list timeline__list--nested"
+                                >
+                                    <li class="timeline__list-item">
+                                        Kontaktformular mit Feldern für Name,
+                                        E-Mail und Nachricht.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="timeline__list-item">
+                                Validierung mit <code
+                                    class="timeline__code-inline"
+                                >validators.js</code>:
+                                <ul
+                                    class="timeline__list timeline__list--nested"
+                                >
+                                    <li class="timeline__list-item">
+                                        Überprüfung auf leere Felder und
+                                        korrekte E-Mail-Formate.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="timeline__list-item">
+                                Integration von visuellen Feedbacks wie
+                                Fehlermeldungen bei ungültigen Eingaben.
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+            <article class="timeline__article">
+                <h3 class="timeline__section-title">05.01.2025</h3>
+                <ul class="timeline__list">
+                    <li class="timeline__list-item">
+                        <strong>Filmdetailseite:</strong>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                Fertigstellung von <code
+                                    class="timeline__code-inline"
+                                >film.html</code>:
+                                <ul
+                                    class="timeline__list timeline__list--nested"
+                                >
+                                    <li class="timeline__list-item">
+                                        Anzeige von Details wie Titel, Genre,
+                                        Produktionsjahr, Vorführungszeiten,
+                                        Produzenten und Regisseuren.
+                                    </li>
+                                    <li class="timeline__list-item">
+                                        Integration eines <code
+                                            class="timeline__code-inline"
+                                        >&lt;video&gt;</code>-Elements für
+                                        Trailer mit Poster-Vorschau.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="timeline__list-item">
+                                Einbindung von <code
+                                    class="timeline__code-inline"
+                                >dateFilter.js</code>:
+                                <ul
+                                    class="timeline__list timeline__list--nested"
+                                >
+                                    <li class="timeline__list-item">
+                                        Filteroptionen für Spielzeiten nach
+                                        Datum.
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+
+            <article class="timeline__article">
+                <h3 class="timeline__section-title">08.01.2025</h3>
+                <ul class="timeline__list">
+                    <li class="timeline__list-item">
+                        <strong>Kartenpreise und Chronik:</strong>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                Fertigstellung von <code
+                                    class="timeline__code-inline"
+                                >prices.html</code>:
+                                <ul
+                                    class="timeline__list timeline__list--nested"
+                                >
+                                    <li class="timeline__list-item">
+                                        Übersichtliche Tabelle mit Ticketpreisen
+                                        und Sonderkosten.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="timeline__list-item">
+                                Erstellung von <code
+                                    class="timeline__code-inline"
+                                >chronicle.html</code>:
+                                <ul
+                                    class="timeline__list timeline__list--nested"
+                                >
+                                    <li class="timeline__list-item">
+                                        Darstellung historischer Meilensteine
+                                        des Kinos mit Bildern und
+                                        Beschreibungen.
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+
+            <article class="timeline__article">
+                <h3 class="timeline__section-title">10.01.2025</h3>
+                <ul class="timeline__list">
+                    <li class="timeline__list-item">
+                        <strong>Administrationsbereich:</strong>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                Fertigstellung von <code
+                                    class="timeline__code-inline"
+                                >dashboard.html</code>:
+                                <ul
+                                    class="timeline__list timeline__list--nested"
+                                >
+                                    <li class="timeline__list-item">
+                                        Verwaltung von Filmen und Highlights mit
+                                        Such- und Filterfunktionen.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="timeline__list-item">
+                                Entwicklung von Formularseiten:
+                                <ul
+                                    class="timeline__list timeline__list--nested"
+                                >
+                                    <li class="timeline__list-item">
+                                        <code class="timeline__code-inline"
+                                        >add.html</code>: Hinzufügen neuer
+                                        Filme.
+                                    </li>
+                                    <li class="timeline__list-item">
+                                        <code class="timeline__code-inline"
+                                        >edit.html</code>: Bearbeitung
+                                        bestehender Filme.
+                                    </li>
+                                    <li class="timeline__list-item">
+                                        <code class="timeline__code-inline"
+                                        >remove.html</code>: Löschen von Filmen.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="timeline__list-item">
+                                Benachrichtigungen mit <code
+                                    class="timeline__code-inline"
+                                >showToast.js</code>:
+                                <ul
+                                    class="timeline__list timeline__list--nested"
+                                >
+                                    <li class="timeline__list-item">
+                                        Anzeigen von Erfolgsmeldungen nach
+                                        Änderungen.
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+
+            <article class="timeline__article">
+                <h3 class="timeline__section-title">13.01.2025</h3>
+                <ul class="timeline__list">
+                    <li class="timeline__list-item">
+                        <strong>Highlight-Verwaltung:</strong>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                Fertigstellung der Seiten:
+                                <ul
+                                    class="timeline__list timeline__list--nested"
+                                >
+                                    <li class="timeline__list-item">
+                                        <code class="timeline__code-inline"
+                                        >add_highlight.html</code>: Hinzufügen.
+                                    </li>
+                                    <li class="timeline__list-item">
+                                        <code class="timeline__code-inline"
+                                        >edit_highlight.html</code>: Bearbeiten.
+                                    </li>
+                                    <li class="timeline__list-item">
+                                        <code class="timeline__code-inline"
+                                        >remove_highlight.html</code>: Löschen.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="timeline__list-item">
+                                Validierung von Highlight-Daten:
+                            </li>
+                            <ul class="timeline__list timeline__list--nested">
+                                <li class="timeline__list-item">
+                                    Prüfung von Titel und Bildgröße.
+                                </li>
+                            </ul>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+
+            <article class="timeline__article">
+                <h3 class="timeline__section-title">15.01.2025</h3>
+                <ul class="timeline__list">
+                    <li class="timeline__list-item">
+                        <strong>Fehlerseite und finale Tests:</strong>
+                        <ul class="timeline__list timeline__list--nested">
+                            <li class="timeline__list-item">
+                                Entwicklung von <code
+                                    class="timeline__code-inline"
+                                >error404.html</code>:
+                                <ul
+                                    class="timeline__list timeline__list--nested"
+                                >
+                                    <li class="timeline__list-item">
+                                        Benutzerfreundliche Gestaltung mit
+                                        Verweis auf die Startseite.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="timeline__list-item">
+                                Umfassende Tests:
+                                <ul
+                                    class="timeline__list timeline__list--nested"
+                                >
+                                    <li class="timeline__list-item">
+                                        Responsives Verhalten auf verschiedenen
+                                        Geräten.
+                                    </li>
+                                    <li class="timeline__list-item">
+                                        Überprüfung der Interaktivität aller
+                                        Funktionen.
+                                    </li>
+                                    <li class="timeline__list-item">
+                                        Sicherstellung der Barrierefreiheit.
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+        </section>
+    </main>
+</div>
+
+{% endblock %}

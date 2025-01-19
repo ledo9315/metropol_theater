@@ -2,6 +2,10 @@
 endblock %} {% block content %}
 
 <main class="main">
+  <button id="scrollToTopBtn" class="scroll-to-top">
+    ↑ Zum Anfang
+  </button>
+
   <section class="highlights" id="highlights">
     <div class="container">
       <div class="highlights__carousel">
@@ -21,7 +25,7 @@ endblock %} {% block content %}
               <div class="highlights__text">
                 {{ highlight.description }}
               </div>
-              <!-- <div class="info__content">
+              <div class="info__content">
                 <h2 class="info__highlights-tile">Reservierungen</h2>
                 <p class="info__text">
                   Kartenvorbestellungen täglich ab 19:00 Uhr <br> telefonisch
@@ -30,7 +34,7 @@ endblock %} {% block content %}
                 <p>
                   Wir freuen uns auf Ihren Besuch!
                 </p>
-              </div> -->
+              </div>
             </article>
           </div>
           {% endif %} {% endfor %}

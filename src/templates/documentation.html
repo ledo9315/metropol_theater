@@ -1,0 +1,2371 @@
+{% extends "template.html" %} {% block title %}Metropol-Theater - Dokumentation {%
+endblock %} {% block content %}
+
+<div class="container">
+    <nav class="breadcrumb add-movie__breadcrumb" aria-label="Breadcrumb">
+        <a href="/" class="breadcrumb__link">&larr; Zurück zur Startseite</a>
+      </nav>
+    <header class="documentation__header">
+        <h1 class="documentation__title">
+            Dokumentation
+        </h1>
+    </header>
+    <main class="documentation">
+
+        <nav class="documentation__nav">
+            <ul class="documentation__nav-list">
+                <li class="documentation__nav-item">
+                    <a href="#ziel-der-anwendung" class="documentation__nav-link">
+                        Ziel der Anwendung
+                    </a>
+                </li>
+                <li class="documentation__nav-item">
+                    <a href="#funktionsumfang" class="documentation__nav-link">
+                        Funktionsumfang
+                    </a>
+                    <ul class="documentation__nav-sublist">
+                        <li class="documentation__nav-subitem">
+                            <a href="#filmverwaltung" class="documentation__nav-sublink">
+                                Filmverwaltung
+                            </a>
+                        </li>
+                        <li class="documentation__nav-subitem">
+                            <a href="#vorfuehrungsplanung" class="documentation__nav-sublink">
+                                Vorführungsplanung
+                            </a>
+                        </li>
+                        <li class="documentation__nav-subitem">
+                            <a href="#highlight-verwaltung" class="documentation__nav-sublink">
+                                Highlight-Verwaltung
+                            </a>
+                        </li>
+                        <li class="documentation__nav-subitem">
+                            <a href="#benutzerverwaltung" class="documentation__nav-sublink">
+                                Benutzerverwaltung
+                            </a>
+                        </li>
+                        <li class="documentation__nav-subitem">
+                            <a href="#programmdarstellung" class="documentation__nav-sublink">
+                                Programmdarstellung
+                            </a>
+                        </li>
+                        <li class="documentation__nav-subitem">
+                            <a href="#datei-handling" class="documentation__nav-sublink">
+                                Datei-Handling
+                            </a>
+                        </li>
+                        <li class="documentation__nav-subitem">
+                            <a href="#datei-serving" class="documentation__nav-sublink">
+                                Datei-Serving
+                            </a>
+                        </li>
+                        <li class="documentation__nav-subitem">
+                            <a href="#sicherheitsmassnahmen" class="documentation__nav-sublink">
+                                Sicherheitsmaßnahmen
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="documentation__nav-item">
+                    <a href="#aufbau-der-anwendung" class="documentation__nav-link">
+                        Aufbau der Anwendung
+                    </a>
+                    <ul class="documentation__nav-sublist">
+                        <li class="documentation__nav-subitem">
+                            <a href="#verzeichnisstruktur" class="documentation__nav-sublink">
+                                Verzeichnisstruktur
+                            </a>
+                        </li>
+                        <li class="documentation__nav-subitem">
+                            <a href="#details-verzeichnisstruktur" class="documentation__nav-sublink">
+                                Details der Verzeichnisstruktur
+                            </a>
+                        </li>
+                        <li class="documentation__nav-subitem">
+                            <a href="#architekturansatz" class="documentation__nav-sublink">
+                                Architekturansatz
+                            </a>
+                        </li>
+                        <li class="documentation__nav-subitem">
+                            <a href="#interne-prozesse" class="documentation__nav-sublink">
+                                Interne Prozesse
+                            </a>
+                        </li>
+                        <li class="documentation__nav-subitem">
+                            <a href="#aufteilung-gewaehlt" class="documentation__nav-sublink">
+                                Warum wurde diese Aufteilung gewählt?
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="documentation__nav-item">
+                    <a href="#aufbau-der-datenbank" class="documentation__nav-link">
+                        Aufbau der Datenbank 
+                    </a>
+                    <ul class="documentation__nav-sublist">
+                        <li class="documentation__nav-subitem">
+                            <a href="#haupttabellen" class="documentation__nav-sublink">
+                                Haupttabellen
+                            </a>
+                        </li>
+                        <li class="documentation__nav-subitem">
+                            <a href="#verknuepfungstabellen" class="documentation__nav-sublink">
+                                Verknüpfungstabellen
+                            </a>
+                        </li>
+                        <li class="documentation__nav-subitem">
+                            <a href="#zusaetzliche-tabellen" class="documentation__nav-sublink">
+                                Zusätzliche Tabellen
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="documentation__nav-item">
+                    <a href="#funktionen-seiten-urls" class="documentation__nav-link">
+                        Funktionen, Seiten und URLs
+                    </a>
+                    <ul class="documentation__nav-sublist">
+                        <li class="documentation__nav-subitem">
+                            <a href="#hauptseiten-pfade" class="documentation__nav-sublink">
+                                Hauptseiten
+                            </a>
+                        </li>
+                        <li class="documentation__nav-subitem">
+                            <a href="#filmverwaltung-pfade" class="documentation__nav-sublink">
+                                Filmverwaltung-Seiten
+                            </a>
+                        </li>
+                        <li class="documentation__nav-subitem">
+                            <a href="#highlight-verwaltung-pfade" class="documentation__nav-sublink">
+                                Highlight-Verwaltung-Seiten
+                            </a>
+                        </li>
+                        <li class="documentation__nav-subitem">
+                            <a href="#benutzerverwaltung-pfade" class="documentation__nav-sublink">
+                                Benutzerverwaltung-Seiten
+                            </a>
+                        </li>
+                        <li class="documentation__nav-subitem">
+                            <a href="#statische-seiten-pfade" class="documentation__nav-sublink">
+                                Statische Seiten
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="documentation__nav-item">
+                    <a href="#externe-komponenten-title" class="documentation__nav-link">
+                        Externe Komponenten
+                    </a>
+                </li>
+                <li class="documentation__nav-item">
+                    <a href="#moegliche-gefahren" class="documentation__nav-link">
+                        Mögliche Gefahren
+                    </a>
+                    <ul class="documentation__nav-sublist">
+                        <li class="documentation__nav-subitem">
+                            <a href="#gefahren-veroeffentlichung" class="documentation__nav-sublink">
+                                Gefahren durch Veröffentlichung
+                            </a>
+                        </li>
+                        <li class="documentation__nav-subitem">
+                            <a href="#angriffsszenarien" class="documentation__nav-sublink">
+                                Mögliche Angriffsszenarien
+                            </a>
+                        </li>
+                        <li class="documentation__nav-subitem">
+                            <a href="#app-schutz" class="documentation__nav-sublink">
+                                Schutz der Anwendung
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="documentation__nav-item">
+                    <a href="#frontend-skripte" class="documentation__nav-link">
+                        Frontend-Skripte
+                    </a>
+                </li>
+                <li class="documentation__nav-item">
+                    <a href="#progressive-enhancement" class="documentation__nav-link">
+                        Progressive Enhancement
+                    </a>
+                </li>
+                <li class="documentation__nav-item">
+                    <a href="#team-contributions" class="documentation__nav-link">
+                        Team-Beiträge
+                    </a>
+                    <ul class="documentation__nav-sublist">
+                        <li class="documentation__nav-subitem">
+                            <a href="#contributions-leonid" class="documentation__nav-sublink">
+                                Leonid Domahalskyy
+                            </a>
+                        </li>
+                        <li class="documentation__nav-subitem">
+                            <a href="#contributions-felix" class="documentation__nav-sublink">
+                                Felix-Sandro Mahler
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+        <button id="scrollToTopBtn" class="scroll-to-top">
+            ↑ Zum Anfang
+        </button>
+        
+        
+
+
+        <section
+            class="documentation__section"
+            aria-labelledby="ziel-der-anwendung"
+            id="ziel-der-anwendung"
+        >
+            <h2 class="documentation__subtitle">
+                Ziel der Anwendung
+            </h2>
+            <article class="documentation__article">
+                <p class="documentation__paragraph">
+                    Die Kino-Verwaltungsanwendung wurde entwickelt, um eine
+                    effiziente und benutzerfreundliche Plattform für
+                    Kinobetreiber bereitzustellen. Ziel ist es, Filme,
+                    Vorführungszeiten und Highlights zentral zu verwalten, den
+                    internen Arbeitsaufwand zu reduzieren und Kunden eine klare
+                    Darstellung des Programms zu bieten. Die Anwendung
+                    kombiniert Verwaltungsfunktionen mit einer interaktiven
+                    Benutzeroberfläche, um den Workflow von Kinobetreibern zu
+                    optimieren.
+                </p>
+            </article>
+        </section>
+
+        <section
+            class="documentation__section"
+            aria-labelledby="funktionsumfang"
+            id="funktionsumfang"
+        >
+            <h2 class="documentation__subtitle">
+                Funktionsumfang
+            </h2>
+
+            <!-- Filmverwaltung -->
+            <article
+                class="documentation__article"
+                aria-labelledby="filmverwaltung"
+            >
+                <h3 id="filmverwaltung" class="documentation__section-title">
+                    Filmverwaltung
+                </h3>
+                <ul class="documentation__list">
+                    <li class="documentation__list-item">
+                        <strong>Funktionen:</strong>
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                Hinzufügen neuer Filme mit Informationen wie
+                                Titel, Dauer, Produktionsjahr, Produktionsland,
+                                Genres und Produzenten.
+                            </li>
+                            <li class="documentation__list-item">
+                                Bearbeiten bestehender Filme, einschließlich
+                                Medien (Poster, Trailer) und Vorführungszeiten.
+                            </li>
+                            <li class="documentation__list-item">
+                                Löschen von Filmen und zugehörigen Daten wie
+                                Vorführungen oder Medien.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Datenvalidierung:</strong>
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                Überprüfung von Pflichtfeldern (z. B. Titel,
+                                Dauer, Produktionsjahr).
+                            </li>
+                            <li class="documentation__list-item">
+                                Fehlerausgabe bei unvollständigen oder
+                                ungültigen Eingaben.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Besonderheiten:</strong>
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                Alle Änderungen an Filmen werden sofort in der
+                                Benutzeroberfläche sichtbar.
+                            </li>
+                        </ul>
+                        <blockquote class="documentation__blockquote">
+                            <p>
+                                Beispiel: Ein Administrator fügt einen neuen
+                                Film hinzu und weist diesem sofort
+                                Vorführungszeiten zu.
+                            </p>
+                        </blockquote>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Darstellung:</strong>
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                Übersicht aller Filme mit Details wie Titel,
+                                Genre, Vorführungszeiten und Medien.
+                            </li>
+                            <li class="documentation__list-item">
+                                Filter- und Suchfunktionen zur einfachen
+                                Navigation.
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+
+            <!-- Vorführungsplanung -->
+            <article
+                class="documentation__article"
+                aria-labelledby="vorfuehrungsplanung"
+            >
+                <h3
+                    id="vorfuehrungsplanung"
+                    class="documentation__section-title"
+                >
+                    Vorführungsplanung
+                </h3>
+                <ul class="documentation__list">
+                    <li class="documentation__list-item">
+                        <strong>Funktionen:</strong>
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                Definition von Vorführungsdaten und -zeiten für
+                                jeden Film.
+                            </li>
+                            <li class="documentation__list-item">
+                                Anpassung von Zusatzoptionen wie 3D und
+                                Originalversion (OV) für einzelne Vorführungen.
+                            </li>
+                            <li class="documentation__list-item">
+                                Verwaltung mehrerer Vorführungen pro Film an
+                                unterschiedlichen Tagen und Uhrzeiten.
+                            </li>
+                            <li class="documentation__list-item">
+                                Filter- und Suchoptionen zur schnellen
+                                Auffindbarkeit von Filmen im Dashboard.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Besonderheiten:</strong>
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                Dynamische Verwaltung: Änderungen an
+                                Vorführungszeiten werden sofort gespeichert und
+                                angezeigt.
+                            </li>
+                            <li class="documentation__list-item">
+                                Übersichtliche Darstellung von Zeitplänen im
+                                Dashboard.
+                            </li>
+                        </ul>
+                        <blockquote class="documentation__blockquote">
+                            <p>
+                                Beispiel: Ein Film wird für eine Woche mit
+                                täglichen Vorführungen geplant, einschließlich
+                                verschiedener Uhrzeiten.
+                            </p>
+                        </blockquote>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Darstellung:</strong>
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                Klare Darstellung aktueller und zukünftiger
+                                Vorführungen im Administrationsbereich und auf
+                                der Website.
+                            </li>
+                            <li class="documentation__list-item">
+                                Benutzer können das Programm nach Datum und Film
+                                durchsuchen.
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+
+            <!-- Highlight-Verwaltung -->
+            <article
+                class="documentation__article"
+                aria-labelledby="highlight-verwaltung"
+            >
+                <h3
+                    id="highlight-verwaltung"
+                    class="documentation__section-title"
+                >
+                    Highlight-Verwaltung
+                </h3>
+                <ul class="documentation__list">
+                    <li class="documentation__list-item">
+                        <strong>Funktionen:</strong>
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                Hochladen und Verwalten von Highlight-Bildern
+                                und Beschreibungen.
+                            </li>
+                            <li class="documentation__list-item">
+                                Steuerung der Sichtbarkeit: Highlights können
+                                ein- oder ausgeblendet werden.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Besonderheiten:</strong>
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                Highlights werden prominent im Karussell auf der
+                                Startseite dargestellt.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Darstellung:</strong>
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                Übersicht aller aktiven und inaktiven Highlights
+                                im Administrationsbereich.
+                            </li>
+                            <li class="documentation__list-item">
+                                Prominente Präsentation der Highlights im
+                                Karussell auf der Startseite.
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+
+            <!-- Benutzerverwaltung -->
+            <article
+                class="documentation__article"
+                aria-labelledby="benutzerverwaltung"
+            >
+                <h3
+                    id="benutzerverwaltung"
+                    class="documentation__section-title"
+                >
+                    Benutzerverwaltung
+                </h3>
+                <ul class="documentation__list">
+                    <li class="documentation__list-item">
+                        <strong>Funktionen:</strong>
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                Authentifizierung von Benutzern über einen
+                                Login-Bereich.
+                            </li>
+                            <li class="documentation__list-item">
+                                Schutz sensibler Verwaltungsbereiche vor
+                                unbefugtem Zugriff.
+                            </li>
+                            <li class="documentation__list-item">
+                                Verschlüsselung von Passwörtern und Verwaltung
+                                von Sitzungen mit Session-Tokens.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Besonderheiten:</strong>
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                Benutzer erhalten nur Zugriff auf administrative
+                                Funktionen nach erfolgreicher Authentifizierung.
+                            </li>
+                        </ul>
+                        <blockquote class="documentation__blockquote">
+                            <p>
+                                Beispiel: Ein Administrator meldet sich an, um
+                                neue Filme hinzuzufügen oder bestehende Inhalte
+                                zu bearbeiten.
+                            </p>
+                        </blockquote>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Darstellung:</strong>
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                Login-Seite mit klarer Benutzerführung und
+                                Fehlermeldungen bei falschen Eingaben.
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+
+            <!-- Programmdarstellung -->
+            <article
+                class="documentation__article"
+                aria-labelledby="programmdarstellung"
+            >
+                <h3
+                    id="programmdarstellung"
+                    class="documentation__section-title"
+                >
+                    Programmdarstellung
+                </h3>
+                <ul class="documentation__list">
+                    <li class="documentation__list-item">
+                        <strong>Funktionen:</strong>
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                Anzeige aktueller Filme und geplanter
+                                Vorführungen mit detaillierten Informationen
+                                (Titel, Dauer, Produktionsland,
+                                Vorführungszeiten).
+                            </li>
+                            <li class="documentation__list-item">
+                                Präsentation zukünftiger Filme im Bereich
+                                "Demnächst".
+                            </li>
+                            <li class="documentation__list-item">
+                                Hervorhebung von Highlights auf der Startseite.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Besonderheiten:</strong>
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                Klare Trennung zwischen aktuellen und
+                                zukünftigen Programminhalten.
+                            </li>
+                        </ul>
+                        <blockquote class="documentation__blockquote">
+                            <p>
+                                Beispiel: Ein Kunde sieht auf der Startseite die
+                                aktuellen Highlights und kann das Programm nach
+                                Datum durchsuchen.
+                            </p>
+                        </blockquote>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Darstellung:</strong>
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                Übersichtliche und intuitive Navigation für
+                                Kunden.
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+
+            <article
+                class="documentation__article"
+                aria-labelledby="datei-handling"
+            >
+                <h3 id="datei-handling" class="documentation__section-title">
+                    Datei-Handling
+                </h3>
+                <ul class="documentation__list">
+                    <li class="documentation__list-item">
+                        <strong>Funktionen:</strong>
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                Upload-Validierung für Medien (Poster, Trailer):
+                                <ul
+                                    class="documentation__list documentation__list--nested"
+                                >
+                                    <li class="documentation__list-item">
+                                        <strong>Bilder:</strong> JPEG, PNG,
+                                        WebP, GIF (max. 10 MB)
+                                    </li>
+                                    <li class="documentation__list-item">
+                                        <strong>Videos:</strong> MP4, WebM, OGG
+                                        (max. 20 MB)
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="documentation__list-item">
+                                Sichere Dateispeicherung mit validierten Pfaden
+                            </li>
+                            <li class="documentation__list-item">
+                                Automatische Generierung eindeutiger Dateinamen
+                            </li>
+                            <li class="documentation__list-item">
+                                Sichere Dateiverwaltung und -löschung
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Besonderheiten:</strong>
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                Schutz vor Directory Traversal und
+                                Null-Byte-Injektionen
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Darstellung:</strong>
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                Medienvorschau in der Benutzeroberfläche
+                            </li>
+                            <li class="documentation__list-item">
+                                Benutzerfreundliche Dateiverwaltung
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+
+            <article
+                class="documentation__article"
+                aria-labelledby="datei-serving"
+            >
+                <h3 id="datei-serving" class="documentation__section-title">
+                    Datei-Serving
+                </h3>
+                <ul class="documentation__list">
+                    <li class="documentation__list-item">
+                        Sichere Bereitstellung statischer Dateien aus
+                        öffentlichem Verzeichnis
+                    </li>
+                    <li class="documentation__list-item">
+                        Zugriffskontrolle durch Pfadvalidierung
+                    </li>
+                    <li class="documentation__list-item">
+                        Automatische MIME-Typ-Erkennung
+                    </li>
+                </ul>
+            </article>
+
+            <article
+                class="documentation__article"
+                aria-labelledby="sicherheitsmassnahmen"
+            >
+                <h3
+                    id="sicherheitsmassnahmen"
+                    class="documentation__section-title"
+                >
+                    Sicherheitsmaßnahmen
+                </h3>
+                <ul class="documentation__list">
+                    <li class="documentation__list-item">
+                        Umfassende Eingabe- und Pfadvalidierung
+                    </li>
+                    <li class="documentation__list-item">
+                        Schutz vor gängigen Angriffsmustern
+                    </li>
+                    <li class="documentation__list-item">
+                        Verschlüsselte Datenspeicherung und Zugriffskontrolle
+                    </li>
+                </ul>
+            </article>
+        </section>
+
+        <section
+            class="documentation__section"
+            aria-labelledby="aufbau-der-anwendung"
+            id="aufbau-der-anwendung"
+        >
+            <h2 class="documentation__subtitle">
+                Aufbau der Anwendung
+            </h2>
+            <p class="documentation__paragraph">
+                Die Anwendung ist modular aufgebaut, um Flexibilität,
+                Erweiterbarkeit und Wartbarkeit zu gewährleisten. Sie folgt
+                einem klar strukturierten MVC-Ansatz (Model-View-Controller) und
+                nutzt moderne Entwicklungspraktiken, um eine effiziente Trennung
+                von Logik, Daten und Darstellung sicherzustellen.
+            </p>
+            <article
+                class="documentation__article"
+                aria-labelledby="verzeichnisstruktur"
+            >
+                <h3
+                    id="verzeichnisstruktur"
+                    class="documentation__section-title"
+                >
+                    Verzeichnisstruktur
+                </h3>
+                <p class="documentation__paragraph">
+                    Die Verzeichnisstruktur der Anwendung gliedert sich in
+                    verschiedene Module, die jeweils spezifische Aufgaben
+                    übernehmen:
+                </p>
+                <pre
+                    class="documentation__code"
+                >
+            <code>
+/src
+  ├── /controllers
+  ├── /models
+  ├── /routes
+  ├── /services
+  ├── /utils
+  ├── /public
+  ├── /templates
+  └── app.js
+            </code>
+        </pre
+                >
+            </article>
+            <article
+                class="documentation__article"
+                aria-labelledby="details-verzeichnisstruktur"
+            >
+                <h3
+                    id="details-verzeichnisstruktur"
+                    class="documentation__section-title"
+                >
+                    Details der Verzeichnisstruktur
+                </h3>
+                <ul class="documentation__list">
+                    <li class="documentation__list-item">
+                        <strong>/src/controllers:</strong> Enthält die Logik für
+                        die Verarbeitung von Anfragen und die Kommunikation
+                        zwischen Modellen und Ansichten.
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                <strong>Beispiel-Dateien:</strong>
+                            </li>
+                            <li class="documentation__list-item">
+                                <code>filmController.js</code>: Steuert die
+                                Verarbeitung von Anfragen für Filme, wie das
+                                Hinzufügen, Bearbeiten und Löschen von Filmen.
+                            </li>
+                            <li class="documentation__list-item">
+                                <code>highlightsController.js</code>:
+                                Verantwortlich für die Verwaltung von
+                                Highlights.
+                            </li>
+                            <li class="documentation__list-item">
+                                <code>authController.js</code>: Behandelt die
+                                Benutzeranmeldung und -authentifizierung.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>/src/models:</strong> Definiert die
+                        Datenstrukturen der Anwendung und stellt die Verbindung
+                        zur Datenbank her.
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                <strong>Beispiel-Dateien:</strong>
+                            </li>
+                            <li class="documentation__list-item">
+                                <code>filmModel.js</code>: Beschreibt das
+                                Datenmodell für Filme.
+                            </li>
+                            <li class="documentation__list-item">
+                                <code>showtimeModel.js</code>: Speichert
+                                Informationen zu Vorführungszeiten.
+                            </li>
+                            <li class="documentation__list-item">
+                                <code>userModel.js</code>: Speichert
+                                Benutzerdaten wie Anmeldedaten und
+                                Berechtigungen.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>/src/routes:</strong> Enthält die Definition der
+                        URL-Pfade und deren Zuordnung zu den entsprechenden
+                        Controllern.
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                <strong>Beispiel-Dateien:</strong>
+                            </li>
+                            <li class="documentation__list-item">
+                                <code>filmRoutes.js</code>: Definiert die Routen
+                                für die Verwaltung von Filmen.
+                            </li>
+                            <li class="documentation__list-item">
+                                <code>authRoutes.js</code>: Behandelt Routen für
+                                Benutzeranmeldung und -authentifizierung.
+                            </li>
+                            <li class="documentation__list-item">
+                                <code>staticRoutes.js</code>: Stellt statische
+                                Dateien bereit (z. B. CSS, JS, Bilder).
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>/src/services:</strong> Enthält
+                        wiederverwendbare Logik, die unabhängig von Controllern
+                        arbeitet.
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                <strong>Beispiel-Dateien:</strong>
+                            </li>
+                            <li class="documentation__list-item">
+                                <code>filmService.js</code>: Kapselt die Logik
+                                zur Verarbeitung von Filmdaten.
+                            </li>
+                            <li class="documentation__list-item">
+                                <code>schedulingService.js</code>: Verarbeitet
+                                Zeitpläne für Vorführungen.
+                            </li>
+                            <li class="documentation__list-item">
+                                <code>render.js</code>: Unterstützt die Anzeige
+                                von Templates.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>/src/utils:</strong> Stellt Hilfsfunktionen
+                        bereit, die in verschiedenen Teilen der Anwendung
+                        verwendet werden.
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                <strong>Beispiel-Dateien:</strong>
+                            </li>
+                            <li class="documentation__list-item">
+                                <code>validators.js</code>: Validiert
+                                Benutzereingaben.
+                            </li>
+                            <li class="documentation__list-item">
+                                <code>fileUtils.js</code>: Handhabt das
+                                Hochladen und Verwalten von Dateien.
+                            </li>
+                            <li class="documentation__list-item">
+                                <code>authMiddleware.js</code>: Überprüft die
+                                Authentifizierung von Benutzern.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>/public:</strong> Beinhaltet alle statischen
+                        Ressourcen, die direkt vom Server bereitgestellt werden,
+                        wie CSS, JavaScript, Bilder und hochgeladene Dateien.
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                <strong>Unterordner:</strong>
+                            </li>
+                            <li class="documentation__list-item">
+                                <code>/css</code>: Stile für die
+                                Benutzeroberfläche.
+                            </li>
+                            <li class="documentation__list-item">
+                                <code>/uploads</code>: Gespeicherte Medien
+                                (Poster, Trailer).
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>/templates:</strong> Enthält die HTML-Templates
+                        für die Darstellung der Benutzeroberfläche.
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                <strong>Beispiel-Dateien:</strong>
+                            </li>
+                            <li class="documentation__list-item">
+                                <code>film.html</code>: Zeigt Details zu einem
+                                Film an.
+                            </li>
+                            <li class="documentation__list-item">
+                                <code>dashboard.html</code>:
+                                Verwaltungs-Dashboard für Administratoren.
+                            </li>
+                            <li class="documentation__list-item">
+                                <code>add.html</code>: Formular für das
+                                Hinzufügen neuer Filme.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>app.js:</strong> Der zentrale Einstiegspunkt der
+                        Anwendung.
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                Initialisiert die Middleware, lädt die Routen
+                                und startet den Server.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>router.js:</strong> Organisiert und verwaltet
+                        die Routen der Anwendung.
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                Kombiniert Routen aus verschiedenen Modulen (z.
+                                B.
+                                <code>filmRoutes.js</code>, <code
+                                >authRoutes.js</code>) zu einer zentralen
+                                Routing-Liste.
+                            </li>
+                            <li class="documentation__list-item">
+                                <strong>Ablauf:</strong>
+                                <ol
+                                    class="documentation__list documentation__list--ordered"
+                                >
+                                    <li>
+                                        Analysiert die URL und die HTTP-Methode
+                                        der Anfrage.
+                                    </li>
+                                    <li>
+                                        Vergleicht die Anfrage mit den in der
+                                        Anwendung definierten Routenmustern.
+                                    </li>
+                                    <li>
+                                        Führt die passende Aktion aus, falls
+                                        eine übereinstimmende Route gefunden
+                                        wird.
+                                    </li>
+                                    <li>
+                                        Gibt eine <code>404-Fehlerseite</code>
+                                        zurück, wenn keine Route übereinstimmt.
+                                    </li>
+                                    <li>
+                                        Handhabt interne Fehler und gibt im
+                                        Fehlerfall eine generische <code>500
+                                            Interner Serverfehler</code>
+                                        Antwort zurück.
+                                    </li>
+                                </ol>
+                            </li>
+                            <li class="documentation__list-item">
+                                <strong>Besonderheiten:</strong>
+                                Flexible Erweiterung durch einfache Integration
+                                neuer Routen. Trennung von Routing-Logik und
+                                Anwendungslogik.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Startpunkt der Anwendung:</strong> Initialisiert
+                        die SQLite-Datenbank und startet den HTTP-Server.
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Ablauf:</strong>
+                        <ol
+                            class="documentation__list documentation__list--ordered"
+                        >
+                            <li>
+                                Initialisiert die Verbindung zur Datenbank
+                                mithilfe von
+                                <code>initConnection</code> (aus <code
+                                >db.js</code>).
+                            </li>
+                            <li>
+                                Startet den Server auf einem definierten Port
+                                (Standard:
+                                <code>8000</code>).
+                            </li>
+                            <li>
+                                Leitet eingehende Anfragen an den zentralen
+                                Anfrage-Handler (<code>app.js</code>) weiter.
+                            </li>
+                        </ol>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Fehlerbehandlung:</strong>
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li>
+                                Gibt Log-Ausgaben für Fehler beim Serverstart
+                                oder bei der Datenbankinitialisierung.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Besonderheiten:</strong>
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li>
+                                Sicherer und konsistenter Startpunkt für die
+                                gesamte Anwendung.
+                            </li>
+                            <li>
+                                Ermöglicht die einfache Anpassung von Server-
+                                und Datenbankeinstellungen.
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+            <!-- Architekturansatz -->
+            <article
+                class="documentation__article"
+                aria-labelledby="architekturansatz"
+            >
+                <h3 id="architekturansatz" class="documentation__section-title">
+                    Architekturansatz
+                </h3>
+                <ul class="documentation__list">
+                    <li class="documentation__list-item">
+                        <strong>Model-View-Controller (MVC)</strong>:
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                <strong>Model:</strong> Definiert die
+                                Datenstrukturen und deren Beziehungen zur
+                                SQLite-Datenbank. Behandelt Datenoperationen wie
+                                Einfügen, Abrufen und Löschen.
+                            </li>
+                            <li class="documentation__list-item">
+                                <strong>View:</strong> Stellt HTML-Templates
+                                bereit, die von den Controllern mit dynamischen
+                                Daten gefüllt werden.
+                            </li>
+                            <li class="documentation__list-item">
+                                <strong>Controller:</strong> Vermittelt zwischen
+                                Benutzeranfragen (über die Routen) und den
+                                Modellen/Ansichten.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>RESTful-API-Struktur</strong>:
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li class="documentation__list-item">
+                                Die Anwendung implementiert eine
+                                RESTful-Architektur, um Anfragen und Aktionen
+                                klar zu definieren.
+                            </li>
+                            <li class="documentation__list-item">
+                                <strong>Beispiele:</strong>
+                                <ul
+                                    class="documentation__list documentation__list--nested"
+                                >
+                                    <li>
+                                        <code>GET /films</code>: Gibt eine Liste
+                                        aller Filme zurück.
+                                    </li>
+                                    <li>
+                                        <code>POST /films</code>: Fügt einen
+                                        neuen Film hinzu.
+                                    </li>
+                                    <li>
+                                        <code>DELETE /films/:id</code>: Löscht
+                                        einen Film mit der angegebenen ID.
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Modularität und Wiederverwendbarkeit</strong>:
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li>
+                                Logik und Datenoperationen sind in Dienste und
+                                Hilfsfunktionen ausgelagert, um sie in
+                                verschiedenen Modulen wiederverwenden zu können.
+                            </li>
+                            <li>
+                                Trennung von Verantwortlichkeiten erleichtert
+                                Wartung und Erweiterung.
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+
+            <!-- Interne Prozesse -->
+            <article
+                class="documentation__article"
+                aria-labelledby="interne-prozesse"
+            >
+                <h3 id="interne-prozesse" class="documentation__section-title">
+                    Interne Prozesse
+                </h3>
+                <ul class="documentation__list">
+                    <li class="documentation__list-item">
+                        <strong>Anfrageverarbeitung:</strong> Eine Anfrage wird
+                        von einer Route empfangen (z. B. <code>/films</code>).
+                        Die Route leitet die Anfrage an den entsprechenden
+                        Controller weiter. Der Controller ruft bei Bedarf
+                        Modelle oder Dienste auf, um Daten zu verarbeiten. Die
+                        Antwort (z. B. HTML) wird an den Benutzer zurückgegeben.
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Authentifizierung:</strong> Über Middleware
+                        (<code>authMiddleware.js</code>) wird überprüft, ob der
+                        Benutzer angemeldet ist, bevor er auf geschützte
+                        Bereiche zugreifen kann.
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Datenbankoperationen:</strong> SQLite wird für
+                        die Speicherung von Daten verwendet. Modelle
+                        abstrahieren die SQL-Abfragen, um den Zugriff zu
+                        vereinfachen.
+                    </li>
+                </ul>
+            </article>
+
+            <!-- Warum wurde diese Aufteilung gewählt? -->
+            <article
+                class="documentation__article"
+                aria-labelledby="aufteilung-gewaehlt"
+            >
+                <h3
+                    id="aufteilung-gewaehlt"
+                    class="documentation__section-title"
+                >
+                    Warum wurde diese Aufteilung gewählt?
+                </h3>
+                <ul class="documentation__list">
+                    <li class="documentation__list-item">
+                        <strong>Trennung der Verantwortlichkeiten:</strong>
+                        Jedes Modul ist klar für einen bestimmten
+                        Aufgabenbereich verantwortlich. Dies erleichtert die
+                        Wartung und die Fehlersuche.
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Wiederverwendbarkeit:</strong> Services und
+                        Utils enthalten logikübergreifende Funktionen, die in
+                        mehreren Modulen genutzt werden können.
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Erweiterbarkeit:</strong> Neue Funktionen können
+                        durch Hinzufügen von Routen, Controllern und Modellen
+                        einfach integriert werden, ohne den bestehenden Code zu
+                        beeinflussen.
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Klarheit und Struktur:</strong> Die modulare
+                        Struktur macht den Code übersichtlich und lesbar, was
+                        vor allem bei größeren Projekten wichtig ist.
+                    </li>
+                </ul>
+            </article>
+        </section>
+
+        <section
+            class="documentation__section"
+            aria-labelledby="aufbau-der-datenbank"
+            id="aufbau-der-datenbank"
+        >
+            <h2 class="documentation__subtitle">
+                Aufbau der Datenbank
+            </h2>
+            <article
+                class="documentation__article"
+                aria-labelledby="haupttabellen"
+            >
+                <h3 id="haupttabellen" class="documentation__section-title">
+                    Haupttabellen
+                </h3>
+                <ul class="documentation__list">
+                    <li class="documentation__list-item">
+                        <strong>films</strong>: Diese Tabelle ist das Herzstück
+                        der Datenbank und enthält alle relevanten Informationen
+                        zu den Filmen:
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li>
+                                <code>id</code> (INTEGER, Primärschlüssel):
+                                Eindeutige Identifikation jedes Films.
+                            </li>
+                            <li>
+                                <code>title</code> (TEXT): Der Titel des Films.
+                            </li>
+                            <li>
+                                <code>duration</code> (INTEGER): Die Laufzeit
+                                des Films in Minuten.
+                            </li>
+                            <li>
+                                <code>production_year</code> (INTEGER): Das
+                                Produktionsjahr des Films.
+                            </li>
+                            <li>
+                                <code>rating</code> (INTEGER): Bewertung des
+                                Films.
+                            </li>
+                            <li>
+                                <code>description</code> (TEXT): Beschreibung
+                                des Films.
+                            </li>
+                            <li>
+                                <code>poster</code>, <code>trailer</code>, <code
+                                >trailer_poster</code> (TEXT): Links zu
+                                visuellen und medialen Inhalten.
+                            </li>
+                            <li>
+                                <code>director_id</code> (INTEGER,
+                                Fremdschlüssel): Verknüpfung zum Regisseur.
+                            </li>
+                            <li>
+                                <code>country_id</code> (INTEGER,
+                                Fremdschlüssel): Verknüpfung zum
+                                Produktionsland.
+                            </li>
+                            <li>
+                                <code>createdAt</code> (TEXT): Erstellungsdatum
+                                des Eintrags.
+                            </li>
+                            <li>
+                                <code>is_3d</code>, <code
+                                >is_original_version</code> (BOOLEAN): Angaben
+                                zur 3D-Option und zur Originalversion.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>director</strong>: Beinhaltet die Informationen
+                        zu den Regisseuren.
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li>
+                                <code>id</code> (INTEGER, Primärschlüssel):
+                                Eindeutige Identifikation.
+                            </li>
+                            <li>
+                                <code>name</code> (TEXT): Name des Regisseurs.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>countries</strong>: Enthält Informationen zu den
+                        Ländern.
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li>
+                                <code>id</code> (INTEGER, Primärschlüssel):
+                                Eindeutige Identifikation.
+                            </li>
+                            <li><code>name</code> (TEXT): Name des Landes.</li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>genres</strong>: Speichert die verschiedenen
+                        Filmgenres.
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li>
+                                <code>id</code> (INTEGER, Primärschlüssel):
+                                Eindeutige Identifikation.
+                            </li>
+                            <li><code>name</code> (TEXT): Name des Genres.</li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>users</strong>: Beinhaltet Benutzerinformationen
+                        für Login und Sitzungsmanagement.
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li>
+                                <code>id</code> (INTEGER, Primärschlüssel):
+                                Eindeutige Identifikation.
+                            </li>
+                            <li><code>username</code> (TEXT): Benutzername.</li>
+                            <li>
+                                <code>password</code> (TEXT): Passwort (sicher
+                                verschlüsselt).
+                            </li>
+                            <li>
+                                <code>session_token</code> (TEXT): Token für die
+                                Verwaltung der Benutzer-Session.
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+
+            <article
+                class="documentation__article"
+                aria-labelledby="verknuepfungstabellen"
+            >
+                <h3
+                    id="verknuepfungstabellen"
+                    class="documentation__section-title"
+                >
+                    Verknüpfungstabellen
+                </h3>
+                <ul class="documentation__list">
+                    <li class="documentation__list-item">
+                        <strong>film_countries</strong>: Verknüpft Filme mit
+                        ihren Produktionsländern.
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li>
+                                <code>film_id</code> (INTEGER, Fremdschlüssel):
+                                Film-Identifikation.
+                            </li>
+                            <li>
+                                <code>country_id</code> (INTEGER,
+                                Fremdschlüssel): Länder-Identifikation.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>film_genres</strong>: Verknüpft Filme mit ihren
+                        Genres.
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li>
+                                <code>film_id</code> (INTEGER, Fremdschlüssel):
+                                Film-Identifikation.
+                            </li>
+                            <li>
+                                <code>genre_id</code> (INTEGER, Fremdschlüssel):
+                                Genre-Identifikation.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>film_producers</strong>: Verknüpft Filme mit
+                        Produzenten.
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li>
+                                <code>film_id</code> (INTEGER, Fremdschlüssel):
+                                Film-Identifikation.
+                            </li>
+                            <li>
+                                <code>producer_id</code> (INTEGER,
+                                Fremdschlüssel): Produzenten-Identifikation.
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+
+            <article
+                class="documentation__article"
+                aria-labelledby="zusaetzliche-tabellen"
+            >
+                <h3
+                    id="zusaetzliche-tabellen"
+                    class="documentation__section-title"
+                >
+                    Zusätzliche Tabellen
+                </h3>
+                <ul class="documentation__list">
+                    <li class="documentation__list-item">
+                        <strong>show_dates</strong>: Verwaltung der
+                        Vorführungsdaten.
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li>
+                                <code>id</code> (INTEGER, Primärschlüssel):
+                                Eindeutige Identifikation.
+                            </li>
+                            <li>
+                                <code>film_id</code> (INTEGER, Fremdschlüssel):
+                                Verknüpfung zum Film.
+                            </li>
+                            <li>
+                                <code>show_date</code> (DATE): Datum der
+                                Vorführung.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>show_times</strong>: Verwaltung der
+                        Vorführungszeiten.
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li>
+                                <code>id</code> (INTEGER, Primärschlüssel):
+                                Eindeutige Identifikation.
+                            </li>
+                            <li>
+                                <code>show_date_id</code> (INTEGER,
+                                Fremdschlüssel): Verknüpfung zum Vorführdatum.
+                            </li>
+                            <li>
+                                <code>show_time</code> (TEXT): Uhrzeit der
+                                Vorführung.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>highlights</strong>: Enthält besondere Inhalte
+                        wie Trailer oder Top-Filme.
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li>
+                                <code>id</code> (INTEGER, Primärschlüssel):
+                                Eindeutige Identifikation.
+                            </li>
+                            <li>
+                                <code>highlight_image</code>, <code
+                                >description</code>, <code>highlight_title</code
+                                > (TEXT): Beschreibung und visuelle Inhalte.
+                            </li>
+                            <li>
+                                <code>show_in_carousel</code> (BOOLEAN):
+                                Anzeigeoption im Karussell.
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+        </section>
+
+        <section
+            class="documentation__section"
+            aria-labelledby="funktionen-seiten-urls"
+            id="funktionen-seiten-urls"
+        >
+            <h2
+                class="documentation__subtitle"
+            >
+                Funktionen/Seiten und ihre URL-Pfade
+            </h2>
+
+            <article
+                class="documentation__article"
+                aria-labelledby="hauptseiten"
+            >
+                <h3 id="hauptseiten-pfade" class="documentation__section-title">
+                    Hauptseiten
+                </h3>
+                <ul class="documentation__list">
+                    <li class="documentation__list-item">
+                        <strong>Startseite</strong> (<code>/</code>)
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li>
+                                Funktion: Zeigt die Highlights und aktuellen
+                                Filme des Kinos.
+                            </li>
+                            <li>
+                                Warum: Standardpfad, der Besuchern einen
+                                Überblick über die Hauptinhalte gibt.
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+
+            <article
+                class="documentation__article"
+                aria-labelledby="filmverwaltung"
+            >
+                <h3 id="filmverwaltung-pfade" class="documentation__section-title">
+                    Filmverwaltung
+                </h3>
+                <ul class="documentation__list">
+                    <li class="documentation__list-item">
+                        <strong>Film hinzufügen</strong> (<code>/films/add</code
+                        >)
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li>
+                                Methoden: <code>GET</code>, <code>POST</code>
+                            </li>
+                            <li>
+                                Funktion:
+                                <ul>
+                                    <li>
+                                        <code>GET</code>: Zeigt das Formular zum
+                                        Hinzufügen eines neuen Films.
+                                    </li>
+                                    <li>
+                                        <code>POST</code>: Verarbeitet die
+                                        Eingaben aus dem Formular und speichert
+                                        den neuen Film.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                Warum: Klare Trennung von Anzeige und
+                                Verarbeitung neuer Inhalte.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Film bearbeiten</strong> (<code
+                        >/films/:id/edit</code>)
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li>
+                                Methoden: <code>GET</code>, <code>POST</code>
+                            </li>
+                            <li>
+                                Funktion:
+                                <ul>
+                                    <li>
+                                        <code>GET</code>: Zeigt das Formular zum
+                                        Bearbeiten eines Films.
+                                    </li>
+                                    <li>
+                                        <code>POST</code>: Aktualisiert die
+                                        Filminformationen.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                Warum: Ermöglicht die gezielte Bearbeitung
+                                einzelner Filme anhand ihrer ID.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Film löschen</strong> (<code
+                        >/films/:id/delete</code>)
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li>
+                                Methoden: <code>GET</code>, <code>POST</code>
+                            </li>
+                            <li>
+                                Funktion:
+                                <ul>
+                                    <li>
+                                        <code>GET</code>: Zeigt eine
+                                        Bestätigungsseite zum Löschen eines
+                                        Films.
+                                    </li>
+                                    <li>
+                                        <code>POST</code>: Löscht den Film aus
+                                        der Datenbank.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                Warum: Zwei Schritte für mehr Sicherheit beim
+                                Löschen.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Filmdetails anzeigen</strong> (<code
+                        >/films/:id</code>)
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li>Methode: <code>GET</code></li>
+                            <li>
+                                Funktion: Zeigt Details eines Films inklusive
+                                Vorführungszeiten und Medien.
+                            </li>
+                            <li>
+                                Warum: Ermöglicht Kunden den Zugriff auf
+                                spezifische Filminformationen.
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+
+            <article
+                class="documentation__article"
+                aria-labelledby="highlight-verwaltung"
+            >
+                <h3
+                    id="highlight-verwaltung-pfade"
+                    class="documentation__section-title"
+                >
+                    Highlight-Verwaltung
+                </h3>
+                <ul class="documentation__list">
+                    <li class="documentation__list-item">
+                        <strong>Highlight hinzufügen</strong> (<code
+                        >/highlights/add</code>)
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li>
+                                Methoden: <code>GET</code>, <code>POST</code>
+                            </li>
+                            <li>
+                                Funktion:
+                                <ul>
+                                    <li>
+                                        <code>GET</code>: Zeigt das Formular zum
+                                        Hinzufügen eines neuen Highlights.
+                                    </li>
+                                    <li>
+                                        <code>POST</code>: Verarbeitet die
+                                        Eingaben und speichert das neue
+                                        Highlight.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                Warum: Strukturiert die Erstellung neuer
+                                Inhalte.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Highlight bearbeiten</strong> (<code
+                        >/highlights/:id/edit</code>)
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li>
+                                Methoden: <code>GET</code>, <code>POST</code>
+                            </li>
+                            <li>
+                                Funktion:
+                                <ul>
+                                    <li>
+                                        <code>GET</code>: Zeigt das Formular zum
+                                        Bearbeiten eines Highlights.
+                                    </li>
+                                    <li>
+                                        <code>POST</code>: Aktualisiert die
+                                        Highlight-Informationen.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                Warum: Ermöglicht die gezielte Bearbeitung
+                                einzelner Highlights.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Highlight löschen</strong> (<code
+                        >/highlights/:id/delete</code>)
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li>
+                                Methoden: <code>GET</code>, <code>POST</code>
+                            </li>
+                            <li>
+                                Funktion:
+                                <ul>
+                                    <li>
+                                        <code>GET</code>: Zeigt eine
+                                        Bestätigungsseite.
+                                    </li>
+                                    <li>
+                                        <code>POST</code>: Entfernt das
+                                        Highlight.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                Warum: Zweistufiger Prozess zur Vermeidung
+                                unbeabsichtigter Löschvorgänge.
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Highlight sichtbar/unsichtbar machen</strong>
+                        (<code>/highlights/:id/toggle-visible</code>)
+                        <ul
+                            class="documentation__list documentation__list--nested"
+                        >
+                            <li>
+                                Methoden: <code>POST</code>
+                            </li>
+                            <li>
+                                Funktion: Ändert die Sichtbarkeit eines
+                                Highlights.
+                            </li>
+                    </li>
+                </ul>
+            </article>
+
+            <article class="documentation__article" aria-labelledby="benutzerverwaltung">
+                <h3 id="benutzerverwaltung-pfade" class="documentation__section-title">
+                    Benutzerverwaltung
+                </h3>
+                <ul class="documentation__list">
+                    <li class="documentation__list-item">
+                        <strong>Login</strong> (<code>/login</code>)
+                        <ul class="documentation__list documentation__list--nested">
+                            <li>Methoden: <code>GET</code>, <code>POST</code></li>
+                            <li>Funktion:
+                                <ul>
+                                    <li><code>GET</code>: Zeigt die Login-Seite.</li>
+                                    <li><code>POST</code>: Authentifiziert den Benutzer.</li>
+                                </ul>
+                            </li>
+                            <li>Warum: Sicherer Zugang zu administrativen Funktionen.</li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Logout</strong> (<code>/logout</code>)
+                        <ul class="documentation__list documentation__list--nested">
+                            <li>Methode: <code>POST</code></li>
+                            <li>Funktion: Meldet den Benutzer ab.</li>
+                            <li>Warum: Klare Abmeldung mit Sicherstellung des Session-Managements.</li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Dashboard</strong> (<code>/dashboard</code>)
+                        <ul class="documentation__list documentation__list--nested">
+                            <li>Methode: <code>GET</code></li>
+                            <li>Funktion: Zeigt das Administrator-Dashboard.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+            
+
+            <article
+                class="documentation__article"
+                aria-labelledby="statische-seiten"
+            >
+                <h3
+                    id="statische-seiten-pfade"
+                    class="documentation__section-title"
+                >
+                    Statische Seiten
+                </h3>
+                <ul class="documentation__list">
+                    <li class="documentation__list-item">
+                        <strong>Über uns</strong> (<code>/about</code>)
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Preise</strong> (<code>/prices</code>)
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Kontakt</strong> (<code>/contact</code>)
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Chronik</strong> (<code>/chronicle</code>)
+                    </li>
+                </ul>
+            </article>
+        </section>
+
+        <section
+            id="externe-komponenten"
+            class="documentation__section"
+            aria-labelledby="externe-komponenten-title"
+        >
+            <h2 id="externe-komponenten-title" class="documentation__subtitle">
+                Externe Komponenten, Skripte, CSS etc. und ihre Verwendung
+            </h2>
+
+            <article class="documentation__article" aria-labelledby="bcrypt">
+                <h3 id="bcrypt" class="documentation__section-title">bcrypt</h3>
+                <ul class="documentation__list">
+                    <li class="documentation__list-item">
+                        <strong>Funktion:</strong>
+                        <ul class="documentation__list documentation__list--nested">
+                            <li>Hashing von Passwörtern vor der Speicherung in der Datenbank.</li>
+                            <li>Validierung von Passwörtern beim Login durch Vergleich mit dem gespeicherten Hash.</li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Warum wird es verwendet?</strong>
+                        <ul class="documentation__list documentation__list--nested">
+                            <li><strong>Hohe Sicherheit:</strong> Passwörter werden niemals im Klartext gespeichert.</li>
+                            <li><strong>Salt-Generierung:</strong> Erschwert Rainbow-Table-Angriffe durch das Hinzufügen eines zufälligen Salt.</li>
+                            <li><strong>Langsame Berechnung:</strong> Erschwert Brute-Force-Angriffe.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+
+            <article class="documentation__article" aria-labelledby="crypto">
+                <h3 id="crypto" class="documentation__section-title">crypto</h3>
+                <ul class="documentation__list">
+                    <li class="documentation__list-item">
+                        <strong>Funktion:</strong>
+                        <ul class="documentation__list documentation__list--nested">
+                            <li>Generierung sicherer Cookies für Sitzungs- oder CSRF-Token.</li>
+                            <li>Erstellung von Zufallswerten für sicherheitsrelevante Prozesse.</li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Warum wird es verwendet?</strong>
+                        <ul class="documentation__list documentation__list--nested">
+                            <li>
+                                <strong>Sichere Cookies:</strong> Tokens, die für Authentifizierung und
+                                Sitzungsverwaltung verwendet werden, sind zufällig und schwer vorhersehbar.
+                            </li>
+                            <li>
+                                <strong>Standardsicherheit:</strong> Die native <code>crypto</code>API von
+                                Deno bietet moderne und robuste Kryptografie-Mechanismen.
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+        </section>
+
+        <section
+            id="moegliche-gefahren"
+            class="documentation__section"
+            aria-labelledby="moegliche-gefahren-title"
+        >
+            <h2 id="moegliche-gefahren-title" class="documentation__subtitle">
+                Mögliche Gefahren bei der Veröffentlichung aller Daten
+            </h2>
+
+            <article
+            class="documentation__article"
+            aria-labelledby="gefahren-veroeffentlichung"
+        >
+            <h3 id="gefahren-veroeffentlichung" class="documentation__section-title">
+                Gefahren durch Veröffentlichung
+            </h3>
+            <ul class="documentation__list">
+                <li class="documentation__list-item">
+                    <strong>Veröffentlichung von Benutzerdaten</strong>:
+                    <ul class="documentation__list documentation__list--nested">
+                        <li>Exposition von sensiblen Informationen wie Passwörtern (auch gehasht) und Sitzungsinformationen.</li>
+                        <li>Risiko von Identitätsdiebstahl und unerlaubtem Zugriff auf andere Dienste, falls Passwörter erneut verwendet wurden.</li>
+                        <li>Verletzung von Datenschutzgesetzen wie der DSGVO.</li>
+                    </ul>
+                    <strong>Konsequenzen:</strong>
+                    <ul class="documentation__list documentation__list--nested">
+                        <li>Schädigung des Vertrauens der Benutzer.</li>
+                        <li>Reputationsverlust für das Unternehmen.</li>
+                        <li>Potenzielle rechtliche Folgen bei Verletzung von Datenschutzgesetzen (z. B. DSGVO).</li>
+                    </ul>
+                </li>
+                <li class="documentation__list-item">
+                    <strong>Veröffentlichung von Film- und Programmdaten</strong>:
+                    <ul class="documentation__list documentation__list--nested">
+                        <li>Missbrauch durch Konkurrenten, die das Programm replizieren oder frühzeitig Anpassungen vornehmen könnten.</li>
+                        <li>Verlust von exklusiven Daten wie unveröffentlichten Highlights oder zukünftigen Filmen.</li>
+                    </ul>
+                    <strong>Konsequenzen:</strong>
+                    <ul class="documentation__list documentation__list--nested">
+                        <li>Wirtschaftlicher Schaden durch Verlust von Wettbewerbsvorteilen.</li>
+                        <li>Negative Auswirkungen auf exklusive Partnerschaften.</li>
+                    </ul>
+                </li>
+                <li class="documentation__list-item">
+                    <strong>Veröffentlichung von Authentifizierungsdaten</strong>:
+                    <ul class="documentation__list documentation__list--nested">
+                        <li>Sitzungs-Tokens oder CSRF-Tokens könnten kompromittiert werden.</li>
+                        <li>Angreifer könnten sich ohne Login Zugang zu administrativen Funktionen verschaffen.</li>
+                    </ul>
+                    <strong>Konsequenzen:</strong>
+                    <ul class="documentation__list documentation__list--nested">
+                        <li>Unerlaubte Änderungen an der Anwendung, wie das Löschen von Daten oder Manipulation des Programms.</li>
+                        <li>Potenzielle Sicherheitslücken für Benutzer und Betreiber der Anwendung.</li>
+                    </ul>
+                </li>
+            </ul>
+        </article>
+        
+
+        <article class="documentation__article" aria-labelledby="angriffsszenarien">
+            <h3 id="angriffsszenarien" class="documentation__section-title">
+                Angriffsszenarien
+            </h3>
+            <ul class="documentation__list">
+                <li class="documentation__list-item">
+                    <strong>SQL-Injection</strong>:
+                    <ul class="documentation__list documentation__list--nested">
+                        <li>
+                            Unvalidierte Eingaben in Formularen oder URL-Parametern könnten direkt in SQL-Abfragen integriert werden.
+                        </li>
+                        <li>
+                            <strong>Beispiel:</strong> Angreifer sendet Eingaben wie 
+                            <code>'; DROP TABLE users; --</code>.
+                        </li>
+                        <li>
+                            <strong>Schutz:</strong> Verwendung parameterisierter Abfragen und serverseitige Validierung.
+                        </li>
+                    </ul>
+                </li>
+                <li class="documentation__list-item">
+                    <strong>Directory Traversal</strong>:
+                    <ul class="documentation__list documentation__list--nested">
+                        <li>
+                            Manipulation von Dateipfaden, um auf sensible Dateien außerhalb des öffentlichen Verzeichnisses zuzugreifen.
+                        </li>
+                        <li>
+                            <strong>Beispiel:</strong> URL: <code>/static/../../../../etc/passwd</code>.
+                        </li>
+                        <li>
+                            <strong>Schutz:</strong> Pfadnormalisierung und Zugriffsbeschränkung auf das 
+                            <code>public</code> Verzeichnis.
+                        </li>
+                    </ul>
+                </li>
+                <li class="documentation__list-item">
+                    <strong>CSRF (Cross-Site Request Forgery)</strong>:
+                    <ul class="documentation__list documentation__list--nested">
+                        <li>
+                            Angreifer senden bösartige Anfragen im Namen eines angemeldeten Benutzers, ohne dessen Wissen.
+                        </li>
+                        <li>
+                            <strong>Beispiel:</strong> Ein eingebettetes Bild im Browser des Benutzers löst ungewollt eine POST-Anfrage aus.
+                        </li>
+                        <li>
+                            <strong>Schutz:</strong> Generierung von CSRF-Tokens für jede Sitzung und Validierung bei kritischen Aktionen.
+                        </li>
+                    </ul>
+                </li>
+                <li class="documentation__list-item">
+                    <strong>XSS (Cross-Site Scripting)</strong>:
+                    <ul class="documentation__list documentation__list--nested">
+                        <li>
+                            Ein Benutzer injiziert bösartigen JavaScript-Code in Eingabefelder, der später auf der Seite ausgeführt wird.
+                        </li>
+                        <li>
+                            <strong>Beispiel:</strong> Eingabe: <code>&lt;script&gt;alert('Hacked!')&lt;/script&gt;</code>.
+                        </li>
+                        <li>
+                            <strong>Schutz:</strong> Escaping aller Benutzereingaben und Validierung vor der Anzeige.
+                        </li>
+                    </ul>
+                </li>
+                <li class="documentation__list-item">
+                    <strong>Man-in-the-Middle-Angriff (MITM)</strong>:
+                    <ul class="documentation__list documentation__list--nested">
+                        <li>
+                            Abfangen unverschlüsselter Daten während der Übertragung.
+                        </li>
+                        <li>
+                            <strong>Schutz:</strong> Nutzung von HTTPS, um alle Datenübertragungen zu verschlüsseln.
+                        </li>
+                    </ul>
+                </li>
+                <li class="documentation__list-item">
+                    <strong>Brute-Force-Angriffe</strong>:
+                    <ul class="documentation__list documentation__list--nested">
+                        <li>
+                            Systematisches Erraten von Passwörtern durch einen Angreifer.
+                        </li>
+                        <li>
+                            <strong>Schutz:</strong> Implementierung von Rate-Limiting für Anmeldeversuche und Verwendung von 
+                            <code>bcrypt</code> zur sicheren Passwortspeicherung.
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </article>
+        
+        
+        <article class="documentation__article" aria-labelledby="app-schutz">
+            <h3 id="app-schutz" class="documentation__section-title">
+                Wie wurde die App geschützt?
+            </h3>
+            <ul class="documentation__list">
+                <li class="documentation__list-item">
+                    <strong>Datenbank-Sicherheit:</strong>
+                    <ul class="documentation__list documentation__list--nested">
+                        <li>Parameterisierte Abfragen verhindern SQL-Injection.</li>
+                        <p>
+                            Schützt vor SQL-Injection, indem Benutzereingaben nicht direkt in SQL-Abfragen integriert werden.
+                        </p>
+                        <pre class="documentation__code">
+        const getUserByEmail = async (email) => {
+            const query = 'SELECT * FROM users WHERE email = ?';
+            const result = await db.query(query, [email]);
+            return result;
+        };
+                        </pre>
+                        <p>
+                            In diesem Beispiel werden Platzhalter (<code>?</code>) verwendet, um sicherzustellen, dass Benutzereingaben
+                            nicht als Code interpretiert werden.
+                        </p>
+                    </ul>
+                </li>
+                <li class="documentation__list-item">
+                    <strong>Eingabevalidierung:</strong>
+                    <ul class="documentation__list documentation__list--nested">
+                        <li>Serverseitige Validierung aller Benutzereingaben.</li>
+
+                        <pre class="documentation__code"
+<code>
+if (!title || title.trim() === "" || title.length < 3) {
+errors.title = "Bitte geben Sie einen Titel ein. (mind. 3 Zeichen)";
+hasErrors = true;
+}
+</code>
+                        </pre>
+                        <li>Whitelist-Validierung für Dateien und Eingabeformate (z. B. mp4, jpg, webp).</li>
+<pre class="documentation__code">
+const ALLOWED_FILE_TYPES = {
+    images: {
+        types: ["image/jpeg", "image/png", "image/webp", "image/gif"],
+        maxSize: 10 * 1024 * 1024,
+    },
+    videos: {
+    types: ["video/mp4", "video/webm", "video/ogg"],
+        maxSize: 20 * 1024 * 1024,
+    },
+
+    function validateFile(file) {
+        const mimeType = file.type || contentType(path.extname(file.name)) || "";
+    
+        for (
+            const [category, { types, maxSize }] of Object.entries(
+                ALLOWED_FILE_TYPES,
+            )
+        ) {
+            if (types.includes(mimeType)) {
+                if (file.size > maxSize) {
+                    throw new Error(
+                        `${
+                            category.charAt(0).toUpperCase() + category.slice(1)
+                        }datei ist zu groß. Maximal ${
+                            maxSize / (1024 * 1024)
+                        } MB erlaubt.`,
+                    );
+                }
+                return category;
+            }
+        }
+    
+        throw new Error(
+            "Ungültiges Dateiformat. Nur Bilder und Videos sind erlaubt.",
+        );
+    }
+};
+                        </pre>
+                    </ul>
+                </li>
+                <li class="documentation__list-item">
+                    <strong>Sicheres Dateihandling:</strong>
+                    <ul class="documentation__list documentation__list--nested">
+                        <li>Pfadvalidierung und Einschränkung auf das <code>public</code>-Verzeichnis.</li>
+<pre class="documentation__code">
+    const baseDir = path.resolve("./public");
+
+    export default async function handleRequest(req) {
+      try {
+        const staticResponse = await serveStatic(req, baseDir);
+        if (staticResponse && staticResponse.status === 200) {
+          return staticResponse;
+        }
+    
+        return await router(req);
+      } catch (error) {
+        console.error("Fehler bei der Anfrageverarbeitung:", error);
+        return new Response("Interner Serverfehler", { status: 500 });
+      }
+    }
+
+    function buildFullPath(base, pathname) {
+        return path.join(base, decodeURI(pathname));
+    }
+    
+    function pathOk(fullPath, base) {
+        return fullPath.startsWith(base) && !fullPath.includes("\0"); // Null-Byte Injection und Directory Traversal verhindern
+    }
+
+    export async function serveStatic(req, publicDir) {
+        const url = new URL(req.url);
+        const base = path.resolve(publicDir);
+        const fullPath = buildFullPath(base, url.pathname);
+    
+        if (!pathOk(fullPath, base)) {
+            return new Response("403 Forbidden", { status: 403 });
+        }
+    
+        const file = await openFile(fullPath);
+        if (!file) {
+            return new Response("404 Not Found", { status: 404 });
+        }
+    
+        const ext = path.extname(fullPath);
+        const mimeType = contentType(ext) || "application/octet-stream";
+        const cacheControl = ext === ".html"
+            ? "public, max-age=0, must-revalidate"
+            : "public, max-age=3600";
+    
+        return new Response(file.readable, {
+            status: 200,
+            headers: {
+                "Content-Type": mimeType,
+                "Cache-Control": cacheControl,
+            },
+        });
+    }
+
+</pre>
+                        <li>Größen- und Typprüfung für hochgeladene Dateien (z. B. nur Bilder bis 10 MB).</li>
+                    </ul>
+                </li>
+                <li class="documentation__list-item">
+                    <strong>Authentifizierung und Sitzungen:</strong>
+                    <ul class="documentation__list documentation__list--nested">
+                        <li>Passwörter wurden mit <code>bcrypt</code> gehasht und mit einem Salt versehen, um Sicherheit bei einem Datenleak zu gewährleisten.</li>
+                        <li>Sichere Cookies sind mit <code>Secure</code>- und <code>HttpOnly</code>-Flags ausgestattet, um sie vor Zugriff durch JavaScript zu schützen.</li>
+                        <li>CSRF-Schutz wird durch die Verwendung von einzigartigen Tokens gewährleistet, die bei jeder Sitzung generiert und validiert werden.</li>
+                    </ul>
+                </li>
+            </ul>
+        </article>
+        
+        
+        </section>
+
+
+        <section class="documentation__section" aria-labelledby="frontend-skripte" id="frontend-skripte">
+            <h2 class="documentation__subtitle">Frontend-Skripte (JavaScript)</h2>
+            <article class="documentation__article">
+                <ul class="documentation__list">
+                    <li class="documentation__list-item">
+                        <strong>carousel.js</strong>
+                        <ul class="documentation__list documentation__list--nested">
+                            <li><strong>Funktion:</strong> Steuert das automatische und manuelle Wechseln von Slides im Highlight-Karussell.</li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>dateFilter.js</strong>
+                        <ul class="documentation__list documentation__list--nested">
+                            <li><strong>Funktion:</strong> Filtert Filme nach Datum und zeigt nur Filme an, die an einem bestimmten Tag laufen.</li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>genres.js</strong>
+                        <ul class="documentation__list documentation__list--nested">
+                            <li><strong>Funktion:</strong> Dynamisches Hinzufügen und Entfernen von Genre-Eingabefeldern.</li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>hamburger.js</strong>
+                        <ul class="documentation__list documentation__list--nested">
+                            <li><strong>Funktion:</strong> Öffnet und schließt das Navigationsmenü bei mobilen Geräten.</li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>menu.js</strong>
+                        <ul class="documentation__list documentation__list--nested">
+                            <li><strong>Funktion:</strong> Steuert die Navigation zwischen verschiedenen Abschnitten im Admin-Dashboard.</li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>producers.js</strong>
+                        <ul class="documentation__list documentation__list--nested">
+                            <li><strong>Funktion:</strong> Dynamisches Hinzufügen und Entfernen von Produzenten-Eingabefeldern.</li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>scrollProgram.js</strong>
+                        <ul class="documentation__list documentation__list--nested">
+                            <li><strong>Funktion:</strong> Ermöglicht das horizontale Scrollen durch die verfügbaren Vorführungsdaten.</li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>showtimes.js</strong>
+                        <ul class="documentation__list documentation__list--nested">
+                            <li><strong>Funktion:</strong> Dynamisches Hinzufügen und Entfernen von Vorführungszeiten.</li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>showToast.js</strong>
+                        <ul class="documentation__list documentation__list--nested">
+                            <li><strong>Funktion:</strong> Zeigt Benachrichtigungen (z. B. Erfolgs- oder Fehlermeldungen) an.</li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>main.js</strong>
+                        <ul class="documentation__list documentation__list--nested">
+                            <li><strong>Funktion:</strong> Zentraler Einstiegspunkt, der alle oben genannten Funktionen initialisiert.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+        </section>
+
+
+        <section class="documentation__section" aria-labelledby="progressive-enhancement" id="progressive-enhancement">
+            <h2 class="documentation__subtitle">Progressive Enhancement</h2>
+            <article class="documentation__article">
+                <ul class="documentation__list">
+                    <li class="documentation__list-item">
+                        <strong>Grundlegende HTML-Struktur</strong>
+                        <ul class="documentation__list documentation__list--nested">
+                            <li>
+                                Die Anwendung wurde so gestaltet, dass alle wichtigen Inhalte und Funktionen über reines HTML zugänglich sind.
+                            </li>
+                            <li>
+                                <strong>Beispiele:</strong>
+                                <ul class="documentation__list documentation__list--nested">
+                                    <li>Navigation und Inhalte sind ohne JavaScript vollständig bedienbar.</li>
+                                    <li>Links und Formulare sind standardkonform und funktionieren auch ohne interaktive Erweiterungen.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>CSS für visuelle Gestaltung</strong>
+                        <ul class="documentation__list documentation__list--nested">
+                            <li>
+                                Stile werden zur Verbesserung des Designs und der Benutzerfreundlichkeit hinzugefügt, aber die Kernfunktionalität bleibt auch ohne CSS intakt.
+                            </li>
+                            <li>
+                                <strong>Beispiele:</strong>
+                                <ul class="documentation__list documentation__list--nested">
+                                    <li>Responsive Layouts sorgen für eine optimale Darstellung auf allen Geräten.</li>
+                                    <li>Ohne CSS bleibt die Struktur der Inhalte klar und logisch lesbar.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>JavaScript für interaktive Elemente</strong>
+                        <ul class="documentation__list documentation__list--nested">
+                            <li>
+                                JavaScript wird verwendet, um die Benutzererfahrung zu verbessern, aber keine Kernfunktionen hängen ausschließlich davon ab.
+                            </li>
+                            <li>
+                                <strong>Beispiele:</strong>
+                                <ul class="documentation__list documentation__list--nested">
+                                    <li>Karussell (Highlight-Anzeige): Funktioniert mit JavaScript für Animationen, zeigt aber ohne JavaScript die Inhalte an.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Serverseitige Unterstützung</strong>
+                        <ul class="documentation__list documentation__list--nested">
+                            <li>
+                                Alle kritischen Funktionen der Anwendung, wie die Filmverwaltung, laufen unabhängig von JavaScript serverseitig ab.
+                            </li>
+                            <li>
+                                <strong>Beispiele:</strong>
+                                <ul class="documentation__list documentation__list--nested">
+                                    <li>Ein Film kann auch ohne clientseitige JavaScript-Unterstützung hinzugefügt oder bearbeitet werden.</li>
+                                    <li>Benutzer können auch ohne interaktive Feedback-Mechanismen (z. B. Toast-Nachrichten) Aktionen ausführen.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Sicherheitsaspekte</strong>
+                        <ul class="documentation__list documentation__list--nested">
+                            <li>
+                                Auch bei deaktiviertem JavaScript bleiben Sicherheitsfunktionen wie CSRF-Schutz und serverseitige Validierung aktiv.
+                            </li>
+                            <li>
+                                Fallback-Mechanismen stellen sicher, dass Benutzeraktionen weiterhin sicher und zuverlässig ausgeführt werden können.
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+        </section>
+
+        <section class="documentation__section" aria-labelledby="team-contributions">
+            <h2 id="team-contributions" class="documentation__subtitle">Team und Beiträge</h2>
+            <article class="documentation__article" aria-labelledby="contributions-leonid">
+                <h3 id="contributions-leonid" class="documentation__section-title">Leonid Domahalskyy</h3>
+                <ul class="documentation__list">
+                    <li class="documentation__list-item">
+                        <strong>Backend-Entwicklung:</strong>
+                        <ul class="documentation__list documentation__list--nested">
+                            <li>Umsetzung der Datenbankstruktur mit SQLite.</li>
+                            <li>Implementierung der Routen und Logik (filmRoutes.js, highlightRoutes.js, authRoutes.js).</li>
+                            <li>Integration von Middleware zur Benutzerauthentifizierung und Sitzungsverwaltung mit bcrypt und crypto.</li>
+                            <li>Erstellung der RESTful-API-Architektur für Datenoperationen (Hinzufügen, Bearbeiten, Löschen).</li>
+                            <li>Implementierung der Sicherheitsmaßnahmen (SQL-Injection-Schutz, Cookie-Handling, Directory Traversal).</li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Frontend-Entwicklung:</strong>
+                        <ul class="documentation__list documentation__list--nested">
+                            <li>Grundlegende Struktur und Entwicklung der Hauptseiten (index.html, film.html, dashboard.html).</li>
+                            <li>Entwicklung der Interaktivität, z. B. Karussell für Highlights und Filterfunktionen.</li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Projektmanagement:</strong>
+                        <ul class="documentation__list documentation__list--nested">
+                            <li>Organisation der Aufgabenverteilung und Meilensteine.</li>
+                            <li>Qualitätssicherung und Testen aller Backend-Funktionen.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+            <article class="documentation__article" aria-labelledby="contributions-felix">
+                <h3 id="contributions-felix" class="documentation__section-title">Felix Sandro Mahler</h3>
+                <ul class="documentation__list">
+                    <li class="documentation__list-item">
+                        <strong>Frontend-Entwicklung:</strong>
+                        <ul class="documentation__list documentation__list--nested">
+                            <li>Design und Optimierung der Benutzeroberfläche mit HTML und CSS.</li>
+                            <li>Umsetzung der Seiten (contact.html, prices.html, about.html, chronicle.html).</li>
+                            <li>Entwicklung der mobilen Navigation mit hamburger.js.</li>
+                            <li>Implementierung von Formularvalidierung und responsiven Layouts.</li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Backend-Entwicklung:</strong>
+                        <ul class="documentation__list documentation__list--nested">
+                            <li>Implementierung sicherer Dateioperationen (Upload und Validierung von Medieninhalten).</li>
+                            <li>Erstellung der Vorführungslogik und Integration von Daten in Templates.</li>
+                        </ul>
+                    </li>
+                    <li class="documentation__list-item">
+                        <strong>Dokumentation:</strong>
+                        <ul class="documentation__list documentation__list--nested">
+                            <li>Erstellung des Kolophons mit rechtlichen Hinweisen und Quellenangaben.</li>
+                            <li>Mitarbeit an der Projektübersicht und Threat-Modeling-Analyse.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+        </section>
+        
+        
+    </main>
+</div>
+{% endblock %}
