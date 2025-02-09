@@ -188,6 +188,9 @@ body {
     font-size: 1.125rem;
     min-height: 100vh !important;
     height: 100% !important;
+
+    display: flex;
+    flex-direction: column;
 }
 .container {
     max-width: 1600px;
@@ -412,7 +415,7 @@ header {
     transform-origin: center;
 }
 .main {
-    min-height: calc(100vh - 500px - 80px - 100px);
+    flex-grow: 1;
 }
 .footer {
     background-color: var(--accent-color);
@@ -1137,6 +1140,10 @@ header {
 .technik {
     max-width: 630px;
     margin-bottom: 100px;
+}
+
+.technik-details {
+    max-width: 1200px;
 }
 .technik__title {
     font-weight: 300;
