@@ -30,7 +30,7 @@ jobs:
         uses: denoland/deployctl@v1
         with:
           project: "leoniddomah-metropol-th-22"
-          entrypoint: "server.js"
+          entrypoint: "src/app.js"
           root: ""
           
           
