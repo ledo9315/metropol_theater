@@ -1,4 +1,4 @@
-import { connection } from "../services/db.js";
+import { connection, handleDatabaseError } from "../services/db.js";
 
 /**
  * Holt Filme, die innerhalb eines bestimmten Datumsbereichs gezeigt werden (inkl. Spielzeiten und Details).
