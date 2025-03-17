@@ -1,5 +1,4 @@
-import { DB } from "https://deno.land/x/sqlite@v3.9.0/mod.ts";
-
+import { DB } from "https://deno.land/x/sqlite@v3.9.1/mod.ts";
 let db = null;
 
 /**
